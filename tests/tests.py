@@ -187,6 +187,32 @@ class Test_ThermalConductivity_Conversion(unittest.TestCase):
 
         self.assertRaises(ValueError, stm.fromSIUnit_thermalConductivity, 1, unitWrong)
 
+class Test_SurfaceTension_Conversion(unittest.TestCase):
+
+    def test_toSIUnit_surfaceTension(self):
+
+        self.assertEqual(stm.toSIUnit_surfaceTension(1.0), 1.0)
+
+    def test_toSIUnit_surfaceTension_English(self):
+
+        self.assertEqual(stm.toSIUnit_surfaceTension(1.0, unitSystem), 1.0/0.068521766)
+
+    def test_toSIUnit_surfaceTension_Error(self):
+
+        self.assertRaises(ValueError, stm.toSIUnit_surfaceTension, 1, unitWrong)
+
+    def test_fromSIUnit_surfaceTension(self):
+
+        self.assertEqual(stm.fromSIUnit_surfaceTension(1.0), 1.0)
+
+    def test_fromSIUnit_surfaceTension_English(self):
+
+        self.assertEqual(stm.fromSIUnit_surfaceTension(1.0, unitSystem), 0.068521766)
+
+    def test_fromSIUnit_surfaceTension_Error(self):
+
+        self.assertRaises(ValueError, stm.fromSIUnit_surfaceTension, 1, unitWrong)
+
 class Test_Tsat_p(unittest.TestCase):
 
     def test_Tsat_p(self):

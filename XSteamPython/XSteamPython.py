@@ -3407,12 +3407,30 @@ def fromSIUnit_thermalConductivity(thermalConductivity, units:str='SI'):
     else:
 
         raise ValueError('Units of {} is not valid'.format(units))
-#Rem Private Function toSIunit_st(ByVal Ins As Double) As Double
-#Rem   toSIunit_st = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_st(ByVal Ins As Double) As Double
-#Rem   fromSIunit_st = Ins
-#Rem End Function
+
+def toSIUnit_surfaceTension(surfaceTension, units:str='SI'):
+    '''Convert surface tension from N/m or lbf/ft to N/m'''
+    if units == 'SI':
+
+        return surfaceTension
+    elif units == 'English':
+
+        return surfaceTension/0.068521766
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
+
+def fromSIUnit_surfaceTension(surfaceTension, units:str='SI'):
+    '''Convert surface tension from N/m to lbf/ft or N/m'''
+    if units == 'SI':
+
+        return surfaceTension
+    elif units == 'English':
+
+        return surfaceTension*0.068521766
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
 #Rem Private Function toSIunit_my(ByVal Ins As Double) As Double
 #Rem   toSIunit_my = Ins
 #Rem End Function
