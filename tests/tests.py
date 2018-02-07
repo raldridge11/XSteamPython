@@ -135,6 +135,32 @@ class Test_SpecificVolume_Conversion(unittest.TestCase):
 
         self.assertRaises(ValueError, stm.fromSIUnit_specificVolume, 1, unitWrong)
 
+class Test_Velocity_Conversion(unittest.TestCase):
+
+    def test_toSIUnit_velocity(self):
+
+        self.assertEqual(stm.toSIUnit_velocity(1.0), 1.0)
+
+    def test_toSIUnit_velocity_English(self):
+
+        self.assertEqual(stm.toSIUnit_velocity(1.0, unitSystem), 0.3048)
+
+    def test_toSIUnit_velocity_Error(self):
+
+        self.assertRaises(ValueError, stm.toSIUnit_velocity, 1, unitWrong)
+
+    def test_fromSIUnit_velocity(self):
+
+        self.assertEqual(stm.fromSIUnit_velocity(1.0), 1.0)
+
+    def test_fromSIUnit_velocity_English(self):
+
+        self.assertEqual(stm.fromSIUnit_velocity(1.0, unitSystem), 1.0/0.3048)
+
+    def test_fromSIUnit_velocity_Error(self):
+
+        self.assertRaises(ValueError, stm.fromSIUnit_velocity, 1, unitWrong)
+
 class Test_Tsat_p(unittest.TestCase):
 
     def test_Tsat_p(self):

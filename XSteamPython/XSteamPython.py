@@ -3360,12 +3360,30 @@ def fromSIUnit_entropy(entropy, units:str='SI'):
 
         raise ValueError('Units of {} is not valid'.format(units))
 
-#Rem Private Function toSIunit_w(ByVal Ins As Double) As Double
-#Rem   toSIunit_w = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_w(ByVal Ins As Double) As Double
-#Rem   fromSIunit_w = Ins
-#Rem End Function
+def toSIUnit_velocity(velocity, units:str='SI'):
+    '''Convert velocity from m/s or ft/s to m/s'''
+    if units == 'SI':
+
+        return velocity
+    elif units == 'English':
+
+        return velocity*0.3048
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
+
+def fromSIUnit_velocity(velocity, units:str='SI'):
+    '''Convert velocity from m/s to ft/s or m/s'''
+    if units == 'SI':
+
+        return velocity
+    elif units == 'English':
+
+        return velocity/0.3048
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
+
 #Rem Private Function toSIunit_tc(ByVal Ins As Double) As Double
 #Rem   toSIunit_tc = Ins
 #Rem End Function
@@ -3377,18 +3395,6 @@ def fromSIUnit_entropy(entropy, units:str='SI'):
 #Rem End Function
 #Rem Private Function fromSIunit_st(ByVal Ins As Double) As Double
 #Rem   fromSIunit_st = Ins
-#Rem End Function
-#Rem Private Function toSIunit_x(ByVal Ins As Double) As Double
-#Rem   toSIunit_x = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_x(ByVal Ins As Double) As Double
-#Rem   fromSIunit_x = Ins
-#Rem End Function
-#Rem Private Function toSIunit_vx(ByVal Ins As Double) As Double
-#Rem   toSIunit_vx = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_vx(ByVal Ins As Double) As Double
-#Rem   fromSIunit_vx = Ins
 #Rem End Function
 #Rem Private Function toSIunit_my(ByVal Ins As Double) As Double
 #Rem   toSIunit_my = Ins
