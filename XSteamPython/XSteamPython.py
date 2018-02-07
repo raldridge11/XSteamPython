@@ -3431,10 +3431,27 @@ def fromSIUnit_surfaceTension(surfaceTension, units:str='SI'):
     else:
 
         raise ValueError('Units of {} is not valid'.format(units))
-#Rem Private Function toSIunit_my(ByVal Ins As Double) As Double
-#Rem   toSIunit_my = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_my(ByVal Ins As Double) As Double
-#Rem   fromSIunit_my = Ins
-#Rem End Function
-#End Sub
+
+def toSIUnit_dynamicViscosity(dynamicViscosity, units:str='SI'):
+    '''Convert dynamicViscosity from Pa*s or lbm/ft/hr to Pa*s'''
+    if units == 'SI':
+
+        return dynamicViscosity
+    elif units == 'English':
+
+        return dynamicViscosity/2419.088311
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
+
+def fromSIUnit_dynamicViscosity(dynamicViscosity, units:str='SI'):
+    '''Convert dynamicViscosity from Pa*s to lbm/ft/hr or Pa*s'''
+    if units == 'SI':
+
+        return dynamicViscosity
+    elif units == 'English':
+
+        return dynamicViscosity*2419.088311
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))

@@ -213,6 +213,32 @@ class Test_SurfaceTension_Conversion(unittest.TestCase):
 
         self.assertRaises(ValueError, stm.fromSIUnit_surfaceTension, 1, unitWrong)
 
+class Test_DynamicViscosity_Conversion(unittest.TestCase):
+
+    def test_toSIUnit_dynamicViscosity(self):
+
+        self.assertEqual(stm.toSIUnit_dynamicViscosity(1.0), 1.0)
+
+    def test_toSIUnit_dynamicViscosity_English(self):
+
+        self.assertEqual(stm.toSIUnit_dynamicViscosity(1.0, unitSystem), 1.0/2419.088311)
+
+    def test_toSIUnit_dynamicViscosity_Error(self):
+
+        self.assertRaises(ValueError, stm.toSIUnit_dynamicViscosity, 1, unitWrong)
+
+    def test_fromSIUnit_dynamicViscosity(self):
+
+        self.assertEqual(stm.fromSIUnit_dynamicViscosity(1.0), 1.0)
+
+    def test_fromSIUnit_dynamicViscosity_English(self):
+
+        self.assertEqual(stm.fromSIUnit_dynamicViscosity(1.0, unitSystem), 2419.088311)
+
+    def test_fromSIUnit_dynamicViscosity_Error(self):
+
+        self.assertRaises(ValueError, stm.fromSIUnit_dynamicViscosity, 1, unitWrong)
+
 class Test_Tsat_p(unittest.TestCase):
 
     def test_Tsat_p(self):
