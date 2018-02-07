@@ -7,15 +7,15 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 
-def Tsat_p(pressure):
+def Tsat_p(pressure, unit:str='SI'):
     '''Returns saturation temperature given a pressure in kPa'''
     pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
-    pressure = toSIUnit_pressure(pressure)
+    pressure = toSIUnit_pressure(pressure, unit)
 
     if pressure >= pressureMin and pressure <= pressureMax:
-       return fromSIUnit_temperature(T4_p(pressure))
+       return fromSIUnit_temperature(T4_p(pressure), unit)
     else:
-       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit_pressure(pressureMin), fromSIUnit_pressure(pressureMax)))
+       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit_pressure(pressureMin, unit), fromSIUnit_pressure(pressureMax, unit)))
 
 #Rem Function Tsat_s(ByVal s As Double) As Double
 #Rem  s = toSIunit_s(s)
@@ -3240,21 +3240,53 @@ def T4_p(p):
 #Rem '***********************************************************************************************************
 #Rem '*6 Units                                                                                      *
 #Rem '***********************************************************************************************************
-def toSIUnit_pressure(pressure):
-    ''' Convert pressure to MPA from kPa'''
-    return pressure/1000.0
+def toSIUnit_pressure(pressure, unit:str='SI'):
+    ''' Convert pressure to MPA from kPa or psi'''
+    if unit == 'SI':
 
-def fromSIUnit_pressure(pressure):
-    '''Convert pressure to kPa from MPa'''
-    return pressure*1000.0
+        return pressure/1000.0
+    elif unit == 'English':
 
-def toSIUnit_temperature(temperature):
-    '''Convert temperature to degC from Kelvin'''
-    return temperature + 273.15
+        return pressure*0.00689475729
+    else:
 
-def fromSIUnit_temperature(temperature):
+        raise ValueError('Units of {} is not valid'.format(unit))
+
+def fromSIUnit_pressure(pressure, unit:str='SI'):
+    '''Convert pressure to kPa or psi from MPa'''
+    if unit == 'SI':
+
+        return pressure*1000.0
+    elif unit == 'English':
+
+        return pressure/0.00689475729
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(unit))
+
+def toSIUnit_temperature(temperature, unit:str='SI'):
+    '''Convert temperature to Kelvin from degC or degF'''
+    if unit == 'SI':
+
+        return temperature + 273.15
+    elif unit == 'English':
+
+        return (5.0/9.0)*(temperature - 32.0) + 273.15
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(unit))
+
+def fromSIUnit_temperature(temperature, unit:str='SI'):
     '''Convert temperature from Kelvin to degC'''
-    return temperature - 273.15
+    if unit == 'SI':
+
+        return temperature - 273.15
+    elif unit == 'English':
+
+        return (temperature - 273.15)*(9.0/5.0) + 32.0
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(unit))
 #Rem Private Function toSIunit_h(ByVal Ins As Double) As Double
 #Rem   toSIunit_h = Ins
 #Rem End Function
