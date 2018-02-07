@@ -109,6 +109,31 @@ class Test_Enthalpy_Conversion(unittest.TestCase):
 
         self.assertRaises(ValueError, stm.fromSIUnit_enthalpy, 1, unitWrong)
 
+class Test_SpecificVolume_Conversion(unittest.TestCase):
+
+    def test_toSIUnit_specificVolume(self):
+
+        self.assertEqual(stm.toSIUnit_specificVolume(1.0), 1.0)
+
+    def test_toSIUnit_specificVolume_English(self):
+
+        self.assertEqual(stm.toSIUnit_specificVolume(1.0, unitSystem), 0.0624279606)
+
+    def test_toSIUnit_specificVolume_Error(self):
+
+        self.assertRaises(ValueError, stm.toSIUnit_specificVolume, 1, unitWrong)
+
+    def test_fromSIUnit_specificVolume(self):
+
+        self.assertEqual(stm.fromSIUnit_specificVolume(1.0), 1.0)
+
+    def test_fromSIUnit_specificVolume_English(self):
+
+        self.assertEqual(stm.fromSIUnit_specificVolume(1.0, unitSystem), 1.0/0.0624279606)
+
+    def test_fromSIUnit_specificVolume_Error(self):
+
+        self.assertRaises(ValueError, stm.fromSIUnit_specificVolume, 1, unitWrong)
 
 class Test_Tsat_p(unittest.TestCase):
 

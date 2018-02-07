@@ -3311,12 +3311,31 @@ def fromSIUnit_enthalpy(enthalpy, units:str='SI'):
     else:
 
         raise ValueError('Units of {} is not valid'.format(units))
-#Rem Private Function toSIunit_v(ByVal Ins As Double) As Double
-#Rem   toSIunit_v = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_v(ByVal Ins As Double) As Double
-#Rem   fromSIunit_v = Ins
-#Rem End Function
+
+def toSIUnit_specificVolume(specificVolume, units:str='SI'):
+    '''Convert specific volume from m**3/kg to ft**3/lb or m**3/kg'''
+    if units == 'SI':
+
+        return specificVolume
+    elif units == 'English':
+
+        return specificVolume*0.0624279606
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
+
+def fromSIUnit_specificVolume(specificVolume, units:str='SI'):
+    '''Convert specific volume from ft**3/lb or m**3/kg to m**/kg'''
+    if units == 'SI':
+
+        return specificVolume
+    elif units == 'English':
+
+        return specificVolume/0.0624279606
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
+
 def toSIUnit_entropy(entropy, units:str='SI'):
     '''Convert entropy from kJ/kg/K or btu/lb/deg to kJ/kg/K'''
     if units == 'SI':
