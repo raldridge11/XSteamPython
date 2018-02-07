@@ -7,15 +7,15 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 
-def Tsat_p(pressure, unit:str='SI'):
+def Tsat_p(pressure, units:str='SI'):
     '''Returns saturation temperature given a pressure in kPa'''
     pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
-    pressure = toSIUnit_pressure(pressure, unit)
+    pressure = toSIUnit_pressure(pressure, units)
 
     if pressure >= pressureMin and pressure <= pressureMax:
-       return fromSIUnit_temperature(T4_p(pressure), unit)
+       return fromSIUnit_temperature(T4_p(pressure), units)
     else:
-       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit_pressure(pressureMin, unit), fromSIUnit_pressure(pressureMax, unit)))
+       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit_pressure(pressureMin, units), fromSIUnit_pressure(pressureMax, units)))
 
 #Rem Function Tsat_s(ByVal s As Double) As Double
 #Rem  s = toSIunit_s(s)
@@ -3240,53 +3240,53 @@ def T4_p(p):
 #Rem '***********************************************************************************************************
 #Rem '*6 Units                                                                                      *
 #Rem '***********************************************************************************************************
-def toSIUnit_pressure(pressure, unit:str='SI'):
+def toSIUnit_pressure(pressure, units:str='SI'):
     ''' Convert pressure to MPA from kPa or psi'''
-    if unit == 'SI':
+    if units == 'SI':
 
         return pressure/1000.0
-    elif unit == 'English':
+    elif units == 'English':
 
         return pressure*0.00689475729
     else:
 
-        raise ValueError('Units of {} is not valid'.format(unit))
+        raise ValueError('Units of {} is not valid'.format(units))
 
-def fromSIUnit_pressure(pressure, unit:str='SI'):
+def fromSIUnit_pressure(pressure, units:str='SI'):
     '''Convert pressure to kPa or psi from MPa'''
-    if unit == 'SI':
+    if units == 'SI':
 
         return pressure*1000.0
-    elif unit == 'English':
+    elif units == 'English':
 
         return pressure/0.00689475729
     else:
 
-        raise ValueError('Units of {} is not valid'.format(unit))
+        raise ValueError('Units of {} is not valid'.format(units))
 
-def toSIUnit_temperature(temperature, unit:str='SI'):
+def toSIUnit_temperature(temperature, units:str='SI'):
     '''Convert temperature to Kelvin from degC or degF'''
-    if unit == 'SI':
+    if units == 'SI':
 
         return temperature + 273.15
-    elif unit == 'English':
+    elif units == 'English':
 
         return (5.0/9.0)*(temperature - 32.0) + 273.15
     else:
 
-        raise ValueError('Units of {} is not valid'.format(unit))
+        raise ValueError('Units of {} is not valid'.format(units))
 
-def fromSIUnit_temperature(temperature, unit:str='SI'):
+def fromSIUnit_temperature(temperature, units:str='SI'):
     '''Convert temperature from Kelvin to degC'''
-    if unit == 'SI':
+    if units == 'SI':
 
         return temperature - 273.15
-    elif unit == 'English':
+    elif units == 'English':
 
         return (temperature - 273.15)*(9.0/5.0) + 32.0
     else:
 
-        raise ValueError('Units of {} is not valid'.format(unit))
+        raise ValueError('Units of {} is not valid'.format(units))
 #Rem Private Function toSIunit_h(ByVal Ins As Double) As Double
 #Rem   toSIunit_h = Ins
 #Rem End Function
@@ -3299,29 +3299,29 @@ def fromSIUnit_temperature(temperature, unit:str='SI'):
 #Rem Private Function fromSIunit_v(ByVal Ins As Double) As Double
 #Rem   fromSIunit_v = Ins
 #Rem End Function
-def toSIUnit_entropy(entropy, unit:str='SI'):
+def toSIUnit_entropy(entropy, units:str='SI'):
     '''Convert entropy from kJ/kg/K to kJ/kg/K or btu/lb/degF'''
-    if unit == 'SI':
+    if units == 'SI':
 
         return entropy
-    elif unit == 'English':
+    elif units == 'English':
 
         return entropy/0.238845896627
     else:
 
-        raise ValueError('Units of {} is not valid'.format(unit))
+        raise ValueError('Units of {} is not valid'.format(units))
 
-def fromSIUnit_entropy(entropy, unit:str='SI'):
+def fromSIUnit_entropy(entropy, units:str='SI'):
     '''Convert entropy from kJ/kg/K or btu/lb/degF to kJ/kg/K'''
-    if unit == 'SI':
+    if units == 'SI':
 
         return entropy
-    elif unit == 'English':
+    elif units == 'English':
 
         return entropy*0.238845896627
     else:
 
-        raise ValueError('Units of {} is not valid'.format(unit))
+        raise ValueError('Units of {} is not valid'.format(units))
 
 #Rem Private Function toSIunit_u(ByVal Ins As Double) As Double
 #Rem   toSIunit_u = Ins
