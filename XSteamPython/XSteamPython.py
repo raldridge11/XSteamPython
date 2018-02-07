@@ -3241,7 +3241,7 @@ def T4_p(p):
 #Rem '*6 Units                                                                                      *
 #Rem '***********************************************************************************************************
 def toSIUnit_pressure(pressure, units:str='SI'):
-    ''' Convert pressure to MPA from kPa or psi'''
+    ''' Convert pressure from kPa or psi to MPa'''
     if units == 'SI':
 
         return pressure/1000.0
@@ -3253,7 +3253,7 @@ def toSIUnit_pressure(pressure, units:str='SI'):
         raise ValueError('Units of {} is not valid'.format(units))
 
 def fromSIUnit_pressure(pressure, units:str='SI'):
-    '''Convert pressure to kPa or psi from MPa'''
+    '''Convert pressure from MPa to psi or kPa'''
     if units == 'SI':
 
         return pressure*1000.0
@@ -3265,7 +3265,7 @@ def fromSIUnit_pressure(pressure, units:str='SI'):
         raise ValueError('Units of {} is not valid'.format(units))
 
 def toSIUnit_temperature(temperature, units:str='SI'):
-    '''Convert temperature to Kelvin from degC or degF'''
+    '''Convert temperature from degC or degF to Kelvin'''
     if units == 'SI':
 
         return temperature + 273.15
@@ -3277,7 +3277,7 @@ def toSIUnit_temperature(temperature, units:str='SI'):
         raise ValueError('Units of {} is not valid'.format(units))
 
 def fromSIUnit_temperature(temperature, units:str='SI'):
-    '''Convert temperature from Kelvin to degC'''
+    '''Convert temperature from Kelvin to degC or degF'''
     if units == 'SI':
 
         return temperature - 273.15
@@ -3287,12 +3287,30 @@ def fromSIUnit_temperature(temperature, units:str='SI'):
     else:
 
         raise ValueError('Units of {} is not valid'.format(units))
-#Rem Private Function toSIunit_h(ByVal Ins As Double) As Double
-#Rem   toSIunit_h = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_h(ByVal Ins As Double) As Double
-#Rem   fromSIunit_h = Ins
-#Rem End Function
+
+def toSIUnit_enthalpy(enthalpy, units:str='SI'):
+    '''Convert enthalpy from kJ/kg or btu/lb to kJ/kg'''
+    if units == 'SI':
+
+        return enthalpy
+    elif units == 'English':
+
+        return enthalpy*2.326
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
+
+def fromSIUnit_enthalpy(enthalpy, units:str='SI'):
+    '''Convert enthalpy from kJ/kg to btu/lb or kJ/kg'''
+    if units == 'SI':
+
+        return enthalpy
+    elif units == 'English':
+
+        return enthalpy/2.326
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
 #Rem Private Function toSIunit_v(ByVal Ins As Double) As Double
 #Rem   toSIunit_v = Ins
 #Rem End Function
@@ -3300,7 +3318,7 @@ def fromSIUnit_temperature(temperature, units:str='SI'):
 #Rem   fromSIunit_v = Ins
 #Rem End Function
 def toSIUnit_entropy(entropy, units:str='SI'):
-    '''Convert entropy from kJ/kg/K to kJ/kg/K or btu/lb/degF'''
+    '''Convert entropy from kJ/kg/K or btu/lb/deg to kJ/kg/K'''
     if units == 'SI':
 
         return entropy
@@ -3312,7 +3330,7 @@ def toSIUnit_entropy(entropy, units:str='SI'):
         raise ValueError('Units of {} is not valid'.format(units))
 
 def fromSIUnit_entropy(entropy, units:str='SI'):
-    '''Convert entropy from kJ/kg/K or btu/lb/degF to kJ/kg/K'''
+    '''Convert entropy from kJ/kg/K to btu/lb/degF or kJ/kg/K'''
     if units == 'SI':
 
         return entropy
