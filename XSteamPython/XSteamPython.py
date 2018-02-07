@@ -3384,12 +3384,29 @@ def fromSIUnit_velocity(velocity, units:str='SI'):
 
         raise ValueError('Units of {} is not valid'.format(units))
 
-#Rem Private Function toSIunit_tc(ByVal Ins As Double) As Double
-#Rem   toSIunit_tc = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_tc(ByVal Ins As Double) As Double
-#Rem   fromSIunit_tc = Ins
-#Rem End Function
+def toSIUnit_thermalConductivity(thermalConductivity, units:str='SI'):
+    '''Convert thermal conductivity from W/m/K or btu/hr/ft/degF to W/m/K'''
+    if units == 'SI':
+
+        return thermalConductivity
+    elif units == 'English':
+
+        return thermalConductivity/0.577789
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
+
+def fromSIUnit_thermalConductivity(thermalConductivity, units:str='SI'):
+    '''Convert thermal conductivity from W/m/K to btu/hr/ft/degF or W/m/K'''
+    if units == 'SI':
+
+        return thermalConductivity
+    elif units == 'English':
+
+        return thermalConductivity*0.577789
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(units))
 #Rem Private Function toSIunit_st(ByVal Ins As Double) As Double
 #Rem   toSIunit_st = Ins
 #Rem End Function
