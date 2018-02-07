@@ -3311,9 +3311,6 @@ def toSIUnit_entropy(entropy, unit:str='SI'):
 
         raise ValueError('Units of {} is not valid'.format(unit))
 
-#Rem Private Function fromSIunit_s(ByVal Ins As Double) As Double
-#Rem   fromSIunit_s = Ins
-#Rem End Function
 def fromSIUnit_entropy(entropy, unit:str='SI'):
     '''Convert entropy from kJ/kg/K or btu/lb/degF to kJ/kg/K'''
     if unit == 'SI':

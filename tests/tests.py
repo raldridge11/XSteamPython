@@ -80,8 +80,6 @@ class Test_Entropy_Conversion(unittest.TestCase):
 
         self.assertRaises(ValueError, stm.fromSIUnit_entropy, 1.0, unit='dumb')
 
-
-
 class Test_Tsat_p(unittest.TestCase):
 
     def test_Tsat_p(self):
