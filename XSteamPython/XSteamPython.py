@@ -3360,18 +3360,6 @@ def fromSIUnit_entropy(entropy, units:str='SI'):
 
         raise ValueError('Units of {} is not valid'.format(units))
 
-#Rem Private Function toSIunit_Cp(ByVal Ins As Double) As Double
-#Rem   toSIunit_Cp = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_Cp(ByVal Ins As Double) As Double
-#Rem   fromSIunit_Cp = Ins
-#Rem End Function
-#Rem Private Function toSIunit_Cv(ByVal Ins As Double) As Double
-#Rem   toSIunit_Cv = Ins
-#Rem End Function
-#Rem Private Function fromSIunit_Cv(ByVal Ins As Double) As Double
-#Rem   fromSIunit_Cv = Ins
-#Rem End Function
 #Rem Private Function toSIunit_w(ByVal Ins As Double) As Double
 #Rem   toSIunit_w = Ins
 #Rem End Function
