@@ -3299,12 +3299,33 @@ def fromSIUnit_temperature(temperature, unit:str='SI'):
 #Rem Private Function fromSIunit_v(ByVal Ins As Double) As Double
 #Rem   fromSIunit_v = Ins
 #Rem End Function
-#Rem Private Function toSIunit_s(ByVal Ins As Double) As Double
-#Rem   toSIunit_s = Ins
-#Rem End Function
+def toSIUnit_entropy(entropy, unit:str='SI'):
+    '''Convert entropy from kJ/kg/K to kJ/kg/K or btu/lb/degF'''
+    if unit == 'SI':
+
+        return entropy
+    elif unit == 'English':
+
+        return entropy/0.238845896627
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(unit))
+
 #Rem Private Function fromSIunit_s(ByVal Ins As Double) As Double
 #Rem   fromSIunit_s = Ins
 #Rem End Function
+def fromSIUnit_entropy(entropy, unit:str='SI'):
+    '''Convert entropy from kJ/kg/K or btu/lb/degF to kJ/kg/K'''
+    if unit == 'SI':
+
+        return entropy
+    elif unit == 'English':
+
+        return entropy*0.238845896627
+    else:
+
+        raise ValueError('Units of {} is not valid'.format(unit))
+
 #Rem Private Function toSIunit_u(ByVal Ins As Double) As Double
 #Rem   toSIunit_u = Ins
 #Rem End Function

@@ -54,6 +54,34 @@ class Test_Temperature_Conversion(unittest.TestCase):
 
         self.assertRaises(ValueError, stm.fromSIUnit_temperature, 373.15, unit='dumb')
 
+class Test_Entropy_Conversion(unittest.TestCase):
+
+    def test_toSIUnit_entropy(self):
+
+        self.assertEqual(stm.toSIUnit_entropy(1.0), 1.0)
+
+    def test_toSIUnit_entropy_English(self):
+
+        self.assertEqual(stm.toSIUnit_entropy(1.0, unit='English'), 1.0/0.238845896627)
+
+    def test_toSIUnit_entropy_Error(self):
+
+        self.assertRaises(ValueError, stm.toSIUnit_entropy, 1.0, unit='dumb')
+
+    def test_fromSIUnit_entropy(self):
+
+        self.assertEqual(stm.fromSIUnit_entropy(1.0), 1.0)
+
+    def test_fromSIUnit_entropy_English(self):
+
+        self.assertEqual(stm.fromSIUnit_entropy(1.0, unit='English'), 0.238845896627)
+
+    def test_fromSIUnit_entropy_Error(self):
+
+        self.assertRaises(ValueError, stm.fromSIUnit_entropy, 1.0, unit='dumb')
+
+
+
 class Test_Tsat_p(unittest.TestCase):
 
     def test_Tsat_p(self):
