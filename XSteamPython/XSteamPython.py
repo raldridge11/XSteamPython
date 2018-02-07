@@ -1,75 +1,12 @@
-#Rem Attribute VBA_ModuleType=VBAModule
-#Sub X_Steam_Tables
-#Rem Option Explicit
-#Rem
-#Rem '***********************************************************************************************************
-#Rem '* Water and steam properties according to IAPWS IF-97                                                     *
-#Rem '* By Magnus Holmgren, www.x-eng.com                                                                       *
-#Rem '* The steam tables are free and provided as is.                                                           *
-#Rem '* We take no responsibilities for any errors in the code or damage thereby.                               *
-#Rem '* You are free to use, modify and distribute the code as long as authorship is properly acknowledged.     *
-#Rem '* Please notify me at magnus@x-eng.com if the code is used in commercial applications                     *
-#Rem '***********************************************************************************************************'
-#Rem '
-#Rem ' The code is also avalibale for matlab at www.x-eng.com
-#Rem '
-#Rem '*Contents.
-#Rem '*1 Calling functions
-#Rem '*1.1
-#Rem '*1.2 Temperature (T)
-#Rem '*1.3 Pressure (p)
-#Rem '*1.4 Enthalpy (h)
-#Rem '*1.5 Specific Volume (v)
-#Rem '*1.6 Density (rho)
-#Rem '*1.7 Specific entropy (s)
-#Rem '*1.8 Specific internal energy (u)
-#Rem '*1.9 Specific isobaric heat capacity (Cp)
-#Rem '*1.10 Specific isochoric heat capacity (Cv)
-#Rem '*1.11 Speed of sound
-#Rem '*1.12 Viscosity
-#Rem '*1.13 Prandtl
-#Rem '*1.14 Kappa
-#Rem '*1.15 Surface tension
-#Rem '*1.16 Heat conductivity
-#Rem '*1.17 Vapour fraction
-#Rem '*1.18 Vapour Volume Fraction
-#Rem '
-#Rem '*2 IAPWS IF 97 Calling functions
-#Rem '*2.1 Functions for region 1
-#Rem '*2.2 Functions for region 2
-#Rem '*2.3 Functions for region 3
-#Rem '*2.4 Functions for region 4
-#Rem '*2.5 Functions for region 5
-#Rem '
-#Rem '*3 Region Selection
-#Rem '*3.1 Regions as a function of pT
-#Rem '*3.2 Regions as a function of ph
-#Rem '*3.3 Regions as a function of ps
-#Rem '*3.4 Regions as a function of hs
-#Rem '*3.5 Regions as a function of p and rho
-#Rem '
-#Rem '4 Region Borders
-#Rem '4.1 Boundary between region 1 and 3.
-#Rem '4.2 Region 3. pSat_h and pSat_s
-#Rem '4.3 Region boundary 1to3 and 3to2 as a functions of s
-#Rem '
-#Rem '5 Transport properties
-#Rem '5.1 Viscosity (IAPWS formulation 1985)
-#Rem '5.2 Thermal Conductivity (IAPWS formulation 1985)
-#Rem '5.3 Surface Tension
-#Rem '
-#Rem '6 Units
-#Rem
-#Rem
-#Rem '***********************************************************************************************************
-#Rem '*1 Calling functions                                                                                      *
-#Rem '***********************************************************************************************************
-#Rem
-#Rem '***********************************************************************************************************
-#Rem '*1.1
-#Rem
-#Rem
-#Rem '***********************************************************************************************************
+'''
+* Water and steam properties according to IAPWS IF-97
+* By Magnus Holmgren, www.x-eng.com
+* The steam tables are free and provided as is.
+* We take no responsibilities for any errors in the code or damage thereby.
+* You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
+* Please notify me at magnus@x-eng.com if the code is used in commercial applications
+'''
+
 def Tsat_p(pressure):
     '''Returns saturation temperature given a pressure in kPa'''
     pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
