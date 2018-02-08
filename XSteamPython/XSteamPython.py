@@ -12,12 +12,12 @@ englishUnits = False
 def Tsat_p(pressure, units:str='SI'):
     '''Returns saturation temperature given a pressure in kPa'''
     pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
-    pressure = toSIUnit_pressure(pressure)
+    pressure = toSIUnit(pressure, 'pressure')
 
     if pressure >= pressureMin and pressure <= pressureMax:
-       return fromSIUnit_temperature(T4_p(pressure))
+       return fromSIUnit(T4_p(pressure), 'temperature')
     else:
-       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit_pressure(pressureMin), fromSIUnit_pressure(pressureMax)))
+       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit(pressureMin, 'pressure'), fromSIUnit(pressureMax, 'pressure')))
 
 #Rem Function Tsat_s(ByVal s As Double) As Double
 #Rem  s = toSIunit_s(s)
@@ -3242,94 +3242,64 @@ def T4_p(p):
 #Rem '***********************************************************************************************************
 #Rem '*6 Units                                                                                      *
 #Rem '***********************************************************************************************************
-def toSIUnit_pressure(pressure):
-    ''' Convert pressure from kPa or psi to MPa'''
-    if not englishUnits:
+conversionFactors = { 'enthalpy': 2.326,
+                      'specific volume': 0.0624279606,
+                      'entropy': 1.0/0.238845896627,
+                      'velocity': 0.3048,
+                      'thermal conductivity': 1.0/0.577789,
+                      'surface tension': 1.0/0.068521766,
+                      'viscosity': 1.0/2419.088311
+    }
 
-        return pressure/1000.0
+def toSIUnit(value, quantity:str):
+
+    quantity = quantity.lower()
+
+    if quantity == 'pressure':
+
+        if not englishUnits:
+
+            value /= 1000.0
+        else:
+
+            value *= 0.00689475729
+    elif quantity == 'temperature':
+
+        if not englishUnits:
+
+            value +=  273.15
+        else:
+
+            value = (5.0/9.0)*(value - 32.0) + 273.15
     else:
 
-        return pressure*0.00689475729
+        value *= conversionFactors[quantity]
 
-def fromSIUnit_pressure(pressure):
-    '''Convert pressure from MPa to psi or kPa'''
-    if not englishUnits:
+    return value
 
-        return pressure*1000.0
+def fromSIUnit(value, quantity:str):
+
+    quantity = quantity.lower()
+
+    if quantity == 'pressure':
+
+        if not englishUnits:
+
+            value *= 1000.0
+        else:
+
+            value /= 0.00689475729
+    elif quantity == 'temperature':
+
+        if not englishUnits:
+
+            value -=  273.15
+        else:
+
+            value = (value - 273.15)*(9.0/5.0) + 32.0
     else:
 
-        return pressure/0.00689475729
+        value /= conversionFactors[quantity]
 
-def toSIUnit_temperature(temperature):
-    '''Convert temperature from degC or degF to Kelvin'''
-    if not englishUnits:
+    return value
 
-        return temperature + 273.15
-    else:
-
-        return (5.0/9.0)*(temperature - 32.0) + 273.15
-
-def fromSIUnit_temperature(temperature):
-    '''Convert temperature from Kelvin to degC or degF'''
-    if not englishUnits:
-
-        return temperature - 273.15
-    else:
-
-        return (temperature - 273.15)*(9.0/5.0) + 32.0
-
-def toSIUnit_enthalpy(enthalpy):
-    '''Convert enthalpy from btu/lb to kJ/kg'''
-    return enthalpy*2.326
-
-def fromSIUnit_enthalpy(enthalpy):
-    '''Convert enthalpy from kJ/kg to btu/lb'''
-    return enthalpy/2.326
-
-def toSIUnit_specificVolume(specificVolume):
-    '''Convert specific volume from m**3/kg to ft**3/lb'''
-    return specificVolume*0.0624279606
-
-def fromSIUnit_specificVolume(specificVolume):
-    '''Convert specific volume from ft**3/lb to m**/kg'''
-    return specificVolume/0.0624279606
-
-def toSIUnit_entropy(entropy):
-    '''Convert entropy from btu/lb/deg to kJ/kg/K'''
-    return entropy/0.238845896627
-
-def fromSIUnit_entropy(entropy):
-    '''Convert entropy from kJ/kg/K to btu/lb/degF'''
-    return entropy*0.238845896627
-
-def toSIUnit_velocity(velocity):
-    '''Convert velocity from ft/s to m/s'''
-    return velocity*0.3048
-
-def fromSIUnit_velocity(velocity):
-    '''Convert velocity from m/s to ft/s'''
-    return velocity/0.3048
-
-def toSIUnit_thermalConductivity(thermalConductivity):
-    '''Convert thermal conductivity from btu/hr/ft/degF to W/m/K'''
-    return thermalConductivity/0.577789
-
-def fromSIUnit_thermalConductivity(thermalConductivity):
-    '''Convert thermal conductivity from W/m/K to btu/hr/ft/degF'''
-    return thermalConductivity*0.577789
-
-def toSIUnit_surfaceTension(surfaceTension):
-    '''Convert surface tension from lbf/ft to N/m'''
-    return surfaceTension/0.068521766
-
-def fromSIUnit_surfaceTension(surfaceTension):
-    '''Convert surface tension from N/m to lbf/ft'''
-    return surfaceTension*0.068521766
-
-def toSIUnit_dynamicViscosity(dynamicViscosity):
-    '''Convert dynamicViscosity from lbm/ft/hr to Pa*s'''
-    return dynamicViscosity/2419.088311
-
-def fromSIUnit_dynamicViscosity(dynamicViscosity):
-    '''Convert dynamicViscosity from Pa*s to lbm/ft/hr'''
-    return dynamicViscosity*2419.088311
