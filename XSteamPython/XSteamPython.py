@@ -7,15 +7,17 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 
+englishUnits = False
+
 def Tsat_p(pressure, units:str='SI'):
     '''Returns saturation temperature given a pressure in kPa'''
     pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
-    pressure = toSIUnit_pressure(pressure, units)
+    pressure = toSIUnit_pressure(pressure)
 
     if pressure >= pressureMin and pressure <= pressureMax:
-       return fromSIUnit_temperature(T4_p(pressure), units)
+       return fromSIUnit_temperature(T4_p(pressure))
     else:
-       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit_pressure(pressureMin, units), fromSIUnit_pressure(pressureMax, units)))
+       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit_pressure(pressureMin), fromSIUnit_pressure(pressureMax)))
 
 #Rem Function Tsat_s(ByVal s As Double) As Double
 #Rem  s = toSIunit_s(s)
@@ -3240,218 +3242,94 @@ def T4_p(p):
 #Rem '***********************************************************************************************************
 #Rem '*6 Units                                                                                      *
 #Rem '***********************************************************************************************************
-def toSIUnit_pressure(pressure, units:str='SI'):
+def toSIUnit_pressure(pressure):
     ''' Convert pressure from kPa or psi to MPa'''
-    if units == 'SI':
+    if not englishUnits:
 
         return pressure/1000.0
-    elif units == 'English':
+    else:
 
         return pressure*0.00689475729
-    else:
 
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def fromSIUnit_pressure(pressure, units:str='SI'):
+def fromSIUnit_pressure(pressure):
     '''Convert pressure from MPa to psi or kPa'''
-    if units == 'SI':
+    if not englishUnits:
 
         return pressure*1000.0
-    elif units == 'English':
+    else:
 
         return pressure/0.00689475729
-    else:
 
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def toSIUnit_temperature(temperature, units:str='SI'):
+def toSIUnit_temperature(temperature):
     '''Convert temperature from degC or degF to Kelvin'''
-    if units == 'SI':
+    if not englishUnits:
 
         return temperature + 273.15
-    elif units == 'English':
+    else:
 
         return (5.0/9.0)*(temperature - 32.0) + 273.15
-    else:
 
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def fromSIUnit_temperature(temperature, units:str='SI'):
+def fromSIUnit_temperature(temperature):
     '''Convert temperature from Kelvin to degC or degF'''
-    if units == 'SI':
+    if not englishUnits:
 
         return temperature - 273.15
-    elif units == 'English':
+    else:
 
         return (temperature - 273.15)*(9.0/5.0) + 32.0
-    else:
 
-        raise ValueError('Units of {} is not valid'.format(units))
+def toSIUnit_enthalpy(enthalpy):
+    '''Convert enthalpy from btu/lb to kJ/kg'''
+    return enthalpy*2.326
 
-def toSIUnit_enthalpy(enthalpy, units:str='SI'):
-    '''Convert enthalpy from kJ/kg or btu/lb to kJ/kg'''
-    if units == 'SI':
+def fromSIUnit_enthalpy(enthalpy):
+    '''Convert enthalpy from kJ/kg to btu/lb'''
+    return enthalpy/2.326
 
-        return enthalpy
-    elif units == 'English':
+def toSIUnit_specificVolume(specificVolume):
+    '''Convert specific volume from m**3/kg to ft**3/lb'''
+    return specificVolume*0.0624279606
 
-        return enthalpy*2.326
-    else:
+def fromSIUnit_specificVolume(specificVolume):
+    '''Convert specific volume from ft**3/lb to m**/kg'''
+    return specificVolume/0.0624279606
 
-        raise ValueError('Units of {} is not valid'.format(units))
+def toSIUnit_entropy(entropy):
+    '''Convert entropy from btu/lb/deg to kJ/kg/K'''
+    return entropy/0.238845896627
 
-def fromSIUnit_enthalpy(enthalpy, units:str='SI'):
-    '''Convert enthalpy from kJ/kg to btu/lb or kJ/kg'''
-    if units == 'SI':
+def fromSIUnit_entropy(entropy):
+    '''Convert entropy from kJ/kg/K to btu/lb/degF'''
+    return entropy*0.238845896627
 
-        return enthalpy
-    elif units == 'English':
+def toSIUnit_velocity(velocity):
+    '''Convert velocity from ft/s to m/s'''
+    return velocity*0.3048
 
-        return enthalpy/2.326
-    else:
+def fromSIUnit_velocity(velocity):
+    '''Convert velocity from m/s to ft/s'''
+    return velocity/0.3048
 
-        raise ValueError('Units of {} is not valid'.format(units))
+def toSIUnit_thermalConductivity(thermalConductivity):
+    '''Convert thermal conductivity from btu/hr/ft/degF to W/m/K'''
+    return thermalConductivity/0.577789
 
-def toSIUnit_specificVolume(specificVolume, units:str='SI'):
-    '''Convert specific volume from m**3/kg to ft**3/lb or m**3/kg'''
-    if units == 'SI':
+def fromSIUnit_thermalConductivity(thermalConductivity):
+    '''Convert thermal conductivity from W/m/K to btu/hr/ft/degF'''
+    return thermalConductivity*0.577789
 
-        return specificVolume
-    elif units == 'English':
+def toSIUnit_surfaceTension(surfaceTension):
+    '''Convert surface tension from lbf/ft to N/m'''
+    return surfaceTension/0.068521766
 
-        return specificVolume*0.0624279606
-    else:
+def fromSIUnit_surfaceTension(surfaceTension):
+    '''Convert surface tension from N/m to lbf/ft'''
+    return surfaceTension*0.068521766
 
-        raise ValueError('Units of {} is not valid'.format(units))
+def toSIUnit_dynamicViscosity(dynamicViscosity):
+    '''Convert dynamicViscosity from lbm/ft/hr to Pa*s'''
+    return dynamicViscosity/2419.088311
 
-def fromSIUnit_specificVolume(specificVolume, units:str='SI'):
-    '''Convert specific volume from ft**3/lb or m**3/kg to m**/kg'''
-    if units == 'SI':
-
-        return specificVolume
-    elif units == 'English':
-
-        return specificVolume/0.0624279606
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def toSIUnit_entropy(entropy, units:str='SI'):
-    '''Convert entropy from kJ/kg/K or btu/lb/deg to kJ/kg/K'''
-    if units == 'SI':
-
-        return entropy
-    elif units == 'English':
-
-        return entropy/0.238845896627
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def fromSIUnit_entropy(entropy, units:str='SI'):
-    '''Convert entropy from kJ/kg/K to btu/lb/degF or kJ/kg/K'''
-    if units == 'SI':
-
-        return entropy
-    elif units == 'English':
-
-        return entropy*0.238845896627
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def toSIUnit_velocity(velocity, units:str='SI'):
-    '''Convert velocity from m/s or ft/s to m/s'''
-    if units == 'SI':
-
-        return velocity
-    elif units == 'English':
-
-        return velocity*0.3048
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def fromSIUnit_velocity(velocity, units:str='SI'):
-    '''Convert velocity from m/s to ft/s or m/s'''
-    if units == 'SI':
-
-        return velocity
-    elif units == 'English':
-
-        return velocity/0.3048
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def toSIUnit_thermalConductivity(thermalConductivity, units:str='SI'):
-    '''Convert thermal conductivity from W/m/K or btu/hr/ft/degF to W/m/K'''
-    if units == 'SI':
-
-        return thermalConductivity
-    elif units == 'English':
-
-        return thermalConductivity/0.577789
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def fromSIUnit_thermalConductivity(thermalConductivity, units:str='SI'):
-    '''Convert thermal conductivity from W/m/K to btu/hr/ft/degF or W/m/K'''
-    if units == 'SI':
-
-        return thermalConductivity
-    elif units == 'English':
-
-        return thermalConductivity*0.577789
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def toSIUnit_surfaceTension(surfaceTension, units:str='SI'):
-    '''Convert surface tension from N/m or lbf/ft to N/m'''
-    if units == 'SI':
-
-        return surfaceTension
-    elif units == 'English':
-
-        return surfaceTension/0.068521766
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def fromSIUnit_surfaceTension(surfaceTension, units:str='SI'):
-    '''Convert surface tension from N/m to lbf/ft or N/m'''
-    if units == 'SI':
-
-        return surfaceTension
-    elif units == 'English':
-
-        return surfaceTension*0.068521766
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def toSIUnit_dynamicViscosity(dynamicViscosity, units:str='SI'):
-    '''Convert dynamicViscosity from Pa*s or lbm/ft/hr to Pa*s'''
-    if units == 'SI':
-
-        return dynamicViscosity
-    elif units == 'English':
-
-        return dynamicViscosity/2419.088311
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
-
-def fromSIUnit_dynamicViscosity(dynamicViscosity, units:str='SI'):
-    '''Convert dynamicViscosity from Pa*s to lbm/ft/hr or Pa*s'''
-    if units == 'SI':
-
-        return dynamicViscosity
-    elif units == 'English':
-
-        return dynamicViscosity*2419.088311
-    else:
-
-        raise ValueError('Units of {} is not valid'.format(units))
+def fromSIUnit_dynamicViscosity(dynamicViscosity):
+    '''Convert dynamicViscosity from Pa*s to lbm/ft/hr'''
+    return dynamicViscosity*2419.088311
