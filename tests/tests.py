@@ -133,5 +133,24 @@ class Test_Tsat_p(unittest.TestCase):
 
         self.assertRaises(ArithmeticError, stm.Tsat_p, 0.0)
 
+class Test_T_ph(unittest.TestCase):
+
+    def tearDown(self):
+
+        stm.englishUnits = False
+
+    def test_T_ph(self):
+
+        self.assertAlmostEqual(stm.T_ph(100.0, 100.0), 23.84, places=2)
+
+    def test_T_ph_English(self):
+
+        stm.englishUnits = True
+        self.assertAlmostEqual(stm.T_ph(1.0, 100.0), 101.69, places=2)
+
+    def test_T_ph_error(self):
+
+        self.assertRaises(ArithmeticError, stm.T_ph, -1, -1)
+
 if __name__ == '__main__':
     unittest.main()
