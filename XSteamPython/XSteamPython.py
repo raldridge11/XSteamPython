@@ -1334,25 +1334,6 @@ def Tsat_p(pressure, units:str='SI'):
 #Rem   Next i
 #Rem  v1_pT = R * T / p * ps * g_p / 1000
 #Rem End Function
-#Rem Private Function h1_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem '5 Equations for Region 1, Section. 5.1 Basic Equation
-#Rem 'Eqution 7, Table 3, Page 6
-#Rem   Dim i As Integer
-#Rem   Dim ps, tau, g_t As Double
-#Rem   Dim I1, J1, n1 As Variant
-#Rem   Const R As Double = 0.461526 'kJ/(kg K)
-#Rem   I1 = Array(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 8, 8, 21, 23, 29, 30, 31, 32)
-#Rem   J1 = Array(-2, -1, 0, 1, 2, 3, 4, 5, -9, -7, -1, 0, 1, 3, -3, 0, 1, 3, 17, -4, 0, 6, -5, -2, 10, -8, -11, -6, -29, -31, -38, -39, -40, -41)
-#Rem   n1 = Array(0.14632971213167, -0.84548187169114, -3.756360367204, 3.3855169168385, -0.95791963387872, 0.15772038513228, -0.016616417199501, 8.1214629983568E-04, 2.8319080123804E-04, -6.0706301565874E-04, -0.018990068218419, -0.032529748770505, -0.021841717175414, -5.283835796993E-05, -4.7184321073267E-04, -3.0001780793026E-04, 4.7661393906987E-05, -4.4141845330846E-06, -7.2694996297594E-16, -3.1679644845054E-05, -2.8270797985312E-06, -8.5205128120103E-10, -2.2425281908E-06, -6.5171222895601E-07, -1.4341729937924E-13, -4.0516996860117E-07, -1.2734301741641E-09, -1.7424871230634E-10, -6.8762131295531E-19, 1.4478307828521E-20, 2.6335781662795E-23, -1.1947622640071E-23, 1.8228094581404E-24, -9.3537087292458E-26)
-#Rem   p = p / 16.53
-#Rem   tau = 1386 / T
-#Rem   g_t = 0#
-#Rem   For i = 0 To 33
-#Rem    g_t = g_t + (n1(i) * (7.1 - p) ^ I1(i) * J1(i) * (tau - 1.222) ^ (J1(i) - 1))
-#Rem   Next i
-#Rem  h1_pT = R * T * tau * g_t
-#Rem End Function
 def h1_pt(pressure, temperature):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997 5 Equations for Region 1, Section. 5.1 Basic Equation Equation 7, Table 3, Page 6'''
     i1 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 8, 8, 21, 23, 29, 30, 31, 32])
@@ -1567,30 +1548,21 @@ def h1_pt(pressure, temperature):
 #Rem   Next i
 #Rem   v2_pT = R * T / p * p * (g0_pi + gr_pi) / 1000
 #Rem End Function
-#Rem Private Function h2_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem '6 Equations for Region 2, Section. 6.1 Basic Equation
-#Rem 'Table 11 and 12, Page 14 and 15
-#Rem   Dim i As Integer
-#Rem   Dim tau, g0_tau, gr_tau As Double
-#Rem   Dim Ir, Jr, nr, J0, n0 As Variant
-#Rem   Const R As Double = 0.461526 'kJ/(kg K)
-#Rem   J0 = Array(0, 1, -5, -4, -3, -2, -1, 2, 3)
-#Rem   n0 = Array(-9.6927686500217, 10.086655968018, -0.005608791128302, 0.071452738081455, -0.40710498223928, 1.4240819171444, -4.383951131945, -0.28408632460772, 0.021268463753307)
-#Rem   Ir = Array(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7, 8, 8, 9, 10, 10, 10, 16, 16, 18, 20, 20, 20, 21, 22, 23, 24, 24, 24)
-#Rem   Jr = Array(0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11, 25, 8, 36, 13, 4, 10, 14, 29, 50, 57, 20, 35, 48, 21, 53, 39, 26, 40, 58)
-#Rem   nr = Array(-1.7731742473213E-03, -0.017834862292358, -0.045996013696365, -0.057581259083432, -0.05032527872793, -3.3032641670203E-05, -1.8948987516315E-04, -3.9392777243355E-03, -0.043797295650573, -2.6674547914087E-05, 2.0481737692309E-08, 4.3870667284435E-07, -3.227767723857E-05, -1.5033924542148E-03, -0.040668253562649, -7.8847309559367E-10, 1.2790717852285E-08, 4.8225372718507E-07, 2.2922076337661E-06, -1.6714766451061E-11, -2.1171472321355E-03, -23.895741934104, -5.905956432427E-18, -1.2621808899101E-06, -0.038946842435739, 1.1256211360459E-11, -8.2311340897998, 1.9809712802088E-08, 1.0406965210174E-19, -1.0234747095929E-13, -1.0018179379511E-09, -8.0882908646985E-11, 0.10693031879409, -0.33662250574171, 8.9185845355421E-25, 3.0629316876232E-13, -4.2002467698208E-06, -5.9056029685639E-26, 3.7826947613457E-06, -1.2768608934681E-15, 7.3087610595061E-29, 5.5414715350778E-17, -9.436970724121E-07)
-#Rem   tau = 540 / T
-#Rem   g0_tau = 0#
-#Rem   For i = 0 To 8
-#Rem     g0_tau = g0_tau + n0(i) * J0(i) * tau ^ (J0(i) - 1)
-#Rem   Next i
-#Rem   gr_tau = 0#
-#Rem   For i = 0 To 42
-#Rem    gr_tau = gr_tau + nr(i) * p ^ Ir(i) * Jr(i) * (tau - 0.5) ^ (Jr(i) - 1)
-#Rem   Next i
-#Rem   h2_pT = R * T * tau * (g0_tau + gr_tau)
-#Rem End Function
+
+def h2_pt(pressure, temperature):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997 6 Equations for Region 2, Section. 6.1 Basic Equation Table 11 and 12, Page 14 and 15'''
+
+    j0 = np.array([0, 1, -5, -4, -3, -2, -1, 2, 3])
+    n0 = np.array([-9.6927686500217, 10.086655968018, -0.005608791128302, 0.071452738081455, -0.40710498223928, 1.4240819171444, -4.383951131945, -0.28408632460772, 0.021268463753307])
+    Ir = np.array([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7, 8, 8, 9, 10, 10, 10, 16, 16, 18, 20, 20, 20, 21, 22, 23, 24, 24, 24])
+    Jr = np.array([0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11, 25, 8, 36, 13, 4, 10, 14, 29, 50, 57, 20, 35, 48, 21, 53, 39, 26, 40, 58])
+    nr = np.array([-1.7731742473213E-03, -0.017834862292358, -0.045996013696365, -0.057581259083432, -0.05032527872793, -3.3032641670203E-05, -1.8948987516315E-04, -3.9392777243355E-03, -0.043797295650573, -2.6674547914087E-05, 2.0481737692309E-08, 4.3870667284435E-07, -3.227767723857E-05, -1.5033924542148E-03, -0.040668253562649, -7.8847309559367E-10, 1.2790717852285E-08, 4.8225372718507E-07, 2.2922076337661E-06, -1.6714766451061E-11, -2.1171472321355E-03, -23.895741934104, -5.905956432427E-18, -1.2621808899101E-06, -0.038946842435739, 1.1256211360459E-11, -8.2311340897998, 1.9809712802088E-08, 1.0406965210174E-19, -1.0234747095929E-13, -1.0018179379511E-09, -8.0882908646985E-11, 0.10693031879409, -0.33662250574171, 8.9185845355421E-25, 3.0629316876232E-13, -4.2002467698208E-06, -5.9056029685639E-26, 3.7826947613457E-06, -1.2768608934681E-15, 7.3087610595061E-29, 5.5414715350778E-17, -9.436970724121E-07])
+
+    tau = 540.0/temperature
+    g0_tau = n0*j0*tau**(j0 - 1)
+    gr_tau = nr*Jr*((tau - 0.5)**(Jr - 1))*pressure**Ir
+    return _R*temperature*tau*(g0_tau.sum() + gr_tau.sum())
+
 #Rem Private Function u2_pT(ByVal p As Double, ByVal T As Double) As Double
 #Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
 #Rem '6 Equations for Region 2, Section. 6.1 Basic Equation
@@ -2755,17 +2727,20 @@ def region_ph(pressure, enthalpy):
 
     if pressure < 16.5292: #Bellow region 3, check region 1,4,2,5
 
-        # Region 1
-        Ts = T4_p(pressure)
-        hL = h1_pt(pressure, Ts)
-        if enthalpy <= hL:
+        if enthalpy <= h1_pt(pressure, T4_p(pressure)):
+
             region = 1
+        elif enthalpy <= h2_pt(pressure, 1073.15):
+
+            region = 2
     else:
 
-        # Region 1
-        print(h1_pt(pressure, 623.15))
         if enthalpy < h1_pt(pressure, 623.15):
+
             region = 1
+        elif enthalpy < h2_pt(pressure, 1073.15):
+
+            region = 2
 
     return region
 
