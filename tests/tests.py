@@ -160,7 +160,7 @@ class Test_region_ph(unittest.TestCase):
 
     def test_region_ph_enthalpyOutOfBounds(self):
 
-        self.assertRaises(ArithmeticError, stm.region_ph, 1, 1)
+        self.assertRaises(ArithmeticError, stm.region_ph, 1, -1)
 
 if __name__ == '__main__':
     unittest.main()
