@@ -1361,9 +1361,9 @@ def h1_pt(pressure, temperature):
 
     p = pressure/16.53
     tau = 1386.0/temperature
-    g_t =n1*j1*((7.1 - p)**i1)*(tau - 1.222)**(j1 - 1)
+    g_t = n1*j1*((7.1 - p)**i1)*(tau - 1.222)**(j1 - 1)
 
-    return _R*temperature*g_t.sum()
+    return _R*temperature*tau*g_t.sum()
 
 #Rem Private Function u1_pT(ByVal p As Double, ByVal T As Double) As Double
 #Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
@@ -2752,6 +2752,23 @@ def region_ph(pressure, enthalpy):
     if enthalpy < enthalpyMin:
         if enthalpy < h1_pt(pressure, 273.150):
             raise ArithmeticError
+
+    if pressure < 16.5292: #Bellow region 3, check region 1,4,2,5
+
+        # Region 1
+        Ts = T4_p(pressure)
+        hL = h1_pt(pressure, Ts)
+        if enthalpy <= hL:
+            region = 1
+    else:
+
+        # Region 1
+        print(h1_pt(pressure, 623.15))
+        if enthalpy < h1_pt(pressure, 623.15):
+            region = 1
+
+    return region
+
 
 #Rem '***********************************************************************************************************
 #Rem '*3.3 Regions as a function of ps

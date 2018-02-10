@@ -162,5 +162,25 @@ class Test_region_ph(unittest.TestCase):
 
         self.assertRaises(ArithmeticError, stm.region_ph, 1, -1)
 
+    def test_region_ph_region1_bellow3(self):
+
+        self.assertEqual(stm.region_ph(1.0, 100.0), 1)
+
+    def test_region_ph_region1_above3(self):
+
+        self.assertEqual(stm.region_ph(17.0, 1000.0), 1)
+
+    def test_region_ph_region2_bellow3(self):
+
+        self.assertEqual(stm.region_ph(1.0, 4000.0), 2)
+
+    def test_region_ph_region4_bellow3(self):
+
+        self.assertEqual(stm.region_ph(1.0, 1000.0), 4)
+
+    def test_region_ph_region5_bellow3(self):
+
+        self.assertEqual(stm.region_ph(1.0, 5000.0), 5)
+
 if __name__ == '__main__':
     unittest.main()
