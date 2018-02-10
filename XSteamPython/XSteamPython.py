@@ -6,6 +6,7 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
+from math import sqrt
 import numpy as np
 
 englishUnits = False
@@ -2727,22 +2728,33 @@ def region_ph(pressure, enthalpy):
 
     if pressure < 16.5292: #Bellow region 3, check region 1,4,2,5
 
-        if enthalpy <= h1_pt(pressure, T4_p(pressure)):
+        Tsatt = T4_p(pressure)
+        if enthalpy <= h1_pt(pressure, Tsatt):
 
-            region = 1
+            return 1
+        elif enthalpy < h2_pt(pressure, Tsatt):
+
+            return 4
         elif enthalpy <= h2_pt(pressure, 1073.15):
 
-            region = 2
+            return 2
     else:
 
         if enthalpy < h1_pt(pressure, 623.15):
 
-            region = 1
+            return 1
+        elif enthalpy < h2_pt(pressure, b23t_p(pressure)):
+
+            if pressure > p3sat_h(enthalpy):
+
+                return 3
+            else:
+
+                return 4
         elif enthalpy < h2_pt(pressure, 1073.15):
 
-            region = 2
+            return 2
 
-    return region
 
 
 #Rem '***********************************************************************************************************
@@ -3041,31 +3053,26 @@ def region_ph(pressure, enthalpy):
 #Rem 'Eq 5, Page 5
 #Rem B23p_T = 348.05185628969 - 1.1671859879975 * T + 1.0192970039326E-03 * T ^ 2
 #Rem End Function
-#Rem Private Function B23T_p(ByVal p As Double) As Double
-#Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
-#Rem '1997
-#Rem 'Section 4 Auxiliary Equation for the Boundary between Regions 2 and 3
-#Rem 'Eq 6, Page 6
-#Rem B23T_p = 572.54459862746 + ((p - 13.91883977887) / 1.0192970039326E-03) ^ 0.5
-#Rem End Function
+
+def b23t_p(pressure):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 1997
+        Section 4 Auxiliary Equation for the Boundary between Regions 2 and 3 Eq 6, Page 6'''
+    return 572.54459862746 + sqrt((pressure - 13.91883977887) / 1.0192970039326E-03)
+
 #Rem '***********************************************************************************************************
 #Rem '*4.2 Region 3. pSat_h and pSat_s
-#Rem Private Function p3sat_h(ByVal h As Double) As Double
-#Rem 'Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
-#Rem '2004
-#Rem 'Section 4 Boundary Equations psat(h) and psat(s) for the Saturation Lines of Region 3
-#Rem 'Se pictures Page 17, Eq 10, Table 17, Page 18
-#Rem Dim Ii, Ji, ni As Variant, ps As Double, i As Integer
-#Rem Ii = Array(0, 1, 1, 1, 1, 5, 7, 8, 14, 20, 22, 24, 28, 36)
-#Rem Ji = Array(0, 1, 3, 4, 36, 3, 0, 24, 16, 16, 3, 18, 8, 24)
-#Rem ni = Array(0.600073641753024, -9.36203654849857, 24.6590798594147, -107.014222858224, -91582131580576.8, -8623.32011700662, -23.5837344740032, 2.52304969384128E+17, -3.89718771997719E+18, -3.33775713645296E+22, 35649946963.6328, -1.48547544720641E+26, 3.30611514838798E+18, 8.13641294467829E+37)
-#Rem h = h / 2600
-#Rem ps = 0
-#Rem For i = 0 To 13
-#Rem   ps = ps + ni(i) * (h - 1.02) ^ Ii(i) * (h - 0.608) ^ Ji(i)
-#Rem Next i
-#Rem p3sat_h = ps * 22
-#Rem End Function
+
+def p3sat_h(enthalpy):
+    '''Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for   Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 2004
+       Section 4 Boundary Equations psat(h) and psat(s) for the Saturation Lines of Region 3 see pictures Page 17, Eq 10, Table 17, Page 18'''
+    Ii = np.array([0, 1, 1, 1, 1, 5, 7, 8, 14, 20, 22, 24, 28, 36])
+    Ji = np.array([0, 1, 3, 4, 36, 3, 0, 24, 16, 16, 3, 18, 8, 24])
+    ni = np.array([0.600073641753024, -9.36203654849857, 24.6590798594147, -107.014222858224, -91582131580576.8, -8623.32011700662, -23.5837344740032, 2.52304969384128E+17, -3.89718771997719E+18, -3.33775713645296E+22, 35649946963.6328, -1.48547544720641E+26, 3.30611514838798E+18, 8.13641294467829E+37])
+
+    h = enthalpy/2600.0
+    ps = ni*(h - 1.02)**Ii*(h - 0.608)**Ji
+    return ps.sum()*22.0
+
 #Rem Private Function p3sat_s(ByVal s As Double) As Double
 #Rem Dim Ii, Ji, ni As Variant, sigma, p As Double, i As Integer
 #Rem Ii = Array(0, 1, 1, 4, 12, 12, 16, 24, 28, 32)

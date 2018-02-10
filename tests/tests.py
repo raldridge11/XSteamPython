@@ -182,9 +182,17 @@ class Test_region_ph(unittest.TestCase):
 
         self.assertEqual(stm.region_ph(1.0, 1000.0), 4)
 
+    def test_region_ph_region4_above3(self):
+
+        self.assertEqual(stm.region_ph(17.0, 2000.0), 4)
+
     def test_region_ph_region5_bellow3(self):
 
         self.assertEqual(stm.region_ph(1.0, 5000.0), 5)
+
+    def test_region_ph_region3(self):
+
+        self.assertEqual(stm.region_ph(19.0, 2500.0), 3)
 
 class Test_hX_pt(unittest.TestCase):
 
@@ -195,6 +203,18 @@ class Test_hX_pt(unittest.TestCase):
     def test_h2_pt(self):
 
         self.assertAlmostEqual(stm.h2_pt(15.0, 1073.15), 4091.326, places=3)
+
+class Test_pXsat_h(unittest.TestCase):
+
+    def test_p3sat_h(self):
+
+        self.assertAlmostEqual(stm.p3sat_h(2674.95), 11.62, places=2)
+
+class Test_bXYt_p(unittest.TestCase):
+
+    def test_b23t_p(self):
+
+        self.assertAlmostEqual(stm.b23t_p(15.0), 605.11, places=2)
 
 if __name__ == '__main__':
     unittest.main()
