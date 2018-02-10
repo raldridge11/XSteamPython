@@ -2726,6 +2726,14 @@ def T4_p(p):
 #Rem  End If
 #Rem  region_ph = 0
 #Rem End Function
+def region_ph(pressure, enthalpy):
+
+    pressureMin, pressureMax = 0.000611657, 100.0
+    enthalpyMin = 0.963 * pressure + 2.2 # Linear adaption to h1_pt()+2 to speed up calcualations.
+
+    if pressure < pressureMin or pressure > pressureMax:
+        raise ArithmeticError
+
 #Rem '***********************************************************************************************************
 #Rem '*3.3 Regions as a function of ps
 #Rem Private Function region_ps(ByVal p As Double, ByVal s) As Integer

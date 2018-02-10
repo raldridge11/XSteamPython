@@ -152,5 +152,15 @@ class Test_T_ph(unittest.TestCase):
 
         self.assertRaises(ArithmeticError, stm.T_ph, -1, -1)
 
+class Test_region_ph(unittest.TestCase):
+
+    def test_region_ph_pressureOutOfBounds(self):
+
+        self.assertRaises(ArithmeticError, stm.region_ph, 0, 4.0)
+
+    def test_region_ph_enthalpyOutOfBounds(self):
+
+        self.assertRaises(ArithmeticError, stm.region_ph, 1, 1)
+
 if __name__ == '__main__':
     unittest.main()
