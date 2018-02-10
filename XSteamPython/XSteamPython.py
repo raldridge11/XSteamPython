@@ -2395,28 +2395,22 @@ def T4_p(p):
 #Rem End Function
 #Rem '***********************************************************************************************************
 #Rem '*2.5 Functions for region 5
-#Rem Private Function h5_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem   'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem   'Basic Equation for Region 5
-#Rem   'Eq 32,33, Page 36, Tables 37-41
-#Rem    Dim Iir, Jir, nir, ni0, Ji0 As Variant, tau, gamma0_tau, gammar_tau As Double, i As Integer
-#Rem    Const R As Double = 0.461526   'kJ/(kg K)
-#Rem   Ji0 = Array(0, 1, -3, -2, -1, 2)
-#Rem   ni0 = Array(-13.179983674201, 6.8540841634434, -0.024805148933466, 0.36901534980333, -3.1161318213925, -0.32961626538917)
-#Rem   Iir = Array(1, 1, 1, 2, 3)
-#Rem   Jir = Array(0, 1, 3, 9, 3)
-#Rem   nir = Array(-1.2563183589592E-04, 2.1774678714571E-03, -0.004594282089991, -3.9724828359569E-06, 1.2919228289784E-07)
-#Rem   tau = 1000 / T
-#Rem   gamma0_tau = 0
-#Rem   For i = 0 To 5
-#Rem     gamma0_tau = gamma0_tau + ni0(i) * Ji0(i) * tau ^ (Ji0(i) - 1)
-#Rem   Next i
-#Rem   gammar_tau = 0
-#Rem   For i = 0 To 4
-#Rem     gammar_tau = gammar_tau + nir(i) * p ^ Iir(i) * Jir(i) * tau ^ (Jir(i) - 1)
-#Rem   Next i
-#Rem   h5_pT = R * T * tau * (gamma0_tau + gammar_tau)
-#Rem End Function
+
+def h5_pt(pressure, temperature):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam September 1997
+        Basic Equation for Region 5
+        Eq 32,33, Page 36, Tables 37-41'''
+    Ji0 = np.array([0, 1, -3, -2, -1, 2])
+    ni0 = np.array([-13.179983674201, 6.8540841634434, -0.024805148933466, 0.36901534980333, -3.1161318213925, -0.32961626538917])
+    Iir = np.array([1, 1, 1, 2, 3])
+    Jir = np.array([0, 1, 3, 9, 3])
+    nir = np.array([-1.2563183589592E-04, 2.1774678714571E-03, -0.004594282089991, -3.9724828359569E-06, 1.2919228289784E-07])
+
+    tau = 1000.0/temperature
+    gamma0_tau = ni0*Ji0*tau**(Ji0 - 1)
+    gammar_tau = nir*Jir*pressure**Iir*tau**(Jir - 1)
+
+    return _R*temperature*tau*(gamma0_tau.sum() + gammar_tau.sum())
 #Rem
 #Rem
 #Rem Private Function v5_pT(ByVal p As Double, ByVal T As Double) As Double
@@ -2738,6 +2732,9 @@ def region_ph(pressure, enthalpy):
         elif enthalpy <= h2_pt(pressure, 1073.15):
 
             return 2
+        elif enthalpy < h5_pt(pressure, 2273.15):
+
+            return 5
     else:
 
         if enthalpy < h1_pt(pressure, 623.15):

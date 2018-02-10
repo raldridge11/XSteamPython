@@ -204,6 +204,10 @@ class Test_hX_pt(unittest.TestCase):
 
         self.assertAlmostEqual(stm.h2_pt(15.0, 1073.15), 4091.326, places=3)
 
+    def test_h5_pt(self):
+
+        self.assertAlmostEqual(stm.h5_pt(10.0,2273.15), 7374.752, places=3)
+
 class Test_pXsat_h(unittest.TestCase):
 
     def test_p3sat_h(self):
