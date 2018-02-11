@@ -15,15 +15,21 @@ _tc = 647.096
 _pc = 22.064
 _rhoc = 322.0
 
-def Tsat_p(pressure, units:str='SI'):
+def Tsat_p(pressure):
     '''Returns saturation temperature given a pressure in kPa'''
     pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
     pressure = toSIUnit(pressure, 'pressure')
 
     if pressure >= pressureMin and pressure <= pressureMax:
-       return fromSIUnit(t4_p(pressure), 'temperature')
+        return fromSIUnit(t4_p(pressure), 'temperature')
     else:
-       raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit(pressureMin, 'pressure'), fromSIUnit(pressureMax, 'pressure')))
+        if not englishUnits:
+            unit = 'kPa'
+        else:
+            unit = 'psi'
+
+        min, max = fromSIUnit(pressureMin, 'pressure'), fromSIUnit(pressureMax, 'pressure')
+        raise ArithmeticError('Pressure needs to be between {} and {} {}'.format(min, max, unit))
 
 #Rem Function Tsat_s(ByVal s As Double) As Double
 #Rem  s = toSIunit_s(s)
@@ -34,25 +40,36 @@ def Tsat_p(pressure, units:str='SI'):
 #Rem  End If
 #Rem End Function
 #Rem
-#Rem Function T_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  h = toSIunit_h(h)
-#Rem  Select Case region_ph(p, h)
-#Rem  Case 1
-#Rem    T_ph = fromSIunit_T(T1_ph(p, h))
-#Rem  Case 2
-#Rem    T_ph = fromSIunit_T(T2_ph(p, h))
-#Rem  Case 3
-#Rem    T_ph = fromSIunit_T(T3_ph(p, h))
-#Rem  Case 4
-#Rem    T_ph = fromSIunit_T(T4_p(p))
-#Rem  Case 5
-#Rem    T_ph = fromSIunit_T(T5_ph(p, h))
-#Rem  Case Else
-#Rem   T_ph = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+
+def T_ph(pressure, enthalpy):
+
+    pressure = toSIUnit(pressure, 'pressure')
+    if englishUnits: enthalpy = toSIUnit(enthalpy, 'enthalpy')
+    temperature = 0
+
+    region = region_ph(pressure, enthalpy)
+
+    if region == 1:
+        temperature = t1_ph(pressure, enthalpy)
+    elif region == 2:
+        temperature = t2_ph(pressure, enthalpy)
+    elif region == 3:
+        temperature = t3_ph(pressure, enthalpy)
+    elif region == 4:
+        temperature = t4_p(pressure)
+    elif region == 5:
+        temperature = t5_ph(pressure, enthalpy)
+    else:
+        pressure = fromSIUnit(pressure, 'pressure')
+        units = ['kPa', 'kJ/kg']
+        if englishUnits:
+            unit = ['psi', 'btu/lb']
+            enthalpy = fromSIUnit(enthalpy, 'enthalpy')
+        raise ArithmeticError('Pressure {} {} and enthalpy {} {} are out of bounds'.format(pressure, unit[0], enthalpy, unit[1]))
+
+    return fromSIUnit(temperature, 'temperature')
+
+
 #Rem Function T_ps(ByVal p As Double, ByVal s As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
