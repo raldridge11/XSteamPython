@@ -2548,6 +2548,22 @@ def h5_pt(pressure, temperature):
 #Rem     Loop
 #Rem     T5_ph = Ts
 #Rem End Function
+def t5_ph(pressure, enthalpy):
+    '''Solve with half interval method'''
+    lowBound, highBound = 1073.15, 2273.15
+    enthalpyGuess, error = 0.0, 0.00001
+
+    while abs(enthalpy - enthalpyGuess) > error:
+
+        temperature = (lowBound + highBound)/2.0
+        enthalpyGuess = h5_pt(pressure, temperature)
+
+        if enthalpyGuess > enthalpy:
+            highBound = temperature
+        else:
+            lowBound = temperature
+
+    return temperature
 #Rem
 #Rem Private Function T5_ps(ByVal p As Double, ByVal s As Double) As Double
 #Rem     'Solve with half interval method
