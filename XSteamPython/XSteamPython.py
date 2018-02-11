@@ -2634,11 +2634,11 @@ def region_ph(pressure, enthalpy):
 
     if pressure < 16.5292: #Bellow region 3, check region 1,4,2,5
 
-        Tsatt = T4_p(pressure)
-        if enthalpy <= h1_pt(pressure, Tsatt):
+        tsatt = t4_p(pressure)
+        if enthalpy <= h1_pt(pressure, tsatt):
 
             return 1
-        elif enthalpy < h2_pt(pressure, Tsatt):
+        elif enthalpy < h2_pt(pressure, tsatt):
 
             return 4
         elif enthalpy <= h2_pt(pressure, 1073.15):

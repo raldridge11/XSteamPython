@@ -174,8 +174,6 @@ class Test_T_ph(unittest.TestCase):
 
         self.assertAlmostEqual(stm.t5_ph(10.0, 4500.0), 1228.268, places=3)
 
-
-
 class Test_region_ph(unittest.TestCase):
 
     def test_region_ph_pressureOutOfBounds(self):
