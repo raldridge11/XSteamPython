@@ -133,6 +133,12 @@ class Test_Tsat_p(unittest.TestCase):
 
         self.assertRaises(ArithmeticError, stm.Tsat_p, 0.0)
 
+class Test_Tx_p(unittest.TestCase):
+
+    def test_t4_p(self):
+
+        self.assertAlmostEqual(stm.t4_p(10.0), 584.149, places=3)
+
 class Test_T_ph(unittest.TestCase):
 
     def tearDown(self):
@@ -151,6 +157,24 @@ class Test_T_ph(unittest.TestCase):
     def test_T_ph_error(self):
 
         self.assertRaises(ArithmeticError, stm.T_ph, -1, -1)
+
+    def test_t1_ph(self):
+
+        self.assertAlmostEqual(stm.t1_ph(10.0, 100.0), 294.775, places=3)
+
+    def test_t2_ph(self):
+
+        self.assertAlmostEqual(stm.t2_ph(10.0, 4000.0), 1026.313, places=3)
+
+    def test_t3_ph(self):
+
+        self.assertAlmostEqual(stm.t3_ph(19.0, 2500.0), 635.926, places=3)
+
+    def test_t5_ph(self):
+
+        self.assertAlmostEqual(stm.t5_ph(10.0, 4500.0), 1228.268, places=3)
+
+
 
 class Test_region_ph(unittest.TestCase):
 

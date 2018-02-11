@@ -1458,23 +1458,19 @@ def h1_pt(pressure, temperature):
 #Rem   Next i
 #Rem   w1_pT = (1000 * R * T * g_p ^ 2 / ((g_p - tau * g_pt) ^ 2 / (tau ^ 2 * G_tt) - g_pp)) ^ 0.5
 #Rem End Function
-#Rem Private Function T1_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem '5 Equations for Region 1, Section. 5.1 Basic Equation, 5.2.1 The Backward Equation T ( p,h )
-#Rem 'Eqution 11, Table 6, Page 10
-#Rem   Dim i As Integer
-#Rem   Dim T As Double
-#Rem   Dim I1, J1, n1 As Variant
-#Rem   I1 = Array(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 4, 5, 6)
-#Rem   J1 = Array(0, 1, 2, 6, 22, 32, 0, 1, 2, 3, 4, 10, 32, 10, 32, 10, 32, 32, 32, 32)
-#Rem   n1 = Array(-238.72489924521, 404.21188637945, 113.49746881718, -5.8457616048039, -1.528548241314E-04, -1.0866707695377E-06, -13.391744872602, 43.211039183559, -54.010067170506, 30.535892203916, -6.5964749423638, 9.3965400878363E-03, 1.157364750534E-07, -2.5858641282073E-05, -4.0644363084799E-09, 6.6456186191635E-08, 8.0670734103027E-11, -9.3477771213947E-13, 5.8265442020601E-15, -1.5020185953503E-17)
-#Rem   h = h / 2500
-#Rem   T = 0#
-#Rem   For i = 0 To 19
-#Rem    T = T + n1(i) * p ^ I1(i) * (h + 1) ^ J1(i)
-#Rem   Next i
-#Rem   T1_ph = T
-#Rem End Function
+
+def t1_ph(pressure, enthalpy):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
+    5 Equations for Region 1, Section. 5.1 Basic Equation, 5.2.1 The Backward Equation T ( p,h )
+    Eqution 11, Table 6, Page 10'''
+    I1 = np.array([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 4, 5, 6])
+    J1 = np.array([0, 1, 2, 6, 22, 32, 0, 1, 2, 3, 4, 10, 32, 10, 32, 10, 32, 32, 32, 32])
+    n1 = np.array([-238.72489924521, 404.21188637945, 113.49746881718, -5.8457616048039, -1.528548241314E-04, -1.0866707695377E-06, -13.391744872602, 43.211039183559, -54.010067170506, 30.535892203916, -6.5964749423638, 9.3965400878363E-03, 1.157364750534E-07, -2.5858641282073E-05, -4.0644363084799E-09, 6.6456186191635E-08, 8.0670734103027E-11, -9.3477771213947E-13, 5.8265442020601E-15, -1.5020185953503E-17])
+
+    h = enthalpy/2500.0
+    T = n1*pressure**I1*(h + 1)**J1
+    return T.sum()
+
 #Rem Private Function T1_ps(ByVal p As Double, ByVal s As Double) As Double
 #Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
 #Rem '5 Equations for Region 1, Section. 5.1 Basic Equation, 5.2.2 The Backward Equation T ( p, s )
@@ -2163,12 +2159,12 @@ def h2_pt(pressure, temperature):
 #Rem   c = 14.91510861353 * teta ^ 2 - 4823.2657361591 * teta + 405113.40542057
 #Rem   p4_T = (2 * c / (-b + (b ^ 2 - 4 * a * c) ^ 0.5)) ^ 4
 #Rem End Function
-def T4_p(p):
+def t4_p(pressure):
     ''' Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
     Section 8.2 The Saturation-Temperature Equation
     Eq 31, Page 34 '''
 
-    beta = p**0.25
+    beta = pressure**0.25
     e = beta**2 - 17.073846940092*beta + 14.91510861353
     f = 1167.0521452767*beta**2 + 12020.82470247*beta - 4823.2657361591
     g = -724213.16703206*beta**2 - 3232555.0322333*beta + 405113.40542057
@@ -2623,90 +2619,6 @@ def h5_pt(pressure, temperature):
 #Rem End Function
 #Rem '***********************************************************************************************************
 #Rem '*3.2 Regions as a function of ph
-#Rem Private Function region_ph(ByVal p, ByVal h) As Integer
-#Rem Dim hL, hV, h_45, h_5u, Ts As Double
-#Rem  'Check if outside pressure limits
-#Rem  If p < 0.000611657 Or p > 100 Then
-#Rem      region_ph = 0
-#Rem      Exit Function
-#Rem  End If
-#Rem
-#Rem  'Check if outside low h.
-#Rem  If h < 0.963 * p + 2.2 Then 'Linear adaption to h1_pt()+2 to speed up calcualations.
-#Rem     If h < h1_pT(p, 273.15) Then
-#Rem       region_ph = 0
-#Rem       Exit Function
-#Rem     End If
-#Rem  End If
-#Rem
-#Rem  If p < 16.5292 Then 'Bellow region 3,Check  region 1,4,2,5
-#Rem    'Check Region 1
-#Rem    Ts = T4_p(p)
-#Rem    hL = 109.6635 * Log(p) + 40.3481 * p + 734.58 'Approximate function for hL_p
-#Rem    If Abs(h - hL) < 100 Then 'If approximate is not god enough use real function
-#Rem       hL = h1_pT(p, Ts)
-#Rem    End If
-#Rem    If h <= hL Then
-#Rem      region_ph = 1
-#Rem      Exit Function
-#Rem    End If
-#Rem    'Check Region 4
-#Rem    hV = 45.1768 * Log(p) - 20.158 * p + 2804.4 'Approximate function for hV_p
-#Rem    If Abs(h - hV) < 50 Then 'If approximate is not god enough use real function
-#Rem       hV = h2_pT(p, Ts)
-#Rem    End If
-#Rem    If h < hV Then
-#Rem      region_ph = 4
-#Rem      Exit Function
-#Rem    End If
-#Rem    'Check upper limit of region 2 Quick Test
-#Rem    If h < 4000 Then
-#Rem      region_ph = 2
-#Rem      Exit Function
-#Rem    End If
-#Rem   'Check region 2 (Real value)
-#Rem    h_45 = h2_pT(p, 1073.15)
-#Rem    If h <= h_45 Then
-#Rem      region_ph = 2
-#Rem      Exit Function
-#Rem    End If
-#Rem   'Check region 5
-#Rem    If p > 10 Then
-#Rem      region_ph = 0
-#Rem      Exit Function
-#Rem    End If
-#Rem    h_5u = h5_pT(p, 2273.15)
-#Rem    If h < h_5u Then
-#Rem       region_ph = 5
-#Rem       Exit Function
-#Rem    End If
-#Rem    region_ph = 0
-#Rem    Exit Function
-#Rem   Else 'For p>16.5292
-#Rem    'Check if in region1
-#Rem    If h < h1_pT(p, 623.15) Then
-#Rem      region_ph = 1
-#Rem      Exit Function
-#Rem    End If
-#Rem    'Check if in region 3 or 4 (Bellow Reg 2)
-#Rem    If h < h2_pT(p, B23T_p(p)) Then
-#Rem      'Region 3 or 4
-#Rem      If p > p3sat_h(h) Then
-#Rem        region_ph = 3
-#Rem        Exit Function
-#Rem      Else
-#Rem        region_ph = 4
-#Rem        Exit Function
-#Rem      End If
-#Rem   End If
-#Rem   'Check if region 2
-#Rem   If h < h2_pT(p, 1073.15) Then
-#Rem     region_ph = 2
-#Rem     Exit Function
-#Rem   End If
-#Rem  End If
-#Rem  region_ph = 0
-#Rem End Function
 def region_ph(pressure, enthalpy):
 
     region = 0
