@@ -11,6 +11,9 @@ import numpy as np
 
 englishUnits = False
 _R = 0.461526 #kJ/(kg K)
+_tc = 647.096
+_pc = 22.064
+_rhoc = 322.0
 
 def Tsat_p(pressure, units:str='SI'):
     '''Returns saturation temperature given a pressure in kPa'''
@@ -18,7 +21,7 @@ def Tsat_p(pressure, units:str='SI'):
     pressure = toSIUnit(pressure, 'pressure')
 
     if pressure >= pressureMin and pressure <= pressureMax:
-       return fromSIUnit(T4_p(pressure), 'temperature')
+       return fromSIUnit(t4_p(pressure), 'temperature')
     else:
        raise ArithmeticError('Pressure needs to be between {} and {} kPa'.format(fromSIUnit(pressureMin, 'pressure'), fromSIUnit(pressureMax, 'pressure')))
 
@@ -1929,42 +1932,35 @@ def h2_pt(pressure, temperature):
 #Rem   fideltadelta = fideltadelta - ni(0) / (delta ^ 2)
 #Rem   w3_rhoT = (1000 * R * T * (2 * delta * fidelta + delta ^ 2 * fideltadelta - (delta * fidelta - delta * tau * fideltatau) ^ 2 / (tau ^ 2 * fitautau))) ^ 0.5
 #Rem End Function
-#Rem Private Function T3_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem 'Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
-#Rem '2004
-#Rem 'Section 3.3 Backward Equations T(p,h) and v(p,h) for Subregions 3a and 3b
-#Rem 'Boundary equation, Eq 1 Page 5
-#Rem  Dim i As Integer, Ji, Ii, ni As Variant, h3ab, ps, hs, Ts As Double
-#Rem  Const R As Double = 0.461526, tc As Double = 647.096, pc As Double = 22.064, rhoc As Double = 322
-#Rem  h3ab = (2014.64004206875 + 3.74696550136983 * p - 2.19921901054187E-02 * p ^ 2 + 8.7513168600995E-05 * p ^ 3)
-#Rem   If h < h3ab Then
-#Rem     'Subregion 3a
-#Rem     'Eq 2, Table 3, Page 7
-#Rem     Ii = Array(-12, -12, -12, -12, -12, -12, -12, -12, -10, -10, -10, -8, -8, -8, -8, -5, -3, -2, -2, -2, -1, -1, 0, 0, 1, 3, 3, 4, 4, 10, 12)
-#Rem     Ji = Array(0, 1, 2, 6, 14, 16, 20, 22, 1, 5, 12, 0, 2, 4, 10, 2, 0, 1, 3, 4, 0, 2, 0, 1, 1, 0, 1, 0, 3, 4, 5)
-#Rem     ni = Array(-1.33645667811215E-07, 4.55912656802978E-06, -1.46294640700979E-05, 6.3934131297008E-03, 372.783927268847, -7186.54377460447, 573494.7521034, -2675693.29111439, -3.34066283302614E-05, -2.45479214069597E-02, 47.8087847764996, 7.64664131818904E-06, 1.28350627676972E-03, 1.71219081377331E-02, -8.51007304583213, -1.36513461629781E-02, -3.84460997596657E-06, 3.37423807911655E-03, -0.551624873066791, 0.72920227710747, -9.92522757376041E-03, -0.119308831407288, 0.793929190615421, 0.454270731799386, 0.20999859125991, -6.42109823904738E-03, -0.023515586860454, 2.52233108341612E-03, -7.64885133368119E-03, 1.36176427574291E-02, -1.33027883575669E-02)
-#Rem     ps = p / 100
-#Rem     hs = h / 2300
-#Rem     Ts = 0
-#Rem     For i = 0 To 30
-#Rem       Ts = Ts + ni(i) * (ps + 0.24) ^ Ii(i) * (hs - 0.615) ^ Ji(i)
-#Rem     Next i
-#Rem     T3_ph = Ts * 760
-#Rem   Else
-#Rem     'Subregion 3b
-#Rem     'Eq 3, Table 4, Page 7,8
-#Rem     Ii = Array(-12, -12, -10, -10, -10, -10, -10, -8, -8, -8, -8, -8, -6, -6, -6, -4, -4, -3, -2, -2, -1, -1, -1, -1, -1, -1, 0, 0, 1, 3, 5, 6, 8)
-#Rem     Ji = Array(0, 1, 0, 1, 5, 10, 12, 0, 1, 2, 4, 10, 0, 1, 2, 0, 1, 5, 0, 4, 2, 4, 6, 10, 14, 16, 0, 2, 1, 1, 1, 1, 1)
-#Rem     ni = Array(3.2325457364492E-05, -1.27575556587181E-04, -4.75851877356068E-04, 1.56183014181602E-03, 0.105724860113781, -85.8514221132534, 724.140095480911, 2.96475810273257E-03, -5.92721983365988E-03, -1.26305422818666E-02, -0.115716196364853, 84.9000969739595, -1.08602260086615E-02, 1.54304475328851E-02, 7.50455441524466E-02, 2.52520973612982E-02, -6.02507901232996E-02, -3.07622221350501, -5.74011959864879E-02, 5.03471360939849, -0.925081888584834, 3.91733882917546, -77.314600713019, 9493.08762098587, -1410437.19679409, 8491662.30819026, 0.861095729446704, 0.32334644281172, 0.873281936020439, -0.436653048526683, 0.286596714529479, -0.131778331276228, 6.76682064330275E-03)
-#Rem     hs = h / 2800
-#Rem     ps = p / 100
-#Rem     Ts = 0
-#Rem     For i = 0 To 32
-#Rem       Ts = Ts + ni(i) * (ps + 0.298) ^ Ii(i) * (hs - 0.72) ^ Ji(i)
-#Rem     Next i
-#Rem     T3_ph = Ts * 860
-#Rem   End If
-#Rem End Function
+
+def t3_ph(pressure, enthalpy):
+    '''Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 2004
+        Section 3.3 Backward Equations T(p,h) and v(p,h) for Subregions 3a and 3b
+        Boundary equation, Eq 1 Page 5'''
+    h3ab = 2014.64004206875 + 3.74696550136983*pressure - 2.19921901054187E-02*pressure**2 + 8.7513168600995E-05*pressure**3
+
+    if enthalpy < h3ab:
+        '''Subregion 3a Eq 2, Table 3, Page 7'''
+        Ii = np.array([-12, -12, -12, -12, -12, -12, -12, -12, -10, -10, -10, -8, -8, -8, -8, -5, -3, -2, -2, -2, -1, -1, 0, 0, 1, 3, 3, 4, 4, 10, 12])
+        Ji = np.array([0, 1, 2, 6, 14, 16, 20, 22, 1, 5, 12, 0, 2, 4, 10, 2, 0, 1, 3, 4, 0, 2, 0, 1, 1, 0, 1, 0, 3, 4, 5])
+        ni = np.array([-1.33645667811215E-07, 4.55912656802978E-06, -1.46294640700979E-05, 6.3934131297008E-03, 372.783927268847, -7186.54377460447, 573494.7521034, -2675693.29111439, -3.34066283302614E-05, -2.45479214069597E-02, 47.8087847764996, 7.64664131818904E-06, 1.28350627676972E-03, 1.71219081377331E-02, -8.51007304583213, -1.36513461629781E-02, -3.84460997596657E-06, 3.37423807911655E-03, -0.551624873066791, 0.72920227710747, -9.92522757376041E-03, -0.119308831407288, 0.793929190615421, 0.454270731799386, 0.20999859125991, -6.42109823904738E-03, -0.023515586860454, 2.52233108341612E-03, -7.64885133368119E-03, 1.36176427574291E-02, -1.33027883575669E-02])
+
+        ps = pressure/100.0
+        hs = enthalpy/2300.0
+        Ts = ni*(ps + 0.24)**I1*(hs - 0.615)**Ji
+        return 760.0*Ts.sum()
+    else:
+        '''Subregion 3b Eq3, Table 4, Page 7,8'''
+        Ii = np.array([-12, -12, -10, -10, -10, -10, -10, -8, -8, -8, -8, -8, -6, -6, -6, -4, -4, -3, -2, -2, -1, -1, -1, -1, -1, -1, 0, 0, 1, 3, 5, 6, 8])
+        Ji = np.array([0, 1, 0, 1, 5, 10, 12, 0, 1, 2, 4, 10, 0, 1, 2, 0, 1, 5, 0, 4, 2, 4, 6, 10, 14, 16, 0, 2, 1, 1, 1, 1, 1])
+        ni = np.array([3.2325457364492E-05, -1.27575556587181E-04, -4.75851877356068E-04, 1.56183014181602E-03, 0.105724860113781, -85.8514221132534, 724.140095480911, 2.96475810273257E-03, -5.92721983365988E-03, -1.26305422818666E-02, -0.115716196364853, 84.9000969739595, -1.08602260086615E-02, 1.54304475328851E-02, 7.50455441524466E-02, 2.52520973612982E-02, -6.02507901232996E-02, -3.07622221350501, -5.74011959864879E-02, 5.03471360939849, -0.925081888584834, 3.91733882917546, -77.314600713019, 9493.08762098587, -1410437.19679409, 8491662.30819026, 0.861095729446704, 0.32334644281172, 0.873281936020439, -0.436653048526683, 0.286596714529479, -0.131778331276228, 6.76682064330275E-03])
+
+        ps = pressure/100.0
+        hs = enthalpy/2800.0
+        Ts = ni*(ps + 0.298)**Ii*(hs - 0.72)**Ji
+        return 860.0*Ts.sum()
+
+
 #Rem Private Function v3_ph(ByVal p As Double, ByVal h As Double) As Double
 #Rem 'Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
 #Rem '2004
@@ -2530,23 +2526,6 @@ def h5_pt(pressure, temperature):
 #Rem   gammar_tautau = gammar_tautau + nir(i) * p ^ Iir(i) * Jir(i) * (Jir(i) - 1) * tau ^ (Jir(i) - 2)
 #Rem Next i
 #Rem w5_pT = (1000 * R * T * (1 + 2 * p * gammar_pi + p ^ 2 * gammar_pi ^ 2) / ((1 - p ^ 2 * gammar_pipi) + (1 + p * gammar_pi - tau * p * gammar_pitau) ^ 2 / (tau ^ 2 * (gamma0_tautau + gammar_tautau)))) ^ 0.5
-#Rem End Function
-#Rem
-#Rem Private Function T5_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem     'Solve with half interval method
-#Rem     Dim Low_Bound, High_Bound, Ts, hs As Double
-#Rem     Low_Bound = 1073.15
-#Rem     High_Bound = 2273.15
-#Rem     Do While Abs(h - hs) > 0.00001
-#Rem       Ts = (Low_Bound + High_Bound) / 2
-#Rem       hs = h5_pT(p, Ts)
-#Rem       If hs > h Then
-#Rem         High_Bound = Ts
-#Rem       Else
-#Rem         Low_Bound = Ts
-#Rem       End If
-#Rem     Loop
-#Rem     T5_ph = Ts
 #Rem End Function
 def t5_ph(pressure, enthalpy):
     '''Solve with half interval method'''
