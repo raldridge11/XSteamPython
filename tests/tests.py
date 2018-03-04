@@ -246,6 +246,10 @@ class Test_BoundaryFunctions(unittest.TestCase):
 
         self.assertAlmostEqual(stm.hB13_s(3.0), 1612.0467, places=3)
 
+    def test_tB23_hs(self):
+
+        self.assertAlmostEqual(stm.tB23_hs(1000.0, 3.0), 1611.524, places=3)
+
 class Test_Transport_Properties(unittest.TestCase):
 
     def test_surfaceTension_T(self):
