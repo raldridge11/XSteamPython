@@ -262,5 +262,11 @@ class Test_Transport_Properties(unittest.TestCase):
     def test_surfaceTension_T_Excetpion(self):
         self.assertRaises(ArithmeticError, stm.surfaceTension_T, 0.0)
 
+class Test_vX_pT(unittest.TestCase):
+
+    def test_v1_pt(self):
+
+        self.assertAlmostEqual(stm.v1_pt(100.0, 400.0), 0.0010185, places=7)
+
 if __name__ == '__main__':
     unittest.main()
