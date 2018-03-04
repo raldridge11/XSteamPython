@@ -242,6 +242,10 @@ class Test_BoundaryFunctions(unittest.TestCase):
 
         self.assertAlmostEqual(stm.b23t_p(15.0), 605.11, places=2)
 
+    def test_b23p_t(self):
+
+        self.assertAlmostEqual(stm.b23p_t(100.0), 241.526, places=3)
+
     def test_hb13_s(self):
 
         self.assertAlmostEqual(stm.hB13_s(3.0), 1612.0467, places=3)

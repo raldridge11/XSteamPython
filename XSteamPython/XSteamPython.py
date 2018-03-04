@@ -2950,6 +2950,11 @@ def region_ph(pressure, enthalpy):
 #Rem B23p_T = 348.05185628969 - 1.1671859879975 * T + 1.0192970039326E-03 * T ^ 2
 #Rem End Function
 
+def b23p_t(temperature):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 1997
+      Section 4 Auxiliary Equation for the Boundary between Regions 2 and 3 Eq 5, Page 5'''
+    return 348.05185628969 - 1.1671859879975*temperature + 1.0192970039326E-03*temperature**2
+
 def b23t_p(pressure):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 1997
         Section 4 Auxiliary Equation for the Boundary between Regions 2 and 3 Eq 6, Page 6'''
