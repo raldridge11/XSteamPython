@@ -300,5 +300,10 @@ class Test_tX_ps(unittest.TestCase):
     def test_t1_ps(self):
         self.assertAlmostEqual(stm.t1_ps(100.0, 2.0), 450.051, places=3)
 
+class Test_pX_hs(unittest.TestCase):
+
+    def test_p1_hs(self):
+        self.assertAlmostEqual(stm.p1_hs(100.0, 0.2), 44.451, places=3)
+
 if __name__ == '__main__':
     unittest.main()

@@ -1444,25 +1444,19 @@ def t1_ps(pressure, entropy):
     i1 = np.array([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 4])
     j1 = np.array([0, 1, 2, 3, 11, 31, 0, 1, 2, 3, 12, 31, 0, 1, 2, 9, 31, 10, 32, 32])
     n1 = np.array([174.78268058307, 34.806930892873, 6.5292584978455, 0.33039981775489, -1.9281382923196E-07, -2.4909197244573E-23, -0.26107636489332, 0.22592965981586, -0.064256463395226, 7.8876289270526E-03, 3.5672110607366E-10, 1.7332496994895E-24, 5.6608900654837E-04, -3.2635483139717E-04, 4.4778286690632E-05, -5.1322156908507E-10, -4.2522657042207E-26, 2.6400441360689E-13, 7.8124600459723E-29, -3.0732199903668E-31])
-    return sum(n1*pressure**i1*(entropy + 2)**j1)
-#Rem Private Function p1_hs(ByVal h As Double, ByVal s As Double) As Double
-#Rem 'Supplementary Release on Backward Equations for Pressure as a Function of Enthalpy and Entropy p(h,s) to the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
-#Rem '5 Backward Equation p(h,s) for Region 1
-#Rem 'Eqution 1, Table 2, Page 5
-#Rem   Dim i As Integer
-#Rem   Dim p As Double
-#Rem   Dim I1, J1, n1 As Variant
-#Rem   I1 = Array(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 5)
-#Rem   J1 = Array(0, 1, 2, 4, 5, 6, 8, 14, 0, 1, 4, 6, 0, 1, 10, 4, 1, 4, 0)
-#Rem   n1 = Array(-0.691997014660582, -18.361254878756, -9.28332409297335, 65.9639569909906, -16.2060388912024, 450.620017338667, 854.68067822417, 6075.23214001162, 32.6487682621856, -26.9408844582931, -319.9478483343, -928.35430704332, 30.3634537455249, -65.0540422444146, -4309.9131651613, -747.512324096068, 730.000345529245, 1142.84032569021, -436.407041874559)
-#Rem   h = h / 3400
-#Rem   s = s / 7.6
-#Rem   p = 0#
-#Rem   For i = 0 To 18
-#Rem    p = p + n1(i) * (h + 0.05) ^ I1(i) * (s + 0.05) ^ J1(i)
-#Rem   Next i
-#Rem   p1_hs = p * 100
-#Rem End Function
+    return sum(n1*pressure**i1*(entropy + 2)**j1
+
+def p1_hs(enthalpy, entropy):
+    ''''Supplementary Release on Backward Equations for Pressure as a Function of Enthalpy and Entropy p(h,s) to the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
+    5 Backward Equation p(h,s) for Region 1'''
+    i1 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 5])
+    j1 = np.array([0, 1, 2, 4, 5, 6, 8, 14, 0, 1, 4, 6, 0, 1, 10, 4, 1, 4, 0])
+    n1 = np.array([-0.691997014660582, -18.361254878756, -9.28332409297335, 65.9639569909906, -16.2060388912024, 450.620017338667, 854.68067822417, 6075.23214001162, 32.6487682621856, -26.9408844582931, -319.9478483343, -928.35430704332, 30.3634537455249, -65.0540422444146, -4309.9131651613, -747.512324096068, 730.000345529245, 1142.84032569021, -436.407041874559])
+    enthalpy = enthalpy/3400.0
+    entropy = entropy/7.6
+    p = n1*(enthalpy + 0.05)**i1*(entropy + 0.05)**j1
+    return sum(p)*100.0
+
 #Rem Private Function T1_prho(ByVal p As Double, ByVal rho As Double) As Double
 #Rem   'Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
 #Rem   'Solve with half interval method
