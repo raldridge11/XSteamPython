@@ -1444,10 +1444,10 @@ def t1_ps(pressure, entropy):
     i1 = np.array([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 4])
     j1 = np.array([0, 1, 2, 3, 11, 31, 0, 1, 2, 3, 12, 31, 0, 1, 2, 9, 31, 10, 32, 32])
     n1 = np.array([174.78268058307, 34.806930892873, 6.5292584978455, 0.33039981775489, -1.9281382923196E-07, -2.4909197244573E-23, -0.26107636489332, 0.22592965981586, -0.064256463395226, 7.8876289270526E-03, 3.5672110607366E-10, 1.7332496994895E-24, 5.6608900654837E-04, -3.2635483139717E-04, 4.4778286690632E-05, -5.1322156908507E-10, -4.2522657042207E-26, 2.6400441360689E-13, 7.8124600459723E-29, -3.0732199903668E-31])
-    return sum(n1*pressure**i1*(entropy + 2)**j1
+    return sum(n1*pressure**i1*(entropy + 2)**j1)
 
 def p1_hs(enthalpy, entropy):
-    ''''Supplementary Release on Backward Equations for Pressure as a Function of Enthalpy and Entropy p(h,s) to the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
+    '''Supplementary Release on Backward Equations for Pressure as a Function of Enthalpy and Entropy p(h,s) to the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
     5 Backward Equation p(h,s) for Region 1'''
     i1 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 4, 4, 5])
     j1 = np.array([0, 1, 2, 4, 5, 6, 8, 14, 0, 1, 4, 6, 0, 1, 10, 4, 1, 4, 0])
@@ -1457,24 +1457,22 @@ def p1_hs(enthalpy, entropy):
     p = n1*(enthalpy + 0.05)**i1*(entropy + 0.05)**j1
     return sum(p)*100.0
 
-#Rem Private Function T1_prho(ByVal p As Double, ByVal rho As Double) As Double
-#Rem   'Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
-#Rem   'Solve with half interval method
-#Rem   Dim i As Integer
-#Rem   Dim Ts, Low_Bound, High_Bound, rhos As Double
-#Rem   Low_Bound = 273.15
-#Rem   High_Bound = T4_p(p)
-#Rem   Do While Abs(rho - rhos) > 0.00001
-#Rem     Ts = (Low_Bound + High_Bound) / 2
-#Rem     rhos = 1 / v1_pT(p, Ts)
-#Rem     If rhos < rho Then
-#Rem       High_Bound = Ts
-#Rem     Else
-#Rem       Low_Bound = Ts
-#Rem     End If
-#Rem     Loop
-#Rem     T1_prho = Ts
-#Rem End Function
+def t1_prho(pressure, density):
+    '''Solve by iteration. Observe that fo low temperatures this equation has 2 solutions. Solve with half interval method'''
+    lowBound = 273.15
+    highBound = t4_p(pressure)
+    rhos = 0.0
+    temperature = 0.0
+    error = 0.00001
+    while abs(density - rhos) > error:
+        temperature = (lowBound + highBound)/2.0
+        rhos = v1_pt(pressure, temperature)
+        if rhos < density:
+            highBound = temperature
+        else:
+            lowBound = temperature
+    return temperature
+
 #Rem '***********************************************************************************************************
 #Rem '*2.2 Functions for region 2
 #Rem
