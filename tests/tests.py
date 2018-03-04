@@ -242,5 +242,13 @@ class Test_bXYt_p(unittest.TestCase):
 
         self.assertAlmostEqual(stm.b23t_p(15.0), 605.11, places=2)
 
+class Test_Transport_Properties(unittest.TestCase):
+
+    def test_surfaceTension_T(self):
+        self.assertAlmostEqual(stm.surfaceTension_T(100.0),0.09006, places=5)
+
+    def test_surfaceTension_T_Excetpion(self):
+        self.assertRaises(ArithmeticError, stm.surfaceTension_T, 0.0)
+
 if __name__ == '__main__':
     unittest.main()

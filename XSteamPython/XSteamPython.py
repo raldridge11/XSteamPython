@@ -3147,20 +3147,14 @@ def p3sat_h(enthalpy):
 #Rem   tc2 = (0.0701309 / T ^ 10 + 0.011852) * rho ^ (9 / 5) * Exp(0.642857 * (1 - rho ^ (14 / 5))) + 0.00169937 * s * rho ^ Q * Exp((Q / (1 + Q)) * (1 - rho ^ (1 + Q))) - 1.02 * Exp(-4.11717 * T ^ (3 / 2) - 6.17937 / rho ^ 5)
 #Rem   tc_ptrho = tc0 + tc1 + tc2
 #Rem End Function
-#Rem '***********************************************************************************************************
-#Rem '5.3 Surface Tension
-#Rem Private Function Surface_Tension_T(ByVal T As Double)
-#Rem 'IAPWS Release on Surface Tension of Ordinary Water Substance,
-#Rem 'September 1994
-#Rem Dim tau As Double
-#Rem Const tc As Double = 647.096, b As Double = 0.2358, bb As Double = -0.625, my As Double = 1.256
-#Rem If T < 0.01 Or T > tc Then
-#Rem  Surface_Tension_T = "Out of valid region"
-#Rem  Exit Function
-#Rem End If
-#Rem tau = 1 - T / tc
-#Rem Surface_Tension_T = b * tau ^ my * (1 + bb * tau)
-#Rem End Function
+
+def surfaceTension_T(temperature):
+    '''IAPWS Release on Surface Tension of Ordinary Water Substance, September 1994'''
+    if temperature < 0.01 or temperature > _tc:
+        raise ArithmeticError('Temperature must be between {} and {}'.format(0.01, _tc))
+    tau = 1.0 - temperature/_tc
+    return 0.2358*tau**1.256*(1.0 - 0.625*tau)
+
 #Rem '***********************************************************************************************************
 #Rem '*6 Units                                                                                      *
 #Rem '***********************************************************************************************************
