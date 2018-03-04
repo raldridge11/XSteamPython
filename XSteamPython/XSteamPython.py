@@ -2982,21 +2982,16 @@ def p3sat_h(enthalpy):
 #Rem p3sat_s = p * 22
 #Rem End Function
 #Rem '***********************************************************************************************************
-#Rem '4.3 Region boundary 1to3 and 3to2 as a functions of s
-#Rem Private Function hB13_s(ByVal s As Double) As Double
-#Rem 'Supplementary Release on Backward Equations ( ) , p h s for Region 3,
-#Rem 'Chapter 4.5 page 23.
-#Rem Dim Ii, Ji, ni As Variant, sigma, eta As Double, i As Integer
-#Rem   Ii = Array(0, 1, 1, 3, 5, 6)
-#Rem   Ji = Array(0, -2, 2, -12, -4, -3)
-#Rem   ni = Array(0.913965547600543, -4.30944856041991E-05, 60.3235694765419, 1.17518273082168E-18, 0.220000904781292, -69.0815545851641)
-#Rem   sigma = s / 3.8
-#Rem   eta = 0
-#Rem   For i = 0 To 5
-#Rem     eta = eta + ni(i) * (sigma - 0.884) ^ Ii(i) * (sigma - 0.864) ^ Ji(i)
-#Rem   Next i
-#Rem   hB13_s = eta * 1700
-#Rem End Function
+def hB13_s(entropy):
+    ''''Supplementary Release on Backward Equations ( ) , p h s for Region 3, 'Chapter 4.5 page 23.'''
+    Ii = np.array([0, 1, 1, 3, 5, 6])
+    Ji = np.array([0, -2, 2, -12, -4, -3])
+    ni = np.array([0.913965547600543, -4.30944856041991E-05, 60.3235694765419, .17518273082168E-18, 0.220000904781292, -69.0815545851641])
+    sigma = entropy/3.8
+    eta = ni*(sigma - 0.884)**Ii*(sigma - 0.864)**Ji
+    return sum(eta)*1700.0
+
+
 #Rem Private Function TB23_hs(ByVal h As Double, ByVal s As Double) As Double
 #Rem 'Supplementary Release on Backward Equations ( ) , p h s for Region 3,
 #Rem 'Chapter 4.6 page 25.
@@ -3013,7 +3008,9 @@ def p3sat_h(enthalpy):
 #Rem   TB23_hs = teta * 900
 #Rem End Function
 #Rem
-#Rem '***********************************************************************************************************
+#Rem
+
+#'***********************************************************************************************************
 #Rem '*5 Transport properties
 #Rem '***********************************************************************************************************
 #Rem '*5.1 Viscosity (IAPWS formulation 1985, Revised 2003)

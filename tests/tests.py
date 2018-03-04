@@ -236,11 +236,15 @@ class Test_pXsat_h(unittest.TestCase):
 
         self.assertAlmostEqual(stm.p3sat_h(2674.95), 11.62, places=2)
 
-class Test_bXYt_p(unittest.TestCase):
+class Test_BoundaryFunctions(unittest.TestCase):
 
     def test_b23t_p(self):
 
         self.assertAlmostEqual(stm.b23t_p(15.0), 605.11, places=2)
+
+    def test_hb13_s(self):
+
+        self.assertAlmostEqual(stm.hB13_s(3.0), 1612.0467, places=3)
 
 class Test_Transport_Properties(unittest.TestCase):
 
