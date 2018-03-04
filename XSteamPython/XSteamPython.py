@@ -1438,20 +1438,13 @@ def t1_ph(pressure, enthalpy):
     T = n1*pressure**I1*(h + 1)**J1
     return T.sum()
 
-#Rem Private Function T1_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem '5 Equations for Region 1, Section. 5.1 Basic Equation, 5.2.2 The Backward Equation T ( p, s )
-#Rem 'Eqution 13, Table 8, Page 11
-#Rem   Dim i As Integer
-#Rem   Dim I1, J1, n1 As Variant
-#Rem   I1 = Array(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 4)
-#Rem   J1 = Array(0, 1, 2, 3, 11, 31, 0, 1, 2, 3, 12, 31, 0, 1, 2, 9, 31, 10, 32, 32)
-#Rem   n1 = Array(174.78268058307, 34.806930892873, 6.5292584978455, 0.33039981775489, -1.9281382923196E-07, -2.4909197244573E-23, -0.26107636489332, 0.22592965981586, -0.064256463395226, 7.8876289270526E-03, 3.5672110607366E-10, 1.7332496994895E-24, 5.6608900654837E-04, -3.2635483139717E-04, 4.4778286690632E-05, -5.1322156908507E-10, -4.2522657042207E-26, 2.6400441360689E-13, 7.8124600459723E-29, -3.0732199903668E-31)
-#Rem   T1_ps = 0#
-#Rem   For i = 0 To 19
-#Rem    T1_ps = T1_ps + n1(i) * p ^ I1(i) * (s + 2) ^ J1(i)
-#Rem   Next i
-#Rem End Function
+def t1_ps(pressure, entropy):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
+    5 Equations for Region 1, Section. 5.1 Basic Equation, 5.2.2 The Backward Equation T(p, s)Equation 13, Table 8, Page 11'''
+    i1 = np.array([0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 4])
+    j1 = np.array([0, 1, 2, 3, 11, 31, 0, 1, 2, 3, 12, 31, 0, 1, 2, 9, 31, 10, 32, 32])
+    n1 = np.array([174.78268058307, 34.806930892873, 6.5292584978455, 0.33039981775489, -1.9281382923196E-07, -2.4909197244573E-23, -0.26107636489332, 0.22592965981586, -0.064256463395226, 7.8876289270526E-03, 3.5672110607366E-10, 1.7332496994895E-24, 5.6608900654837E-04, -3.2635483139717E-04, 4.4778286690632E-05, -5.1322156908507E-10, -4.2522657042207E-26, 2.6400441360689E-13, 7.8124600459723E-29, -3.0732199903668E-31])
+    return sum(n1*pressure**i1*(entropy + 2)**j1)
 #Rem Private Function p1_hs(ByVal h As Double, ByVal s As Double) As Double
 #Rem 'Supplementary Release on Backward Equations for Pressure as a Function of Enthalpy and Entropy p(h,s) to the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
 #Rem '5 Backward Equation p(h,s) for Region 1
