@@ -274,5 +274,10 @@ class Test_uX_pt(unittest.TestCase):
 
         self.assertAlmostEqual(stm.u1_pt(100.0, 400.0), 501.925, places=3)
 
+class Test_sX_pt(unittest.TestCase):
+
+    def test_s1_pt(self):
+        self.assertAlmostEqual(stm.s1_pt(100.0, 400.0), 1.519, places=3)
+
 if __name__ == '__main__':
     unittest.main()

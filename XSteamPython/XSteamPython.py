@@ -1371,27 +1371,17 @@ def u1_pt(pressure, temperature):
     g_t = n1*(7.1 - pressure)**I1*J1*(tau - 1.222)**(J1 - 1)
     return _R*temperature*(tau*sum(g_t) - pressure*sum(g_p))
 
-#Rem Private Function s1_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem '5 Equations for Region 1, Section. 5.1 Basic Equation
-#Rem 'Eqution 7, Table 3, Page 6
-#Rem   Dim i As Integer
-#Rem   Dim g, g_t As Double
-#Rem   Dim I1, J1, n1 As Variant
-#Rem   Const R As Double = 0.461526 'kJ/(kg K)
-#Rem   I1 = Array(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 8, 8, 21, 23, 29, 30, 31, 32)
-#Rem   J1 = Array(-2, -1, 0, 1, 2, 3, 4, 5, -9, -7, -1, 0, 1, 3, -3, 0, 1, 3, 17, -4, 0, 6, -5, -2, 10, -8, -11, -6, -29, -31, -38, -39, -40, -41)
-#Rem   n1 = Array(0.14632971213167, -0.84548187169114, -3.756360367204, 3.3855169168385, -0.95791963387872, 0.15772038513228, -0.016616417199501, 8.1214629983568E-04, 2.8319080123804E-04, -6.0706301565874E-04, -0.018990068218419, -0.032529748770505, -0.021841717175414, -5.283835796993E-05, -4.7184321073267E-04, -3.0001780793026E-04, 4.7661393906987E-05, -4.4141845330846E-06, -7.2694996297594E-16, -3.1679644845054E-05, -2.8270797985312E-06, -8.5205128120103E-10, -2.2425281908E-06, -6.5171222895601E-07, -1.4341729937924E-13, -4.0516996860117E-07, -1.2734301741641E-09, -1.7424871230634E-10, -6.8762131295531E-19, 1.4478307828521E-20, 2.6335781662795E-23, -1.1947622640071E-23, 1.8228094581404E-24, -9.3537087292458E-26)
-#Rem   p = p / 16.53
-#Rem   T = 1386 / T
-#Rem   g = 0#
-#Rem   g_t = 0#
-#Rem   For i = 0 To 33
-#Rem    g_t = g_t + (n1(i) * (7.1 - p) ^ I1(i) * J1(i) * (T - 1.222) ^ (J1(i) - 1))
-#Rem    g = g + n1(i) * (7.1 - p) ^ I1(i) * (T - 1.222) ^ J1(i)
-#Rem   Next i
-#Rem   s1_pT = R * T * g_t - R * g
-#Rem End Function
+def s1_pt(pressure, temperature):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
+    5 Equations for Region 1, Section. 5.1 Basic Equation Equation 7, Table 3, Page 6'''
+    I1 = np.array([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 8, 8, 21, 23, 29, 30, 31, 32])
+    J1 = np.array([-2, -1, 0, 1, 2, 3, 4, 5, -9, -7, -1, 0, 1, 3, -3, 0, 1, 3, 17, -4, 0, 6, -5, -2, 10, -8, -11, -6, -29, -31, -38, -39, -40, -41])
+    n1 = np.array([0.14632971213167, -0.84548187169114, -3.756360367204, 3.3855169168385, -0.95791963387872, 0.15772038513228, -0.016616417199501, 8.1214629983568E-04, 2.8319080123804E-04, -6.0706301565874E-04, -0.018990068218419, -0.032529748770505, -0.021841717175414, -5.283835796993E-05, -4.7184321073267E-04, -3.0001780793026E-04, 4.7661393906987E-05, -4.4141845330846E-06, -7.2694996297594E-16, -3.1679644845054E-05, -2.8270797985312E-06, -8.5205128120103E-10, -2.2425281908E-06, -6.5171222895601E-07, -1.4341729937924E-13, -4.0516996860117E-07, -1.2734301741641E-09, -1.7424871230634E-10, -6.8762131295531E-19, 1.4478307828521E-20, 2.6335781662795E-23, -1.1947622640071E-23, 1.8228094581404E-24, -9.3537087292458E-26])
+    pressure = pressure/16.53
+    temperature = 1386.0/temperature
+    g_t = n1*(7.1 - pressure)**I1*J1*(temperature - 1.222)**(J1 - 1)
+    g = n1*(7.1 - pressure)**I1*(temperature - 1.222)**J1
+    return _R*(temperature*sum(g_t) - sum(g))
 #Rem Private Function Cp1_pT(ByVal p As Double, ByVal T As Double) As Double
 #Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
 #Rem '5 Equations for Region 1, Section. 5.1 Basic Equation
