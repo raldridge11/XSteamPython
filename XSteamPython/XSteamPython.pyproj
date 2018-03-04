@@ -11,7 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>XSteamPython</Name>
     <RootNamespace>XSteamPython</RootNamespace>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|env1|$(MSBuildProjectFullPath)</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,8 +25,8 @@
     <Compile Include="XSteamPython.py" />
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="..\env\">
-      <Id>env</Id>
+    <Interpreter Include="env\">
+      <Id>env1</Id>
       <Version>3.6</Version>
       <Description>env (Python 3.6 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
