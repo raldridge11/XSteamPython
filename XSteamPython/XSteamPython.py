@@ -2939,16 +2939,7 @@ def region_ph(pressure, enthalpy):
 #Rem
 #Rem '***********************************************************************************************************
 #Rem '*4 Region Borders
-#Rem '***********************************************************************************************************
-#Rem '***********************************************************************************************************
-#Rem '*4.1 Boundary between region 2 and 3.
-#Rem Private Function B23p_T(ByVal T As Double) As Double
-#Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
-#Rem '1997
-#Rem 'Section 4 Auxiliary Equation for the Boundary between Regions 2 and 3
-#Rem 'Eq 5, Page 5
-#Rem B23p_T = 348.05185628969 - 1.1671859879975 * T + 1.0192970039326E-03 * T ^ 2
-#Rem End Function
+#Rem '************************************************************************************************
 
 def b23p_t(temperature):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 1997
