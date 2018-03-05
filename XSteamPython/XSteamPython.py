@@ -1466,7 +1466,7 @@ def t1_prho(pressure, density):
     error = 0.00001
     while abs(density - rhos) > error:
         temperature = (lowBound + highBound)/2.0
-        rhos = v1_pt(pressure, temperature)
+        rhos = 1.0/v1_pt(pressure, temperature)
         if rhos < density:
             highBound = temperature
         else:
