@@ -3084,7 +3084,7 @@ conversionFactors = { 'enthalpy': 2.326, #[btu/lb]/[kJ/kg]
                       'viscosity': 1.0/2419.088311 #[lb/ft*hr]/[Pa*s]
     }
 
-def toSIUnit(value, quantity:str):
+def toSIUnit(value, quantity):
 
     quantity = quantity.lower()
 
@@ -3110,7 +3110,7 @@ def toSIUnit(value, quantity:str):
 
     return value
 
-def fromSIUnit(value, quantity:str):
+def fromSIUnit(value, quantity):
 
     quantity = quantity.lower()
 
