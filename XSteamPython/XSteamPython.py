@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 * Water and steam properties according to IAPWS IF-97
 * By Magnus Holmgren, www.x-eng.com
@@ -6,6 +7,7 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
+
 from math import sqrt
 import numpy as np
 
