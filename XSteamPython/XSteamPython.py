@@ -1558,36 +1558,27 @@ def cv2_pt(pressure, temperature):
     gr_pitau = sum(nr*ir*pressure**(ir - 1)*jr*(tau - 0.5)**(jr - 1))
     gr_tautau = sum(nr*pressure**ir*jr*(jr - 1)*(tau - 0.5)**(jr - 2))
     return _R*(-(tau**2*(g0_tautau + gr_tautau)) - ((1.0 + pressure*gr_pi - tau*pressure*gr_pitau)**2)/(1.0 - pressure**2*gr_pipi))
-#Function w2_pT(ByVal p As Double, ByVal T As Double) As Double
-#'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#'6 Equations for Region 2, Section. 6.1 Basic Equation
-#'Table 11 and 12, Page 14 and 15
-#  Dim i As Integer
-#  Dim tau, g0_tautau, gr_pi, gr_pitau, gr_pipi, gr_tautau As Double
-#  Dim Ir, Jr, nr, J0, n0 As Variant
-#  Const R As Double = 0.461526 'kJ/(kg K)
-#  J0 = Array(0, 1, -5, -4, -3, -2, -1, 2, 3)
-#  n0 = Array(-9.6927686500217, 10.086655968018, -0.005608791128302, 0.071452738081455, -0.40710498223928, 1.4240819171444, -4.383951131945, -0.28408632460772, 0.021268463753307)
-#  Ir = Array(1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7, 8, 8, 9, 10, 10, 10, 16, 16, 18, 20, 20, 20, 21, 22, 23, 24, 24, 24)
-#  Jr = Array(0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11, 25, 8, 36, 13, 4, 10, 14, 29, 50, 57, 20, 35, 48, 21, 53, 39, 26, 40, 58)
-#  nr = Array(-1.7731742473213E-03, -0.017834862292358, -0.045996013696365, -0.057581259083432, -0.05032527872793, -3.3032641670203E-05, -1.8948987516315E-04, -3.9392777243355E-03, -0.043797295650573, -2.6674547914087E-05, 2.0481737692309E-08, 4.3870667284435E-07, -3.227767723857E-05, -1.5033924542148E-03, -0.040668253562649, -7.8847309559367E-10, 1.2790717852285E-08, 4.8225372718507E-07, 2.2922076337661E-06, -1.6714766451061E-11, -2.1171472321355E-03, -23.895741934104, -5.905956432427E-18, -1.2621808899101E-06, -0.038946842435739, 1.1256211360459E-11, -8.2311340897998, 1.9809712802088E-08, 1.0406965210174E-19, -1.0234747095929E-13, -1.0018179379511E-09, -8.0882908646985E-11, 0.10693031879409, -0.33662250574171, 8.9185845355421E-25, 3.0629316876232E-13, -4.2002467698208E-06, -5.9056029685639E-26, 3.7826947613457E-06, -1.2768608934681E-15, 7.3087610595061E-29, 5.5414715350778E-17, -9.436970724121E-07)
-#  tau = 540 / T
-#  g0_tautau = 0#
-#  For i = 0 To 8
-#    g0_tautau = g0_tautau + n0(i) * J0(i) * (J0(i) - 1) * tau ^ (J0(i) - 2)
-#  Next i
-#  gr_pi = 0#
-#  gr_pitau = 0#
-#  gr_pipi = 0#
-#  gr_tautau = 0#
-#  For i = 0 To 42
-#   gr_pi = gr_pi + nr(i) * Ir(i) * p ^ (Ir(i) - 1) * (tau - 0.5) ^ Jr(i)
-#   gr_pipi = gr_pipi + nr(i) * Ir(i) * (Ir(i) - 1) * p ^ (Ir(i) - 2) * (tau - 0.5) ^ Jr(i)
-#   gr_pitau = gr_pitau + nr(i) * Ir(i) * p ^ (Ir(i) - 1) * Jr(i) * (tau - 0.5) ^ (Jr(i) - 1)
-#   gr_tautau = gr_tautau + nr(i) * p ^ Ir(i) * Jr(i) * (Jr(i) - 1) * (tau - 0.5) ^ (Jr(i) - 2)
-#  Next i
-#  w2_pT = (1000 * R * T * (1 + 2 * p * gr_pi + p ^ 2 * gr_pi ^ 2) / ((1 - p ^ 2 * gr_pipi) + (1 + p * gr_pi - tau * p * gr_pitau) ^ 2 / (tau ^ 2 * (g0_tautau + gr_tautau)))) ^ 0.5
-#End Function
+
+def w2_pt(pressure, temperature):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
+    6 Equations for Region 2, Section. 6.1 Basic Equation Table 11 and 12, Page 14 and 15'''
+    j0 = np.array([0, 1, -5, -4, -3, -2, -1, 2, 3])
+    n0 = np.array([-9.6927686500217, 10.086655968018, -0.005608791128302, 0.071452738081455, -0.40710498223928, 1.4240819171444, -4.383951131945, -0.28408632460772, 0.021268463753307])
+    ir = np.array([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7, 8, 8, 9, 10, 10, 10, 16, 16, 18, 20, 20, 20, 21, 22, 23, 24, 24, 24])
+    jr = np.array([0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11, 25, 8, 36, 13, 4, 10, 14, 29, 50, 57, 20, 35, 48, 21, 53, 39, 26, 40, 58])
+    nr = np.array([-1.7731742473213E-03, -0.017834862292358, -0.045996013696365, -0.057581259083432, -0.05032527872793, -3.3032641670203E-05, -1.8948987516315E-04, -3.9392777243355E-03, -0.043797295650573, -2.6674547914087E-05, 2.0481737692309E-08, 4.3870667284435E-07, -3.227767723857E-05, -1.5033924542148E-03, -0.040668253562649, -7.8847309559367E-10, 1.2790717852285E-08, 4.8225372718507E-07, 2.2922076337661E-06, -1.6714766451061E-11, -2.1171472321355E-03, -23.895741934104, -5.905956432427E-18, -1.2621808899101E-06, -0.038946842435739, 1.1256211360459E-11, -8.2311340897998, 1.9809712802088E-08, 1.0406965210174E-19, -1.0234747095929E-13, -1.0018179379511E-09, -8.0882908646985E-11, 0.10693031879409, -0.33662250574171, 8.9185845355421E-25, 3.0629316876232E-13, -4.2002467698208E-06, -5.9056029685639E-26, 3.7826947613457E-06, -1.2768608934681E-15, 7.3087610595061E-29, 5.5414715350778E-17, -9.436970724121E-07])
+    tau = 540.0/temperature
+    g0_tautau = sum(n0*j0*(j0 - 1)*tau**(j0 - 2))
+    gr_pi = sum(nr*ir*pressure**(ir - 1)*(tau - 0.5)**jr)
+    gr_pipi = sum(nr*ir*(ir - 1)*pressure**(ir - 2)*(tau - 0.5)**jr)
+    gr_pitau = sum(nr*ir*pressure**(ir - 1)*jr*(tau - 0.5)**(jr - 1))
+    gr_tautau = sum(nr*pressure**ir*jr*(jr -1)*(tau - 0.5)**(jr - 2))
+    a = 1000.0*_R*temperature*(1.0 + 2.0*pressure*gr_pi + pressure**2*gr_pi**2)
+    b = 1.0 - pressure**2*gr_pipi
+    c = (1.0 + pressure*gr_pi - tau*pressure*gr_pitau)**2
+    d = tau**2*(g0_tautau + gr_tautau)
+    e = c/d
+    return sqrt(1000.0*_R*temperature*(1.0 + 2.0*pressure*gr_pi + pressure**2*gr_pi**2)/((1.0 - pressure**2*gr_pipi) + (1.0 + pressure*gr_pi - tau*pressure*gr_pitau)**2/(tau**2*(g0_tautau + gr_tautau))))
 
 def t2_ph(pressure, enthalpy):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
