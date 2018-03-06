@@ -1573,11 +1573,6 @@ def w2_pt(pressure, temperature):
     gr_pipi = sum(nr*ir*(ir - 1)*pressure**(ir - 2)*(tau - 0.5)**jr)
     gr_pitau = sum(nr*ir*pressure**(ir - 1)*jr*(tau - 0.5)**(jr - 1))
     gr_tautau = sum(nr*pressure**ir*jr*(jr -1)*(tau - 0.5)**(jr - 2))
-    a = 1000.0*_R*temperature*(1.0 + 2.0*pressure*gr_pi + pressure**2*gr_pi**2)
-    b = 1.0 - pressure**2*gr_pipi
-    c = (1.0 + pressure*gr_pi - tau*pressure*gr_pitau)**2
-    d = tau**2*(g0_tautau + gr_tautau)
-    e = c/d
     return sqrt(1000.0*_R*temperature*(1.0 + 2.0*pressure*gr_pi + pressure**2*gr_pi**2)/((1.0 - pressure**2*gr_pipi) + (1.0 + pressure*gr_pi - tau*pressure*gr_pitau)**2/(tau**2*(g0_tautau + gr_tautau))))
 
 def t2_ph(pressure, enthalpy):
