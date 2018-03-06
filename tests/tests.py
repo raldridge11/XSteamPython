@@ -297,6 +297,12 @@ class Test_cpX_pt(unittest.TestCase):
 
         self.assertAlmostEqual(stm.cp1_pt(100.0, 400.0), 4.0604, places=4)
 
+    def test_cp2_pt(self):
+
+        self.assertAlmostEqual(stm.cp2_pt(10.0, 600.0), 5.141, places=3)
+
+
+
 class Test_cvX_pt(unittest.TestCase):
 
     def test_cv1_pt(self):
