@@ -345,7 +345,6 @@ class Test_pX_hs(unittest.TestCase):
     def test_p2_hs_region3(self):
         self.assertAlmostEqual(stm.p2_hs(2800.0, 5.8), 8.415, places=3)
 
-
 class Test_tX_prho(unittest.TestCase):
 
     def test_t1_prho(self):
@@ -353,6 +352,11 @@ class Test_tX_prho(unittest.TestCase):
 
     def test_t2_prho(self):
         self.assertAlmostEqual(stm.t2_prho(1.01, 5.0), 466.334, places=3)
+
+class Test_pX_rhot(unittest.TestCase):
+
+    def test_p3_rhot(self):
+        self.assertAlmostEqual(stm.p3_rhot(500.0, 644.0), 22.689, places=3)
 
 if __name__ == '__main__':
     unittest.main()
