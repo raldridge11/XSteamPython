@@ -12,10 +12,10 @@ from math import sqrt, log
 import numpy as np
 
 englishUnits = False
-_R = 0.461526 #kJ/(kg K)
-_tc = 647.096
-_pc = 22.064
-_rhoc = 322.0
+_R = 0.461526 # kJ/(kg K)
+_tc = 647.096 # K
+_pc = 22.064 # MPa
+_rhoc = 322.0 # kg/m**3
 
 def Tsat_p(pressure):
     '''Returns saturation temperature given a pressure in kPa'''
