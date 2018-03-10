@@ -378,5 +378,10 @@ class Test_cpX_rhot(unittest.TestCase):
     def test_cp3_rhot(self):
         self.assertAlmostEqual(stm.cp3_rhot(500.0, 644.0), 16.128, places=3)
 
+class Test_cvX_rhot(unittest.TestCase):
+
+    def test_cv3_rhot(self):
+        self.assertAlmostEqual(stm.cv3_rhot(500.0, 644.0), 3.278, places=3)
+
 if __name__ == '__main__':
     unittest.main()
