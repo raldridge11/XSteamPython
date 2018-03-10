@@ -1332,12 +1332,10 @@ def T_ph(pressure, enthalpy):
 #Rem   End If
 #Rem End Function
 #Rem
-#Rem '***********************************************************************************************************
-#Rem '*2 IAPWS IF 97 Calling functions                                                                          *
-#Rem '***********************************************************************************************************
-#Rem '
-#Rem '***********************************************************************************************************
-#Rem '*2.1 Functions for region 1
+
+# IAPWS IF 97 Calling functions
+#
+# Functions for region 1
 def v1_pt(pressure, temperature):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
     5 Equations for Region 1, Section. 5.1 Basic Equation Eqution 7, Table 3, Page 6'''
@@ -1475,8 +1473,7 @@ def t1_prho(pressure, density):
             lowBound = temperature
     return temperature
 
-#Rem '***********************************************************************************************************
-#Rem '*2.2 Functions for region 2
+# Functions for region 2
 def v2_pt(pressure, temperature):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
     6 Equations for Region 2, Section. 6.1 Basic Equation Table 11 and 12, Page 14 and 15'''
@@ -1687,29 +1684,6 @@ def p2_hs(enthalpy, entropy):
         pressure = 100.0*sum(ni*(eta - 0.7)**ii*(sigma - 1.1)**ji)**4
 
     return pressure
-
-#Rem Private Function T2_prho(ByVal p As Double, ByVal rho As Double) As Double
-#Rem   'Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
-#Rem   'Solve with half interval method
-#Rem   Dim Low_Bound, High_Bound, rhos, Ts As Double
-#Rem
-#Rem   If p < 16.5292 Then
-#Rem     Low_Bound = T4_p(p)
-#Rem   Else
-#Rem     Low_Bound = B23T_p(p)
-#Rem   End If
-#Rem   High_Bound = 1073.15
-#Rem   Do While Abs(rho - rhos) > 0.000001
-#Rem     Ts = (Low_Bound + High_Bound) / 2
-#Rem     rhos = 1 / v2_pT(p, Ts)
-#Rem     If rhos < rho Then
-#Rem       High_Bound = Ts
-#Rem     Else
-#Rem       Low_Bound = Ts
-#Rem     End If
-#Rem     Loop
-#Rem     T2_prho = Ts
-#Rem End Function
 
 def t2_prho(pressure, density):
     '''Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
