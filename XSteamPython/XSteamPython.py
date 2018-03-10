@@ -1745,26 +1745,18 @@ def h3_rhot(density, temperature):
     fidelta = sum(ni*ii*delta**(ii - 1)*tau**ji) + ni[0]/delta
     fitau = sum(ni*delta**ii*ji*tau**(ji - 1))
     return _R*temperature*(tau*fitau + delta*fidelta)
-#Rem Private Function s3_rhoT(ByVal rho As Double, ByVal T As Double) As Double
-#Rem   'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem   '7 Basic Equation for Region 3, Section. 6.1 Basic Equation
-#Rem   'Table 30 and 31, Page 30 and 31
-#Rem   Dim i As Integer, Ji, Ii, ni As Variant, fi, delta, tau, fitau As Double
-#Rem   Const R As Double = 0.461526, tc As Double = 647.096, pc As Double = 22.064, rhoc As Double = 322
-#Rem   Ii = Array(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 8, 9, 9, 10, 10, 11)
-#Rem   Ji = Array(0, 0, 1, 2, 7, 10, 12, 23, 2, 6, 15, 17, 0, 2, 6, 7, 22, 26, 0, 2, 4, 16, 26, 0, 2, 4, 26, 1, 3, 26, 0, 2, 26, 2, 26, 2, 26, 0, 1, 26)
-#Rem   ni = Array(1.0658070028513, -15.732845290239, 20.944396974307, -7.6867707878716, 2.6185947787954, -2.808078114862, 1.2053369696517, -8.4566812812502E-03, -1.2654315477714, -1.1524407806681, 0.88521043984318, -0.64207765181607, 0.38493460186671, -0.85214708824206, 4.8972281541877, -3.0502617256965, 0.039420536879154, 0.12558408424308, -0.2799932969871, 1.389979956946, -2.018991502357, -8.2147637173963E-03, -0.47596035734923, 0.0439840744735, -0.44476435428739, 0.90572070719733, 0.70522450087967, 0.10770512626332, -0.32913623258954, -0.50871062041158, -0.022175400873096, 0.094260751665092, 0.16436278447961, -0.013503372241348, -0.014834345352472, 5.7922953628084E-04, 3.2308904703711E-03, 8.0964802996215E-05, -1.6557679795037E-04, -4.4923899061815E-05)
-#Rem   delta = rho / rhoc
-#Rem   tau = tc / T
-#Rem   fi = 0
-#Rem   fitau = 0
-#Rem   For i = 1 To 39
-#Rem     fi = fi + ni(i) * delta ^ Ii(i) * tau ^ Ji(i)
-#Rem     fitau = fitau + ni(i) * delta ^ Ii(i) * Ji(i) * tau ^ (Ji(i) - 1)
-#Rem   Next i
-#Rem   fi = fi + ni(0) * Log(delta)
-#Rem   s3_rhoT = R * (tau * fitau - fi)
-#Rem End Function
+
+def s3_rhot(density, temperature):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
+    7 Basic Equation for Region 3, Section. 6.1 Basic Equation Table 30 and 31, Page 30 and 31'''
+    ii = np.array([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 8, 9, 9, 10, 10, 11])
+    ji = np.array([0, 0, 1, 2, 7, 10, 12, 23, 2, 6, 15, 17, 0, 2, 6, 7, 22, 26, 0, 2, 4, 16, 26, 0, 2, 4, 26, 1, 3, 26, 0, 2, 26, 2, 26, 2, 26, 0, 1, 26])
+    ni = np.array([1.0658070028513, -15.732845290239, 20.944396974307, -7.6867707878716, 2.6185947787954, -2.808078114862, 1.2053369696517, -8.4566812812502E-03, -1.2654315477714, -1.1524407806681, 0.88521043984318, -0.64207765181607, 0.38493460186671, -0.85214708824206, 4.8972281541877, -3.0502617256965, 0.039420536879154, 0.12558408424308, -0.2799932969871, 1.389979956946, -2.018991502357, -8.2147637173963E-03, -0.47596035734923, 0.0439840744735, -0.44476435428739, 0.90572070719733, 0.70522450087967, 0.10770512626332, -0.32913623258954, -0.50871062041158, -0.022175400873096, 0.094260751665092, 0.16436278447961, -0.013503372241348, -0.014834345352472, 5.7922953628084E-04, 3.2308904703711E-03, 8.0964802996215E-05, -1.6557679795037E-04, -4.4923899061815E-05])
+    delta = density/_rhoc
+    tau = _tc/temperature
+    fi = sum(ni*delta**ii*tau**ji) + ni[0]*(log(delta) - 1.0)
+    fitau = sum(ni*delta**ii*ji*tau**(ji - 1))
+    return _R*(tau*fitau - fi)
 #Rem Private Function Cp3_rhoT(ByVal rho As Double, ByVal T As Double) As Double
 #Rem   'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
 #Rem   '7 Basic Equation for Region 3, Section. 6.1 Basic Equation

@@ -368,5 +368,10 @@ class Test_hX_rhot(unittest.TestCase):
     def test_h3_rhot(self):
         self.assertAlmostEqual(stm.h3_rhot(500.0, 644.0), 1838.244, places=3)
 
+class Test_sX_rhot(unittest.TestCase):
+
+    def test_s3_pt(self):
+        self.assertAlmostEqual(stm.s3_rhot(500.0, 644.0), 4.024, places=3)
+
 if __name__ == '__main__':
     unittest.main()
