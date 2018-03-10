@@ -351,5 +351,8 @@ class Test_tX_prho(unittest.TestCase):
     def test_t1_prho(self):
         self.assertAlmostEqual(stm.t1_prho(100.0, 990.0), 388.110, places=3)
 
+    def test_t2_prho(self):
+        self.assertAlmostEqual(stm.t2_prho(1.01, 5.0), 466.334, places=3)
+
 if __name__ == '__main__':
     unittest.main()

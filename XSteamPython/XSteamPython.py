@@ -1710,6 +1710,33 @@ def p2_hs(enthalpy, entropy):
 #Rem     Loop
 #Rem     T2_prho = Ts
 #Rem End Function
+
+def t2_prho(pressure, density):
+    '''Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
+    Solve with half interval method'''
+    pressureMax = 16.5292
+    lowBound = 0.0
+    highBound = 1073.15
+    rhos = 0.0
+    tolerance = 0.000001
+    temperature = 0.0
+
+    if pressure < pressureMax:
+        lowBound = t4_p(pressure)
+    else:
+        lowBound = b23t_p(pressure)
+
+    while abs(density - rhos) > tolerance:
+        temperature = (lowBound + highBound)/2.0
+        rhos = 1.0/v2_pt(pressure, temperature)
+
+        if rhos < density:
+            highBound = temperature
+        else:
+            lowBound = temperature
+
+    return temperature
+
 #Rem '***********************************************************************************************************
 #Rem '*2.3 Functions for region 3
 #Rem
