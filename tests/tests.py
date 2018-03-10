@@ -134,7 +134,7 @@ class Test_Tsat_p(unittest.TestCase):
 
         self.assertRaises(ArithmeticError, stm.Tsat_p, 0.0)
 
-class Test_Tx_p(unittest.TestCase):
+class Test_T_p(unittest.TestCase):
 
     def test_t4_p(self):
 
@@ -309,7 +309,7 @@ class Test_cvX_pt(unittest.TestCase):
     def test_cv2_pt(self):
         self.assertAlmostEqual(stm.cv2_pt(10.0, 600.0), 2.626, places=3)
 
-class Test_wx_pt(unittest.TestCase):
+class Test_wX_pt(unittest.TestCase):
 
     def test_w1_pt(self):
         self.assertAlmostEqual(stm.w1_pt(100.0, 400.0), 1717.663, places=3)
@@ -382,6 +382,11 @@ class Test_cvX_rhot(unittest.TestCase):
 
     def test_cv3_rhot(self):
         self.assertAlmostEqual(stm.cv3_rhot(500.0, 644.0), 3.278, places=3)
+
+class Test_wX_rhot(unittest.TestCase):
+
+    def test_w3_rhot(self):
+        self.assertAlmostEqual(stm.w3_rhot(500.0, 644.0), 473.134, places=3)
 
 if __name__ == '__main__':
     unittest.main()
