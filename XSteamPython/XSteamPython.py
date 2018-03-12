@@ -2065,19 +2065,20 @@ def h4_p(pressure, phase):
 
     return enthalpy
 
-#Rem Private Function x4_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem 'Calculate vapour fraction from hL and hV for given p
-#Rem  Dim h4v, h4l As Double
-#Rem   h4v = h4V_p(p)
-#Rem   h4l = h4L_p(p)
-#Rem   If h > h4v Then
-#Rem     x4_ph = 1
-#Rem   ElseIf h < h4l Then
-#Rem     x4_ph = 0
-#Rem   Else
-#Rem     x4_ph = (h - h4l) / (h4v - h4l)
-#Rem   End If
-#Rem End Function
+def x4_ph(pressure, enthalpy):
+    ''' Calculate vapor fraction from enthalpy for given pressure'''
+    enthalpyVapor = h4_p(pressure, 'vap')
+    enthalpyLiquid = h4_p(pressure, 'liq')
+    quality = -1.0
+    if enthalpy > enthalpyVapor:
+        quality = 1.0
+    elif enthalpy < enthalpyLiquid:
+        quality = 0.0
+    else:
+        quality = (enthalpy - enthalpyLiquid)/(enthalpyVapor - enthalpyLiquid)
+
+    return quality
+
 #Rem Private Function x4_ps(ByVal p As Double, ByVal s As Double) As Double
 #Rem  Dim ssV, ssL As Double
 #Rem   If p < 16.529 Then

@@ -474,5 +474,16 @@ class Test_wX_rhot(unittest.TestCase):
     def test_w3_rhot(self):
         self.assertAlmostEqual(stm.w3_rhot(500.0, 644.0), 473.134, places=3)
 
+class Test_xX_ph(unittest.TestCase):
+
+    def test_x4_ph_liquid(self):
+        self.assertEqual(stm.x4_ph(15.0, 1000.0), 0.0)
+
+    def test_x4_ph_vapor(self):
+        self.assertEqual(stm.x4_ph(15.0, 3000.0), 1.0)
+
+    def test_x4_ph_mix(self):
+        self.assertAlmostEqual(stm.x4_ph(15.0, 2000.0), 0.390, places=3)
+
 if __name__ == '__main__':
     unittest.main()
