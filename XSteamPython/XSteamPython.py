@@ -8,7 +8,7 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 
-from math import sqrt, log
+from math import sqrt, log, exp
 import numpy as np
 
 englishUnits = False
@@ -1986,79 +1986,47 @@ def t4_p(pressure):
     d = 2*g/(-f - (f**2 - 4*e*g)**0.5)
     return (650.17534844798 + d - ((650.17534844798 + d)**2 - 4*(-0.23855557567849 + 650.17534844798*d))**0.5)/2
 
-#Rem Private Function h4_s(ByVal s As Double) As Double
-#Rem 'Supplementary Release on Backward Equations ( ) , p h s for Region 3,Equations as a Function of h and s for the Region Boundaries, and an Equation( ) sat , T hs for Region 4 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
-#Rem '4 Equations for Region Boundaries Given Enthalpy and Entropy
-#Rem ' Se picture page 14
-#Rem Dim Ii, Ji, ni As Variant, eta, sigma, sigma1, sigma2 As Double, i As Integer
-#Rem   If s > -0.0001545495919 And s <= 3.77828134 Then
-#Rem     'hL1_s
-#Rem     'Eq 3,Table 9,Page 16
-#Rem     Ii = Array(0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5, 7, 8, 12, 12, 14, 14, 16, 20, 20, 22, 24, 28, 32, 32)
-#Rem     Ji = Array(14, 36, 3, 16, 0, 5, 4, 36, 4, 16, 24, 18, 24, 1, 4, 2, 4, 1, 22, 10, 12, 28, 8, 3, 0, 6, 8)
-#Rem     ni = Array(0.332171191705237, 6.11217706323496E-04, -8.82092478906822, -0.45562819254325, -2.63483840850452E-05, -22.3949661148062, -4.28398660164013, -0.616679338856916, -14.682303110404, 284.523138727299, -113.398503195444, 1156.71380760859, 395.551267359325, -1.54891257229285, 19.4486637751291, -3.57915139457043, -3.35369414148819, -0.66442679633246, 32332.1885383934, 3317.66744667084, -22350.1257931087, 5739538.75852936, 173.226193407919, -3.63968822121321E-02, 8.34596332878346E-07, 5.03611916682674, 65.5444787064505)
-#Rem     sigma = s / 3.8
-#Rem     eta = 0
-#Rem     For i = 0 To 26
-#Rem       eta = eta + ni(i) * (sigma - 1.09) ^ Ii(i) * (sigma + 0.0000366) ^ Ji(i)
-#Rem     Next i
-#Rem     h4_s = eta * 1700
-#Rem   ElseIf s > 3.77828134 And s <= 4.41202148223476 Then
-#Rem     'hL3_s
-#Rem     'Eq 4,Table 10,Page 16
-#Rem     Ii = Array(0, 0, 0, 0, 2, 3, 4, 4, 5, 5, 6, 7, 7, 7, 10, 10, 10, 32, 32)
-#Rem     Ji = Array(1, 4, 10, 16, 1, 36, 3, 16, 20, 36, 4, 2, 28, 32, 14, 32, 36, 0, 6)
-#Rem     ni = Array(0.822673364673336, 0.181977213534479, -0.011200026031362, -7.46778287048033E-04, -0.179046263257381, 4.24220110836657E-02, -0.341355823438768, -2.09881740853565, -8.22477343323596, -4.99684082076008, 0.191413958471069, 5.81062241093136E-02, -1655.05498701029, 1588.70443421201, -85.0623535172818, -31771.4386511207, -94589.0406632871, -1.3927384708869E-06, 0.63105253224098)
-#Rem     sigma = s / 3.8
-#Rem     eta = 0
-#Rem     For i = 0 To 18
-#Rem       eta = eta + ni(i) * (sigma - 1.09) ^ Ii(i) * (sigma + 0.0000366) ^ Ji(i)
-#Rem     Next i
-#Rem     h4_s = eta * 1700
-#Rem   ElseIf s > 4.41202148223476 And s <= 5.85 Then
-#Rem     'Section 4.4 Equations ( ) 2ab " h s and ( ) 2c3b "h s for the Saturated Vapor Line
-#Rem     'Page 19, Eq 5
-#Rem     'hV2c3b_s(s)
-#Rem     Ii = Array(0, 0, 0, 1, 1, 5, 6, 7, 8, 8, 12, 16, 22, 22, 24, 36)
-#Rem     Ji = Array(0, 3, 4, 0, 12, 36, 12, 16, 2, 20, 32, 36, 2, 32, 7, 20)
-#Rem     ni = Array(1.04351280732769, -2.27807912708513, 1.80535256723202, 0.420440834792042, -105721.24483466, 4.36911607493884E+24, -328032702839.753, -6.7868676080427E+15, 7439.57464645363, -3.56896445355761E+19, 1.67590585186801E+31, -3.55028625419105E+37, 396611982166.538, -4.14716268484468E+40, 3.59080103867382E+18, -1.16994334851995E+40)
-#Rem     sigma = s / 5.9
-#Rem     eta = 0
-#Rem     For i = 0 To 15
-#Rem       eta = eta + ni(i) * (sigma - 1.02) ^ Ii(i) * (sigma - 0.726) ^ Ji(i)
-#Rem     Next i
-#Rem     h4_s = eta ^ 4 * 2800
-#Rem   ElseIf s > 5.85 And s < 9.155759395 Then
-#Rem     'Section 4.4 Equations ( ) 2ab " h s and ( ) 2c3b "h s for the Saturated Vapor Line
-#Rem     'Page 20, Eq 6
-#Rem     Ii = Array(1, 1, 2, 2, 4, 4, 7, 8, 8, 10, 12, 12, 18, 20, 24, 28, 28, 28, 28, 28, 32, 32, 32, 32, 32, 36, 36, 36, 36, 36)
-#Rem     Ji = Array(8, 24, 4, 32, 1, 2, 7, 5, 12, 1, 0, 7, 10, 12, 32, 8, 12, 20, 22, 24, 2, 7, 12, 14, 24, 10, 12, 20, 22, 28)
-#Rem     ni = Array(-524.581170928788, -9269472.18142218, -237.385107491666, 21077015581.2776, -23.9494562010986, 221.802480294197, -5104725.33393438, 1249813.96109147, 2000084369.96201, -815.158509791035, -157.612685637523, -11420042233.2791, 6.62364680776872E+15, -2.27622818296144E+18, -1.71048081348406E+31, 6.60788766938091E+15, 1.66320055886021E+22, -2.18003784381501E+29, -7.87276140295618E+29, 1.51062329700346E+31, 7957321.70300541, 1.31957647355347E+15, -3.2509706829914E+23, -4.18600611419248E+25, 2.97478906557467E+34, -9.53588761745473E+19, 1.66957699620939E+24, -1.75407764869978E+32, 3.47581490626396E+34, -7.10971318427851E+38)
-#Rem     sigma1 = s / 5.21
-#Rem     sigma2 = s / 9.2
-#Rem     eta = 0
-#Rem     For i = 0 To 29
-#Rem       eta = eta + ni(i) * (1 / sigma1 - 0.513) ^ Ii(i) * (sigma2 - 0.524) ^ Ji(i)
-#Rem     Next i
-#Rem     h4_s = Exp(eta) * 2800
-#Rem   Else
-#Rem     h4_s = CVErr(xlErrValue)
-#Rem   End If
-#Rem End Function
-#Rem Private Function p4_s(ByVal s As Double) As Double
-#Rem   'Uses h4_s and p_hs for the diffrent regions to determine p4_s
-#Rem   Dim hsat As Double
-#Rem   hsat = h4_s(s)
-#Rem   If s > -0.0001545495919 And s <= 3.77828134 Then
-#Rem     p4_s = p1_hs(hsat, s)
-#Rem   ElseIf s > 3.77828134 And s <= 5.210887663 Then
-#Rem     p4_s = p3_hs(hsat, s)
-#Rem   ElseIf s > 5.210887663 And s < 9.155759395 Then
-#Rem     p4_s = p2_hs(hsat, s)
-#Rem   Else
-#Rem     p4_s = CVErr(xlErrValue)
-#Rem   End If
-#Rem End Function
+def h4_s(entropy):
+    ''' Supplementary Release on Backward Equations ( ) , p h s for Region 3,Equations as a Function of h and s for the Region Boundaries, and an Equation( ) sat , T hs for Region 4 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
+    4 Equations for Region Boundaries Given Enthalpy and Entropy See picture page 14'''
+    enthalpy = 0.0
+    if entropy > -0.0001545495919 and entropy <= 3.77828134:
+        # hL1_s Eq 3,Table 9,Page 16
+        ii = np.array([0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 5, 5, 7, 8, 12, 12, 14, 14, 16, 20, 20, 22, 24, 28, 32, 32])
+        ji = np.array([14, 36, 3, 16, 0, 5, 4, 36, 4, 16, 24, 18, 24, 1, 4, 2, 4, 1, 22, 10, 12, 28, 8, 3, 0, 6, 8])
+        ni = np.array([0.332171191705237, 6.11217706323496E-04, -8.82092478906822, -0.45562819254325, -2.63483840850452E-05, -22.3949661148062, -4.28398660164013, -0.616679338856916, -14.682303110404, 284.523138727299, -113.398503195444, 1156.71380760859, 395.551267359325, -1.54891257229285, 19.4486637751291, -3.57915139457043, -3.35369414148819, -0.66442679633246, 32332.1885383934, 3317.66744667084, -22350.1257931087, 5739538.75852936, 173.226193407919, -3.63968822121321E-02, 8.34596332878346E-07, 5.03611916682674, 65.5444787064505])
+        sigma = entropy/3.8
+        eta = sum(ni*(sigma - 1.09)**ii*(sigma + 0.0000366)**ji)
+        enthalpy = eta*1700.0
+    elif entropy > 3.77828134 and entropy <= 4.41202148223476:
+        # hL3_s Eq 4,Table 10,Page 16
+        ii = np.array([0, 0, 0, 0, 2, 3, 4, 4, 5, 5, 6, 7, 7, 7, 10, 10, 10, 32, 32])
+        ji = np.array([1, 4, 10, 16, 1, 36, 3, 16, 20, 36, 4, 2, 28, 32, 14, 32, 36, 0, 6])
+        ni = np.array([0.822673364673336, 0.181977213534479, -0.011200026031362, -7.46778287048033E-04, -0.179046263257381, 4.24220110836657E-02, -0.341355823438768, -2.09881740853565, -8.22477343323596, -4.99684082076008, 0.191413958471069, 5.81062241093136E-02, -1655.05498701029, 1588.70443421201, -85.0623535172818, -31771.4386511207, -94589.0406632871, -1.3927384708869E-06, 0.63105253224098])
+        sigma = entropy/3.8
+        eta = sum(ni*(sigma - 1.09)**ii*(sigma + 0.0000366)**ji)
+        enthalpy = eta*1700.0
+    elif entropy > 4.41202148223476 and entropy <= 5.85:
+        # Section 4.4 Equations ( ) 2ab " h s and ( ) 2c3b "h s for the Saturated Vapor Line Page 19, Eq 5 hV2c3b_s(s)
+        ii = np.array([0, 0, 0, 1, 1, 5, 6, 7, 8, 8, 12, 16, 22, 22, 24, 36])
+        ji = np.array([0, 3, 4, 0, 12, 36, 12, 16, 2, 20, 32, 36, 2, 32, 7, 20])
+        ni = np.array([1.04351280732769, -2.27807912708513, 1.80535256723202, 0.420440834792042, -105721.24483466, 4.36911607493884E+24, -328032702839.753, -6.7868676080427E+15, 7439.57464645363, -3.56896445355761E+19, 1.67590585186801E+31, -3.55028625419105E+37, 396611982166.538, -4.14716268484468E+40, 3.59080103867382E+18, -1.16994334851995E+40])
+        sigma = entropy/5.9
+        eta = sum(ni*(sigma - 1.02)**ii*(sigma - 0.726)**ji)
+        enthalpy = 2800.0*eta**4
+    elif entropy > 5.85 and entropy <= 9.155759395:
+        # Section 4.4 Equations ( ) 2ab " h s and ( ) 2c3b "h s for the Saturated Vapor Line Page 20, Eq 6
+        ii = np.array([1, 1, 2, 2, 4, 4, 7, 8, 8, 10, 12, 12, 18, 20, 24, 28, 28, 28, 28, 28, 32, 32, 32, 32, 32, 36, 36, 36, 36, 36])
+        ji = np.array([8, 24, 4, 32, 1, 2, 7, 5, 12, 1, 0, 7, 10, 12, 32, 8, 12, 20, 22, 24, 2, 7, 12, 14, 24, 10, 12, 20, 22, 28])
+        ni = np.array([-524.581170928788, -9269472.18142218, -237.385107491666, 21077015581.2776, -23.9494562010986, 221.802480294197, -5104725.33393438, 1249813.96109147, 2000084369.96201, -815.158509791035, -157.612685637523, -11420042233.2791, 6.62364680776872E+15, -2.27622818296144E+18, -1.71048081348406E+31, 6.60788766938091E+15, 1.66320055886021E+22, -2.18003784381501E+29, -7.87276140295618E+29, 1.51062329700346E+31, 7957321.70300541, 1.31957647355347E+15, -3.2509706829914E+23, -4.18600611419248E+25, 2.97478906557467E+34, -9.53588761745473E+19, 1.66957699620939E+24, -1.75407764869978E+32, 3.47581490626396E+34, -7.10971318427851E+38])
+        sigma = entropy/5.21, entropy/9.2
+        eta = sum(ni*(1.0/sigma[0] - 0.513)**ii*(sigma[1] - 0.524)**ji)
+        enthalpy = 2800.0*exp(eta)
+    else:
+        raise ArithmeticError('Entropy needs to be between {} and {} J/kgK'.format(-0.0001545495919, 9.155759395))
+
+    return enthalpy
+
 #Rem Private Function h4L_p(ByVal p As Double) As Double
 #Rem  Dim Low_Bound, High_Bound, hs, ps, Ts As Double
 #Rem  If p > 0.000611657 And p < 22.06395 Then

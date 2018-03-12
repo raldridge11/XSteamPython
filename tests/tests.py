@@ -232,6 +232,23 @@ class Test_pX_t(unittest.TestCase):
     def test_p4_t(self):
         self.assertAlmostEqual(stm.p4_t(550.0), 6.117, places=3)
 
+class Test_hX_s(unittest.TestCase):
+
+    def test_h4_s_regionhl1_s(self):
+        self.assertAlmostEqual(stm.h4_s(1.0), 308.551, places=3)
+
+    def test_h4_s_regionhl3_s(self):
+        self.assertAlmostEqual(stm.h4_s(4.0), 1816.891, places=3)
+
+    def test_h4_s_regionhv2c3b_s(self):
+        self.assertAlmostEqual(stm.h4_s(5.0), 2451.624, places=3)
+
+    def test_h4_s_region4(self):
+        self.assertAlmostEqual(stm.h4_s(6.0), 2796.509, places=3)
+
+    def test_h4_s_exception(self):
+        self.assertRaises(ArithmeticError, stm.h4_s, 100.0)
+
 class Test_hX_pt(unittest.TestCase):
 
     def test_h1_pt(self):
