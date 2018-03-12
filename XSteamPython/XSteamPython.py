@@ -2765,11 +2765,8 @@ def region_ph(pressure, enthalpy):
 #Rem   Region_prho = 0
 #Rem End Function
 #Rem
-#Rem
-#Rem '***********************************************************************************************************
-#Rem '*4 Region Borders
-#Rem '************************************************************************************************
 
+# Region Borders
 def b23p_t(temperature):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 1997
       Section 4 Auxiliary Equation for the Boundary between Regions 2 and 3 Eq 5, Page 5'''
@@ -2780,9 +2777,7 @@ def b23t_p(pressure):
         Section 4 Auxiliary Equation for the Boundary between Regions 2 and 3 Eq 6, Page 6'''
     return 572.54459862746 + sqrt((pressure - 13.91883977887) / 1.0192970039326E-03)
 
-#Rem '***********************************************************************************************************
-#Rem '*4.2 Region 3. pSat_h and pSat_s
-
+# Region 3 pSat_h and pSat_s
 def p3sat_h(enthalpy):
     '''Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for   Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 2004
        Section 4 Boundary Equations psat(h) and psat(s) for the Saturation Lines of Region 3 see pictures Page 17, Eq 10, Table 17, Page 18'''
@@ -2794,19 +2789,14 @@ def p3sat_h(enthalpy):
     ps = ni*(h - 1.02)**Ii*(h - 0.608)**Ji
     return ps.sum()*22.0
 
-#Rem Private Function p3sat_s(ByVal s As Double) As Double
-#Rem Dim Ii, Ji, ni As Variant, sigma, p As Double, i As Integer
-#Rem Ii = Array(0, 1, 1, 4, 12, 12, 16, 24, 28, 32)
-#Rem Ji = Array(0, 1, 32, 7, 4, 14, 36, 10, 0, 18)
-#Rem ni = Array(0.639767553612785, -12.9727445396014, -2.24595125848403E+15, 1774667.41801846, 7170793495.71538, -3.78829107169011E+17, -9.55586736431328E+34, 1.87269814676188E+23, 119254746466.473, 1.10649277244882E+36)
-#Rem sigma = s / 5.2
-#Rem p = 0
-#Rem For i = 0 To 9
-#Rem   p = p + ni(i) * (sigma - 1.03) ^ Ii(i) * (sigma - 0.699) ^ Ji(i)
-#Rem Next i
-#Rem p3sat_s = p * 22
-#Rem End Function
-#Rem '***********************************************************************************************************
+def p3sat_s(entropy):
+    ii = np.array([0, 1, 1, 4, 12, 12, 16, 24, 28, 32])
+    ji = np.array([0, 1, 32, 7, 4, 14, 36, 10, 0, 18])
+    ni = np.array([0.639767553612785, -12.9727445396014, -2.24595125848403E+15, 1774667.41801846, 7170793495.71538, -3.78829107169011E+17, -9.55586736431328E+34, 1.87269814676188E+23, 119254746466.473, 1.10649277244882E+36])
+    sigma = entropy/5.2
+    pressure = sum(ni*(sigma - 1.03)**ii*(sigma - 0.699)**ji)
+    return pressure*22.0
+
 def hB13_s(entropy):
     ''''Supplementary Release on Backward Equations ( ) , p h s for Region 3, 'Chapter 4.5 page 23.'''
     Ii = np.array([0, 1, 1, 3, 5, 6])

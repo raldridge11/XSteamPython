@@ -250,6 +250,11 @@ class Test_pXsat_h(unittest.TestCase):
 
         self.assertAlmostEqual(stm.p3sat_h(2674.95), 11.62, places=2)
 
+class Test_pXsat_s(unittest.TestCase):
+
+    def test_p3sat_s(self):
+        self.assertAlmostEqual(stm.p3sat_s(4.0), 19.809, places=3)
+
 class Test_tX_ph(unittest.TestCase):
 
     def test_t1_ph(self):
