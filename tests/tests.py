@@ -195,26 +195,6 @@ class Test_region_ph(unittest.TestCase):
 
         self.assertEqual(stm.region_ph(19.0, 2500.0), 3)
 
-class Test_hX_pt(unittest.TestCase):
-
-    def test_h1_pt(self):
-
-        self.assertAlmostEqual(stm.h1_pt(17.0, 623.15), 1666.589, places=3)
-
-    def test_h2_pt(self):
-
-        self.assertAlmostEqual(stm.h2_pt(15.0, 1073.15), 4091.326, places=3)
-
-    def test_h5_pt(self):
-
-        self.assertAlmostEqual(stm.h5_pt(10.0,2273.15), 7374.752, places=3)
-
-class Test_pXsat_h(unittest.TestCase):
-
-    def test_p3sat_h(self):
-
-        self.assertAlmostEqual(stm.p3sat_h(2674.95), 11.62, places=2)
-
 class Test_BoundaryFunctions(unittest.TestCase):
 
     def test_b23t_p(self):
@@ -240,6 +220,26 @@ class Test_Transport_Properties(unittest.TestCase):
 
     def test_surfaceTension_T_Excetpion(self):
         self.assertRaises(ArithmeticError, stm.surfaceTension_T, 0.0)
+
+class Test_hX_pt(unittest.TestCase):
+
+    def test_h1_pt(self):
+
+        self.assertAlmostEqual(stm.h1_pt(17.0, 623.15), 1666.589, places=3)
+
+    def test_h2_pt(self):
+
+        self.assertAlmostEqual(stm.h2_pt(15.0, 1073.15), 4091.326, places=3)
+
+    def test_h5_pt(self):
+
+        self.assertAlmostEqual(stm.h5_pt(10.0,2273.15), 7374.752, places=3)
+
+class Test_pXsat_h(unittest.TestCase):
+
+    def test_p3sat_h(self):
+
+        self.assertAlmostEqual(stm.p3sat_h(2674.95), 11.62, places=2)
 
 class Test_tX_ph(unittest.TestCase):
 
@@ -326,6 +326,12 @@ class Test_tX_ps(unittest.TestCase):
 
     def test_t2_ps_region2(self):
         self.assertAlmostEqual(stm.t2_ps(5.0, 5.86), 525.436, places=3)
+
+    def test_t3_ps_region3a(self):
+        self.assertAlmostEqual(stm.t3_ps(20.0, 4.0), 638.449, places=3)
+
+    def test_t3_ps_region3b(self):
+        self.assertAlmostEqual(stm.t3_ps(20.0, 5.0), 640.118, places=3)
 
 class Test_pX_hs(unittest.TestCase):
 

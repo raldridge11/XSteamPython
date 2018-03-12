@@ -1850,42 +1850,32 @@ def v3_ph(pressure, enthalpy):
 
     return specificVolume
 
-#Rem Private Function T3_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem 'Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
-#Rem '2004
-#Rem '3.4 Backward Equations T(p,s) and v(p,s) for Subregions 3a and 3b
-#Rem 'Boundary equation, Eq 6 Page 11
-#Rem  Dim i As Integer, Ji, Ii, ni As Variant, ps, sigma, teta As Double
-#Rem  Const R As Double = 0.461526, tc As Double = 647.096, pc As Double = 22.064, rhoc As Double = 322
-#Rem
-#Rem   If s <= 4.41202148223476 Then
-#Rem     'Subregion 3a
-#Rem     'Eq 6, Table 10, Page 11
-#Rem     Ii = Array(-12, -12, -10, -10, -10, -10, -8, -8, -8, -8, -6, -6, -6, -5, -5, -5, -4, -4, -4, -2, -2, -1, -1, 0, 0, 0, 1, 2, 2, 3, 8, 8, 10)
-#Rem     Ji = Array(28, 32, 4, 10, 12, 14, 5, 7, 8, 28, 2, 6, 32, 0, 14, 32, 6, 10, 36, 1, 4, 1, 6, 0, 1, 4, 0, 0, 3, 2, 0, 1, 2)
-#Rem     ni = Array(1500420082.63875, -159397258480.424, 5.02181140217975E-04, -67.2057767855466, 1450.58545404456, -8238.8953488889, -0.154852214233853, 11.2305046746695, -29.7000213482822, 43856513263.5495, 1.37837838635464E-03, -2.97478527157462, 9717779473494.13, -5.71527767052398E-05, 28830.794977842, -74442828926270.3, 12.8017324848921, -368.275545889071, 6.64768904779177E+15, 0.044935925195888, -4.22897836099655, -0.240614376434179, -4.74341365254924, 0.72409399912611, 0.923874349695897, 3.99043655281015, 3.84066651868009E-02, -3.59344365571848E-03, -0.735196448821653, 0.188367048396131, 1.41064266818704E-04, -2.57418501496337E-03, 1.23220024851555E-03)
-#Rem     sigma = s / 4.4
-#Rem     ps = p / 100
-#Rem     teta = 0
-#Rem     For i = 0 To 32
-#Rem       teta = teta + ni(i) * (ps + 0.24) ^ Ii(i) * (sigma - 0.703) ^ Ji(i)
-#Rem     Next i
-#Rem     T3_ps = teta * 760
-#Rem   Else
-#Rem     'Subregion 3b
-#Rem     'Eq 7, Table 11, Page 11
-#Rem     Ii = Array(-12, -12, -12, -12, -8, -8, -8, -6, -6, -6, -5, -5, -5, -5, -5, -4, -3, -3, -2, 0, 2, 3, 4, 5, 6, 8, 12, 14)
-#Rem     Ji = Array(1, 3, 4, 7, 0, 1, 3, 0, 2, 4, 0, 1, 2, 4, 6, 12, 1, 6, 2, 0, 1, 1, 0, 24, 0, 3, 1, 2)
-#Rem     ni = Array(0.52711170160166, -40.1317830052742, 153.020073134484, -2247.99398218827, -0.193993484669048, -1.40467557893768, 42.6799878114024, 0.752810643416743, 22.6657238616417, -622.873556909932, -0.660823667935396, 0.841267087271658, -25.3717501764397, 485.708963532948, 880.531517490555, 2650155.92794626, -0.359287150025783, -656.991567673753, 2.41768149185367, 0.856873461222588, 0.655143675313458, -0.213535213206406, 5.62974957606348E-03, -316955725450471#, -6.99997000152457E-04, 1.19845803210767E-02, 1.93848122022095E-05, -2.15095749182309E-05)
-#Rem     sigma = s / 5.3
-#Rem     ps = p / 100
-#Rem     teta = 0
-#Rem     For i = 0 To 27
-#Rem       teta = teta + ni(i) * (ps + 0.76) ^ Ii(i) * (sigma - 0.818) ^ Ji(i)
-#Rem     Next i
-#Rem     T3_ps = teta * 860
-#Rem   End If
-#Rem End Function
+def t3_ps(pressure, entropy):
+    '''Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 2004
+    3.4 Backward Equations T(p,s) and v(p,s) for Subregions 3a and 3b Boundary equation, Eq 6 Page 11'''
+    entropyBoundary = 4.41202148223476
+    temperature = 0.0
+    if entropy <= entropyBoundary:
+        # Subregion 3a Eq 6, Table 10, Page 11
+        ii = np.array([-12, -12, -10, -10, -10, -10, -8, -8, -8, -8, -6, -6, -6, -5, -5, -5, -4, -4, -4, -2, -2, -1, -1, 0, 0, 0, 1, 2, 2, 3, 8, 8, 10])
+        ji = np.array([28, 32, 4, 10, 12, 14, 5, 7, 8, 28, 2, 6, 32, 0, 14, 32, 6, 10, 36, 1, 4, 1, 6, 0, 1, 4, 0, 0, 3, 2, 0, 1, 2])
+        ni = np.array([1500420082.63875, -159397258480.424, 5.02181140217975E-04, -67.2057767855466, 1450.58545404456, -8238.8953488889, -0.154852214233853, 11.2305046746695, -29.7000213482822, 43856513263.5495, 1.37837838635464E-03, -2.97478527157462, 9717779473494.13, -5.71527767052398E-05, 28830.794977842, -74442828926270.3, 12.8017324848921, -368.275545889071, 6.64768904779177E+15, 0.044935925195888, -4.22897836099655, -0.240614376434179, -4.74341365254924, 0.72409399912611, 0.923874349695897, 3.99043655281015, 3.84066651868009E-02, -3.59344365571848E-03, -0.735196448821653, 0.188367048396131, 1.41064266818704E-04, -2.57418501496337E-03, 1.23220024851555E-03])
+        sigma = entropy/4.4
+        ps = pressure/100.0
+        teta = sum(ni*(ps + 0.24)**ii*(sigma - 0.703)**ji)
+        temperature = teta*760.0
+    else:
+        # Subregion 3b Eq 7, Table 11, Page 11
+        ii = np.array([-12, -12, -12, -12, -8, -8, -8, -6, -6, -6, -5, -5, -5, -5, -5, -4, -3, -3, -2, 0, 2, 3, 4, 5, 6, 8, 12, 14])
+        ji = np.array([1, 3, 4, 7, 0, 1, 3, 0, 2, 4, 0, 1, 2, 4, 6, 12, 1, 6, 2, 0, 1, 1, 0, 24, 0, 3, 1, 2])
+        ni = np.array([0.52711170160166, -40.1317830052742, 153.020073134484, -2247.99398218827, -0.193993484669048, -1.40467557893768, 42.6799878114024, 0.752810643416743, 22.6657238616417, -622.873556909932, -0.660823667935396, 0.841267087271658, -25.3717501764397, 485.708963532948, 880.531517490555, 2650155.92794626, -0.359287150025783, -656.991567673753, 2.41768149185367, 0.856873461222588, 0.655143675313458, -0.213535213206406, 5.62974957606348E-03, -316955725450471, -6.99997000152457E-04, 1.19845803210767E-02, 1.93848122022095E-05, -2.15095749182309E-05])
+        sigma = entropy/5.3
+        ps = pressure/100.0
+        teta = sum(ni*(ps + 0.76)**ii*(sigma - 0.818)**ji)
+        temperature = teta*860.0
+
+    return temperature
+
 #Rem Private Function v3_ps(ByVal p As Double, ByVal s As Double) As Double
 #Rem 'Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam
 #Rem '2004
