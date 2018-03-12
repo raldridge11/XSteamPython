@@ -2065,6 +2065,21 @@ def h4_p(pressure, phase):
 
     return enthalpy
 
+def p4_s(entropy):
+    '''Uses h4_s and p_hs for the different regions to determine p4_s'''
+    saturationEnthalpy = h4_s(entropy)
+    pressure = 0.0
+    if entropy > -0.0001545495919 and entropy <= 3.77828134:
+        pressure = p1_hs(saturationEnthalpy, entropy)
+    elif entropy > 3.77828134 and entropy <= 5.210887663:
+        pressure = p3_hs(saturationEnthalpy, entropy)
+    elif entropy > 5.210887663 and entropy < 9.155759395:
+        pressure = p2_hs(saturationEnthalpy, entropy)
+    else:
+        raise ArithmeticError('Entropy needs to be between {} and {} J/kgK'.format(-0.0001545495919, 9.155759395))
+
+    return pressure
+
 def x4_ph(pressure, enthalpy):
     ''' Calculate vapor fraction from enthalpy for given pressure'''
     enthalpyVapor = h4_p(pressure, 'vap')
