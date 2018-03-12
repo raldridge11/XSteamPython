@@ -221,6 +221,12 @@ class Test_Transport_Properties(unittest.TestCase):
     def test_surfaceTension_T_Excetpion(self):
         self.assertRaises(ArithmeticError, stm.surfaceTension_T, 0.0)
 
+class Test_tX_p(unittest.TestCase):
+
+    def test_t4_p(self):
+
+        self.assertAlmostEqual(stm.t4_p(10.0), 584.149, places=3)
+
 class Test_hX_pt(unittest.TestCase):
 
     def test_h1_pt(self):
@@ -258,6 +264,14 @@ class Test_tX_ph(unittest.TestCase):
     def test_t5_ph(self):
 
         self.assertAlmostEqual(stm.t5_ph(10.0, 4500.0), 1228.268, places=3)
+
+class Test_vX_ph(unittest.TestCase):
+
+    def test_v3_ph_region3a(self):
+        self.assertAlmostEqual(stm.v3_ph(22.0, 2000.0), 0.002638, places=6)
+
+    def test_v3_ph_region3b(self):
+        self.assertAlmostEqual(stm.v3_ph(22.5, 2089.0), 0.003065, places=6)
 
 class Test_vX_pt(unittest.TestCase):
 
@@ -389,20 +403,6 @@ class Test_wX_rhot(unittest.TestCase):
 
     def test_w3_rhot(self):
         self.assertAlmostEqual(stm.w3_rhot(500.0, 644.0), 473.134, places=3)
-
-class Test_vX_ph(unittest.TestCase):
-
-    def test_v3_ph_region3a(self):
-        self.assertAlmostEqual(stm.v3_ph(22.0, 2000.0), 0.002638, places=6)
-
-    def test_v3_ph_region3b(self):
-        self.assertAlmostEqual(stm.v3_ph(22.5, 2089.0), 0.003065, places=6)
-
-class Test_tx_p(unittest.TestCase):
-
-    def test_t4_p(self):
-
-        self.assertAlmostEqual(stm.t4_p(10.0), 584.149, places=3)
 
 if __name__ == '__main__':
     unittest.main()
