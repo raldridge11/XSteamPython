@@ -12,7 +12,7 @@
     <OutputPath>.</OutputPath>
     <Name>tests</Name>
     <RootNamespace>tests</RootNamespace>
-    <InterpreterId>MSBuild|env|H:\Projects\XSteamPython\XSteamPython\XSteamPython.pyproj</InterpreterId>
+    <InterpreterId>MSBuild|env1|H:\Projects\XSteamPython\XSteamPython\XSteamPython.pyproj</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,7 +35,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <InterpreterReference Include="MSBuild|env|H:\Projects\XSteamPython\XSteamPython\XSteamPython.pyproj" />
+    <InterpreterReference Include="MSBuild|env1|H:\Projects\XSteamPython\XSteamPython\XSteamPython.pyproj" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
