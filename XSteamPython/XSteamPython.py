@@ -2027,54 +2027,44 @@ def h4_s(entropy):
 
     return enthalpy
 
-def h4l_p(pressure):
+def h4_p(pressure, phase):
     pressureMin, pressureMax = 0.000611657, 22.06395
     enthalpy = 0.0
+    if phase not in ['liq', 'vap']:
+        raise AttributeError('phase argument needs to be \'liq\' or \'vap\'')
+
     if pressure > pressureMin and pressure <= pressureMax:
         ts = t4_p(pressure)
         if pressure < 16.529:
-            enthalpy = h1_pt(pressure, ts)
+            if phase is 'liq':
+                enthalpy = h1_pt(pressure, ts)
+            else:
+                enthalpy = h2_pt(pressure, ts)
         else:
             # Iterate to find the the backward solution of p3sat_h
-            lowBound, highBound = 1670.858218, 2087.23500164864
+            if phase is 'liq':
+                lowBound, highBound = 1670.858218, 2087.23500164864
+            else:
+                lowBound, highBound = 2087.23500164864, 2563.592004 + 5.0 # 5 added to extrapolate to ensure even the border ==350°C solved.
             ps, tolerance = 0.0, 0.00001
             while abs(pressure - ps) > tolerance:
                 enthalpy = (lowBound + highBound)/2.0
                 ps = p3sat_h(enthalpy)
-                if ps > pressure:
-                    highBound = enthalpy
+                if phase is 'liq':
+                    if ps > pressure:
+                        highBound = enthalpy
+                    else:
+                        lowBound = enthalpy
                 else:
-                    lowBound = enthalpy
+                    if ps < pressure:
+                        highBound = enthalpy
+                    else:
+                        lowBound = enthalpy
     else:
         raise ArithmeticError('Pressure needs to be between {} and {} MPa'.format(pressureMin, pressureMax))
 
     return enthalpy
 
-#Rem Private Function h4V_p(ByVal p As Double) As Double
-#Rem  Dim Low_Bound, High_Bound, hs, ps, Ts As Double
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem   Ts = T4_p(p)
-#Rem   If p < 16.529 Then
-#Rem     h4V_p = h2_pT(p, Ts)
-#Rem   Else
-#Rem     'Iterate to find the the backward solution of p3sat_h
-#Rem     Low_Bound = 2087.23500164864
-#Rem     High_Bound = 2563.592004 + 5 '5 added to extrapolate to ensure even the border ==350°C solved.
-#Rem     Do While Abs(p - ps) > 0.000001
-#Rem       hs = (Low_Bound + High_Bound) / 2
-#Rem       ps = p3sat_h(hs)
-#Rem       If ps < p Then
-#Rem         High_Bound = hs
-#Rem       Else
-#Rem         Low_Bound = hs
-#Rem       End If
-#Rem     Loop
-#Rem     h4V_p = hs
-#Rem   End If
-#Rem  Else
-#Rem   h4V_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
 #Rem Private Function x4_ph(ByVal p As Double, ByVal h As Double) As Double
 #Rem 'Calculate vapour fraction from hL and hV for given p
 #Rem  Dim h4v, h4l As Double

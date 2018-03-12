@@ -249,16 +249,28 @@ class Test_hX_s(unittest.TestCase):
     def test_h4_s_exception(self):
         self.assertRaises(ArithmeticError, stm.h4_s, 100.0)
 
-class Test_hXi_p(unittest.TestCase):
+class Test_hX_p(unittest.TestCase):
 
-    def test_h4l_p_region1(self):
-        self.assertAlmostEqual(stm.h4l_p(15.0), 1610.152, places=3)
+    def test_h4_p_phaseException(self):
+        self.assertRaises(AttributeError, stm.h4_p, 22.0, 'dumb')
 
-    def test_h4l_p_region2(self):
-        self.assertAlmostEqual(stm.h4l_p(17.0), 1690.036, places=3)
+    def test_h4_p_liq_region1(self):
+        self.assertAlmostEqual(stm.h4_p(15.0, 'liq'), 1610.152, places=3)
 
-    def test_h4l_p_exception(self):
-        self.assertRaises(ArithmeticError, stm.h4l_p, 23.0)
+    def test_h4_p_liq_region2(self):
+        self.assertAlmostEqual(stm.h4_p(17.0, 'liq'), 1690.036, places=3)
+
+    def test_h4_p_liq_exception(self):
+        self.assertRaises(ArithmeticError, stm.h4_p, 23.0, 'liq')
+
+    def test_h4_p_vap_region1(self):
+        self.assertAlmostEqual(stm.h4_p(15.0, 'vap'), 2610.865, places=3)
+
+    def test_h4_p_vap_region2(self):
+        self.assertAlmostEqual(stm.h4_p(17.0, 'vap'), 2547.413, places=3)
+
+    def test_h4_p_vap_exception(self):
+        self.assertRaises(ArithmeticError, stm.h4_p, 23.0, 'vap')
 
 class Test_hX_pt(unittest.TestCase):
 
