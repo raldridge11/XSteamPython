@@ -1963,20 +1963,17 @@ def t3_prho(pressure, density):
             lowBound = temperature
 
     return temperature
-#Rem
-#Rem '***********************************************************************************************************
-#Rem '*2.4 Functions for region 4
-#Rem Private Function p4_T(ByVal T As Double) As Double
-#Rem   'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem   'Section 8.1 The Saturation-Pressure Equation
-#Rem   'Eq 30, Page 33
-#Rem   Dim teta, a, b, c As Double
-#Rem   teta = T - 0.23855557567849 / (T - 650.17534844798)
-#Rem   a = teta ^ 2 + 1167.0521452767 * teta - 724213.16703206
-#Rem   b = -17.073846940092 * teta ^ 2 + 12020.82470247 * teta - 3232555.0322333
-#Rem   c = 14.91510861353 * teta ^ 2 - 4823.2657361591 * teta + 405113.40542057
-#Rem   p4_T = (2 * c / (-b + (b ^ 2 - 4 * a * c) ^ 0.5)) ^ 4
-#Rem End Function
+
+# Functions for region 4
+def p4_t(temperature):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
+    Section 8.1 The Saturation-Pressure Equation Eq 30, Page 33'''
+    teta = temperature - 0.23855557567849/(temperature - 650.17534844798)
+    a = teta**2 + 1167.0521452767*teta - 724213.16703206
+    b = -17.073846940092*teta**2 + 12020.82470247*teta - 3232555.0322333
+    c = 14.91510861353*teta**2 - 4823.2657361591*teta + 405113.40542057
+    return (2.0*c/(-b + sqrt(b**2 - 4*a*c)))**4
+
 def t4_p(pressure):
     ''' Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
     Section 8.2 The Saturation-Temperature Equation

@@ -227,6 +227,11 @@ class Test_tX_p(unittest.TestCase):
 
         self.assertAlmostEqual(stm.t4_p(10.0), 584.149, places=3)
 
+class Test_pX_t(unittest.TestCase):
+
+    def test_p4_t(self):
+        self.assertAlmostEqual(stm.p4_t(550.0), 6.117, places=3)
+
 class Test_hX_pt(unittest.TestCase):
 
     def test_h1_pt(self):
