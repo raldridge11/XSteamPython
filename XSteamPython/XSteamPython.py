@@ -1711,7 +1711,7 @@ def t2_prho(pressure, density):
 
     return temperature
 
-# 2.3 Functions for region 3
+# Functions for region 3
 def p3_rhot(density, temperature):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
     '7 Basic Equation for Region 3, Section. 6.1 Basic Equation Table 30 and 31, Page 30 and 31'''
@@ -1946,23 +1946,23 @@ def h3_pt(pressure, temperature):
 
     return enthalpy
 
-#Rem Private Function T3_prho(ByVal p As Double, ByVal rho As Double)
-#Rem   'Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
-#Rem   'Solve with half interval method
-#Rem   Dim ps, Low_Bound, High_Bound, Ts As Double
-#Rem   Low_Bound = 623.15
-#Rem   High_Bound = 1073.15
-#Rem   Do While Abs(p - ps) > 0.00000001
-#Rem     Ts = (Low_Bound + High_Bound) / 2
-#Rem     ps = p3_rhoT(rho, Ts)
-#Rem     If ps > p Then
-#Rem       High_Bound = Ts
-#Rem     Else
-#Rem       Low_Bound = Ts
-#Rem     End If
-#Rem     Loop
-#Rem     T3_prho = Ts
-#Rem End Function
+def t3_prho(pressure, density):
+    '''Solve by iteration. Observe that for low temperatures this equation has 2 solutions.
+    Solve with half interval method'''
+    lowBound = 623.15
+    highBound = 1073.15
+    tolerance = 0.00000001
+    temperature = 0.0
+    ps = 0.0
+    while abs(pressure - ps) > tolerance:
+        temperature = (lowBound + highBound)/2.0
+        ps = p3_rhot(density, temperature)
+        if ps > pressure:
+            highBound = temperature
+        else:
+            lowBound = temperature
+
+    return temperature
 #Rem
 #Rem '***********************************************************************************************************
 #Rem '*2.4 Functions for region 4
