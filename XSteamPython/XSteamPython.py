@@ -2079,23 +2079,25 @@ def x4_ph(pressure, enthalpy):
 
     return quality
 
-#Rem Private Function x4_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem  Dim ssV, ssL As Double
-#Rem   If p < 16.529 Then
-#Rem    ssV = s2_pT(p, T4_p(p))
-#Rem    ssL = s1_pT(p, T4_p(p))
-#Rem   Else
-#Rem    ssV = s3_rhoT(1 / (v3_ph(p, h4V_p(p))), T4_p(p))
-#Rem    ssL = s3_rhoT(1 / (v3_ph(p, h4L_p(p))), T4_p(p))
-#Rem   End If
-#Rem   If s < ssL Then
-#Rem     x4_ps = 0
-#Rem   ElseIf s > ssV Then
-#Rem     x4_ps = 1
-#Rem   Else
-#Rem     x4_ps = (s - ssL) / (ssV - ssL)
-#Rem   End If
-#Rem End Function
+def x4_ps(pressure, entropy):
+
+    quality = -1.0
+    if pressure < 16.529:
+        entropyVapor = s2_pt(pressure, t4_p(pressure))
+        entropyLiquid = s1_pt(pressure, t4_p(pressure))
+    else:
+        entropyVapor = s3_rhot(1.0/(v3_ph(pressure, h4_p(pressure, 'vap'))), t4_p(pressure))
+        entropyLiquid = s3_rhot(1.0/(v3_ph(pressure, h4_p(pressure, 'liq'))), t4_p(pressure))
+
+    if entropy < entropyLiquid:
+        quality = 0.0
+    elif entropy > entropyVapor:
+        quality = 1.0
+    else:
+        quality = (entropy - entropyLiquid)/(entropyVapor - entropyLiquid)
+
+    return quality
+
 #Rem Private Function T4_hs(ByVal h As Double, ByVal s As Double) As Double
 #Rem 'Supplementary Release on Backward Equations ( ) , p h s for Region 3,
 #Rem 'Chapter 5.3 page 30.

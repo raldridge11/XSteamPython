@@ -485,5 +485,25 @@ class Test_xX_ph(unittest.TestCase):
     def test_x4_ph_mix(self):
         self.assertAlmostEqual(stm.x4_ph(15.0, 2000.0), 0.390, places=3)
 
+class Test_xX_ps(unittest.TestCase):
+
+    def test_x4_ps_region1_liquid(self):
+        self.assertEqual(stm.x4_ps(15.0, 1.0), 0.0)
+
+    def test_x4_ps_region1_vapor(self):
+        self.assertEqual(stm.x4_ps(15.0, 6.0), 1.0)
+
+    def test_x4_ps_region1_mix(self):
+        self.assertAlmostEqual(stm.x4_ps(15.0, 4.0), 0.194, places=3)
+
+    def test_x4_ps_region2_liquid(self):
+        self.assertEqual(stm.x4_ps(17.0, 1.0), 0.0)
+
+    def test_x4_ps_region2_vapor(self):
+        self.assertEqual(stm.x4_ps(17.0, 6.0), 1.0)
+
+    def test_x4_ps_region2_mix(self):
+        self.assertAlmostEqual(stm.x4_ps(17.0, 4.0), 0.140, places=3)
+
 if __name__ == '__main__':
     unittest.main()
