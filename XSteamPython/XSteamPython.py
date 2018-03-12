@@ -2027,32 +2027,29 @@ def h4_s(entropy):
 
     return enthalpy
 
-#Rem Private Function h4L_p(ByVal p As Double) As Double
-#Rem  Dim Low_Bound, High_Bound, hs, ps, Ts As Double
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem   Ts = T4_p(p)
-#Rem   If p < 16.529 Then
-#Rem     h4L_p = h1_pT(p, Ts)
-#Rem   Else
-#Rem     'Iterate to find the the backward solution of p3sat_h
-#Rem     Low_Bound = 1670.858218
-#Rem     High_Bound = 2087.23500164864
-#Rem     Do While Abs(p - ps) > 0.00001
-#Rem       hs = (Low_Bound + High_Bound) / 2
-#Rem       ps = p3sat_h(hs)
-#Rem       If ps > p Then
-#Rem         High_Bound = hs
-#Rem       Else
-#Rem         Low_Bound = hs
-#Rem       End If
-#Rem     Loop
-#Rem
-#Rem     h4L_p = hs
-#Rem   End If
-#Rem  Else
-#Rem   h4L_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def h4l_p(pressure):
+    pressureMin, pressureMax = 0.000611657, 22.06395
+    enthalpy = 0.0
+    if pressure > pressureMin and pressure <= pressureMax:
+        ts = t4_p(pressure)
+        if pressure < 16.529:
+            enthalpy = h1_pt(pressure, ts)
+        else:
+            # Iterate to find the the backward solution of p3sat_h
+            lowBound, highBound = 1670.858218, 2087.23500164864
+            ps, tolerance = 0.0, 0.00001
+            while abs(pressure - ps) > tolerance:
+                enthalpy = (lowBound + highBound)/2.0
+                ps = p3sat_h(enthalpy)
+                if ps > pressure:
+                    highBound = enthalpy
+                else:
+                    lowBound = enthalpy
+    else:
+        raise ArithmeticError('Pressure needs to be between {} and {} MPa'.format(pressureMin, pressureMax))
+
+    return enthalpy
+
 #Rem Private Function h4V_p(ByVal p As Double) As Double
 #Rem  Dim Low_Bound, High_Bound, hs, ps, Ts As Double
 #Rem  If p > 0.000611657 And p < 22.06395 Then

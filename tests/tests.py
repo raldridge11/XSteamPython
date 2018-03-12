@@ -249,6 +249,17 @@ class Test_hX_s(unittest.TestCase):
     def test_h4_s_exception(self):
         self.assertRaises(ArithmeticError, stm.h4_s, 100.0)
 
+class Test_hXi_p(unittest.TestCase):
+
+    def test_h4l_p_region1(self):
+        self.assertAlmostEqual(stm.h4l_p(15.0), 1610.152, places=3)
+
+    def test_h4l_p_region2(self):
+        self.assertAlmostEqual(stm.h4l_p(17.0), 1690.036, places=3)
+
+    def test_h4l_p_exception(self):
+        self.assertRaises(ArithmeticError, stm.h4l_p, 23.0)
+
 class Test_hX_pt(unittest.TestCase):
 
     def test_h1_pt(self):
