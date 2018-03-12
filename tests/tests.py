@@ -361,6 +361,14 @@ class Test_pX_hs(unittest.TestCase):
     def test_p2_hs_region3(self):
         self.assertAlmostEqual(stm.p2_hs(2800.0, 5.8), 8.415, places=3)
 
+class Test_vX_ps(unittest.TestCase):
+
+    def test_v3_ps_region3a(self):
+        self.assertAlmostEqual(stm.v3_ps(20.0, 4.0), 0.002010, places=6)
+
+    def test_v3_ps_region3b(self):
+        self.assertAlmostEqual(stm.v3_ps(20.0, 5.0), 0.006262, places=6)
+
 class Test_tX_prho(unittest.TestCase):
 
     def test_t1_prho(self):
