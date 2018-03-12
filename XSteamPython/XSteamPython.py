@@ -1928,24 +1928,24 @@ def p3_hs(enthalpy, entropy):
 
     return pressure
 
-#Rem Private Function h3_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem    'Not avalible with IF 97
-#Rem    'Solve function T3_ph-T=0 with half interval method.
-#Rem    Dim Ts, Low_Bound, High_Bound, hs As Double
-#Rem    Ts = T + 1
-#Rem    Low_Bound = h1_pT(p, 623.15)
-#Rem    High_Bound = h2_pT(p, B23T_p(p))
-#Rem    Do While Abs(T - Ts) > 0.00001
-#Rem     hs = (Low_Bound + High_Bound) / 2
-#Rem     Ts = T3_ph(p, hs)
-#Rem     If Ts > T Then
-#Rem       High_Bound = hs
-#Rem     Else
-#Rem       Low_Bound = hs
-#Rem     End If
-#Rem    Loop
-#Rem    h3_pT = hs
-#Rem End Function
+def h3_pt(pressure, temperature):
+    '''Not avalible with IF 97
+    Solve function T3_ph-T=0 with half interval method.'''
+    ts = temperature + 1
+    lowBound = h1_pt(pressure, 623.15)
+    highBound = h2_pt(pressure, b23t_p(pressure))
+    tolerance = 0.00001
+    enthalpy = 0.0
+    while abs(temperature - ts) > tolerance:
+        enthalpy = (lowBound + highBound)/2.0
+        ts = t3_ph(pressure, enthalpy)
+        if ts > temperature:
+            highBound = enthalpy
+        else:
+            lowBound = enthalpy
+
+    return enthalpy
+
 #Rem Private Function T3_prho(ByVal p As Double, ByVal rho As Double)
 #Rem   'Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
 #Rem   'Solve with half interval method
