@@ -2113,73 +2113,60 @@ def x4_ps(pressure, entropy):
 
     return quality
 
-#Rem Private Function T4_hs(ByVal h As Double, ByVal s As Double) As Double
-#Rem 'Supplementary Release on Backward Equations ( ) , p h s for Region 3,
-#Rem 'Chapter 5.3 page 30.
-#Rem 'The if 97 function is only valid for part of region4. Use iteration outsida.
-#Rem  Dim Ii, Ji, ni As Variant, hL, Ts, ss, p, sigma, eta, teta, High_Bound, Low_Bound, PL, s4V, v4V, s4L, v4L, xs As Double, i As Integer
-#Rem    Ii = Array(0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6, 6, 8, 10, 10, 12, 14, 14, 16, 16, 18, 18, 18, 20, 28)
-#Rem    Ji = Array(0, 3, 12, 0, 1, 2, 5, 0, 5, 8, 0, 2, 3, 4, 0, 1, 1, 2, 4, 16, 6, 8, 22, 1, 20, 36, 24, 1, 28, 12, 32, 14, 22, 36, 24, 36)
-#Rem    ni = Array(0.179882673606601, -0.267507455199603, 1.162767226126, 0.147545428713616, -0.512871635973248, 0.421333567697984, 0.56374952218987, 0.429274443819153, -3.3570455214214, 10.8890916499278, -0.248483390456012, 0.30415322190639, -0.494819763939905, 1.07551674933261, 7.33888415457688E-02, 1.40170545411085E-02, -0.106110975998808, 1.68324361811875E-02, 1.25028363714877, 1013.16840309509, -1.51791558000712, 52.4277865990866, 23049.5545563912, 2.49459806365456E-02, 2107964.67412137, 366836848.613065, -144814105.365163, -1.7927637300359E-03, 4899556021.00459, 471.262212070518, -82929439019.8652, -1715.45662263191, 3557776.82973575, 586062760258.436, -12988763.5078195, 31724744937.1057)
-#Rem   If (s > 5.210887825 And s < 9.15546555571324) Then
-#Rem     sigma = s / 9.2
-#Rem     eta = h / 2800
-#Rem     teta = 0
-#Rem     For i = 0 To 35
-#Rem       teta = teta + ni(i) * (eta - 0.119) ^ Ii(i) * (sigma - 1.07) ^ Ji(i)
-#Rem     Next i
-#Rem     T4_hs = teta * 550
-#Rem Else
-#Rem     'Function psat_h
-#Rem     If s > -0.0001545495919 And s <= 3.77828134 Then
-#Rem       Low_Bound = 0.000611
-#Rem       High_Bound = 165.291642526045
-#Rem       Do While Abs(hL - h) > 0.00001 And Abs(High_Bound - Low_Bound) > 0.0001
-#Rem        PL = (Low_Bound + High_Bound) / 2
-#Rem        Ts = T4_p(PL)
-#Rem        hL = h1_pT(PL, Ts)
-#Rem        If hL > h Then
-#Rem          High_Bound = PL
-#Rem        Else
-#Rem          Low_Bound = PL
-#Rem        End If
-#Rem       Loop
-#Rem     ElseIf s > 3.77828134 And s <= 4.41202148223476 Then
-#Rem       PL = p3sat_h(h)
-#Rem     ElseIf s > 4.41202148223476 And s <= 5.210887663 Then
-#Rem       PL = p3sat_h(h)
-#Rem     End If
-#Rem     Low_Bound = 0.000611
-#Rem     High_Bound = PL
-#Rem     Do While Abs(s - ss) > 0.000001 And Abs(High_Bound - Low_Bound) > 0.0000001
-#Rem       p = (Low_Bound + High_Bound) / 2
-#Rem
-#Rem       'Calculate s4_ph
-#Rem       Ts = T4_p(p)
-#Rem       xs = x4_ph(p, h)
-#Rem       If p < 16.529 Then
-#Rem         s4V = s2_pT(p, Ts)
-#Rem         s4L = s1_pT(p, Ts)
-#Rem       Else
-#Rem         v4V = v3_ph(p, h4V_p(p))
-#Rem         s4V = s3_rhoT(1 / v4V, Ts)
-#Rem         v4L = v3_ph(p, h4L_p(p))
-#Rem         s4L = s3_rhoT(1 / v4L, Ts)
-#Rem       End If
-#Rem       ss = (xs * s4V + (1 - xs) * s4L)
-#Rem
-#Rem       If ss < s Then
-#Rem         High_Bound = p
-#Rem       Else
-#Rem         Low_Bound = p
-#Rem       End If
-#Rem     Loop
-#Rem     T4_hs = T4_p(p)
-#Rem End If
-#Rem End Function
-#Rem '***********************************************************************************************************
-#Rem '*2.5 Functions for region 5
+def t4_hs(enthalpy, entropy):
+    ''' Supplementary Release on Backward Equations ( ) , p h s for Region 3, Chapter 5.3 page 30.
+    The if 97 function is only valid for part of region4. Use iteration outside.'''
+    if entropy < -0.0001545495919 or entropy >= 9.15546555571324:
+        raise ArithmeticError('Entropy needs to be between {} and {} kJ/kgK'.format(-0.0001545495919, 9.15546555571324))
+    temperature = 0.0
+    ii = np.array([0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 3, 3, 4, 4, 5, 5, 5, 5, 6, 6, 6, 8, 10, 10, 12, 14, 14, 16, 16, 18, 18, 18, 20, 28])
+    ji = np.array([0, 3, 12, 0, 1, 2, 5, 0, 5, 8, 0, 2, 3, 4, 0, 1, 1, 2, 4, 16, 6, 8, 22, 1, 20, 36, 24, 1, 28, 12, 32, 14, 22, 36, 24, 36])
+    ni = np.array([0.179882673606601, -0.267507455199603, 1.162767226126, 0.147545428713616, -0.512871635973248, 0.421333567697984, 0.56374952218987, 0.429274443819153, -3.3570455214214, 10.8890916499278, -0.248483390456012, 0.30415322190639, -0.494819763939905, 1.07551674933261, 7.33888415457688E-02, 1.40170545411085E-02, -0.106110975998808, 1.68324361811875E-02, 1.25028363714877, 1013.16840309509, -1.51791558000712, 52.4277865990866, 23049.5545563912, 2.49459806365456E-02, 2107964.67412137, 366836848.613065, -144814105.365163, -1.7927637300359E-03, 4899556021.00459, 471.262212070518, -82929439019.8652, -1715.45662263191, 3557776.82973575, 586062760258.436, -12988763.5078195, 31724744937.1057])
+    if entropy > 5.210887825 and entropy < 9.15546555571324:
+        sigma = entropy/9.2
+        eta = enthalpy/2800.0
+        teta = sum(ni*(eta - 0.119)**ii*(sigma - 1.07)**ji)
+        temperature = teta*550.0
+    else:
+        if entropy > -0.0001545495919 and entropy <= 3.77828134:
+            lowBound, highBound = 0.000611, 165.291642526045
+            liquidEnthalpy, pressureL = 0.0, 0.0
+            tolerance = (0.00001, 0.0001)
+            while abs(liquidEnthalpy - enthalpy) > tolerance[0] and abs(highBound - lowBound) > tolerance[1]:
+                pressureL = (highBound + lowBound)/2.0
+                temperature = t4_p(pressureL)
+                liquidEnthalpy = h1_pt(pressureL, temperature)
+                if liquidEnthalpy > enthalpy:
+                    highBound = pressureL
+                else:
+                    lowBound = pressureL
+        elif entropy > 3.77828134 and entropy <= 5.210887663:
+            pressureL = p3sat_h(enthalpy)
 
+        lowBound, highBound = 0.000611, pressureL
+        entropyS = 0.0
+        tolerance = (0.000001, 0.0000001)
+        while abs(entropy - entropyS) > tolerance[0] and abs(highBound - lowBound) > tolerance[1]:
+            pressure = (lowBound + highBound)/2.0
+            temperature = t4_p(pressure)
+            quality = x4_ph(pressure, enthalpy)
+            if pressure < 16.529:
+                entropyVapor = s2_pt(pressure, temperature)
+                entropyLiquid =s1_pt(pressure, temperature)
+            else:
+                specificVolume = v3_ph(pressure, h4_p(pressure, 'vap'))
+                entropyVapor = s3_rhot(1.0/specificVolume, temperature)
+                specificVolume = v3_ph(pressure, h4_p(pressure, 'liq'))
+                entropyLiquid = s3_rhot(1.0/specificVolume, temperature)
+            entropyS = (quality*entropyVapor + (1.0 - quality)*entropyLiquid)
+            if entropyS < entropy:
+                highBound = pressure
+            else:
+                lowBound = pressure
+
+    return temperature
+
+# Functions for region 5
 def h5_pt(pressure, temperature):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam September 1997
         Basic Equation for Region 5
