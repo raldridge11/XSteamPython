@@ -482,6 +482,9 @@ class Test_tX_prho(unittest.TestCase):
     def test_t3_prho(self):
         self.assertAlmostEqual(stm.t3_prho(21.0, 148.0), 649.829, places=3)
 
+    def test_t5_prho(self):
+        self.assertAlmostEqual(stm.t5_prho(9.0, 10.0), 1943.669, places=3)
+
 class Test_pX_rhot(unittest.TestCase):
 
     def test_p3_rhot(self):

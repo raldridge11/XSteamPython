@@ -2300,23 +2300,24 @@ def t5_ps(pressure, entropy):
             lowBound = temperature
 
     return temperature
-#Rem Private Function T5_prho(ByVal p As Double, ByVal rho As Double) As Double
-#Rem   'Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
-#Rem   'Solve with half interval method
-#Rem   Dim Low_Bound, High_Bound, Ts, rhos As Double
-#Rem     Low_Bound = 1073.15
-#Rem     High_Bound = 2073.15
-#Rem   Do While Abs(rho - rhos) > 0.000001
-#Rem     Ts = (Low_Bound + High_Bound) / 2
-#Rem     rhos = 1 / v2_pT(p, Ts)
-#Rem     If rhos < rho Then
-#Rem       High_Bound = Ts
-#Rem     Else
-#Rem       Low_Bound = Ts
-#Rem     End If
-#Rem     Loop
-#Rem     T5_prho = Ts
-#Rem End Function
+
+def t5_prho(pressure, denisty):
+    '''Solve by iteration. Observe that for low temperatures this equation has 2 solutions.
+    Solve with half interval method'''
+    lowBound, highBound = 1073.15, 2073.15
+    densityS, tolerance = 0.0, 0.000001
+    temperature = 0.0
+
+    while abs(denisty - densityS) > tolerance:
+        temperature = (highBound + lowBound)/2.0
+        densityS = 1.0/v2_pt(pressure, temperature)
+        if densityS < denisty:
+            highBound = temperature
+        else:
+            lowBound = temperature
+
+    return temperature
+
 #Rem '***********************************************************************************************************
 #Rem '*3 Region Selection
 #Rem '***********************************************************************************************************
