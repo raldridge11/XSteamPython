@@ -252,12 +252,12 @@ class Test_hX_s(unittest.TestCase):
 class Test_pX_s(unittest.TestCase):
 
     def test_p4_s_region1(self):
-        self.assertAlmostEqual(stm.p4_s(1.0), 0.035, places=3)
+        self.assertAlmostEqual(stm.p4_s(1.0), 0.037, places=3)
 
     def test_p4_s_region2(self):
         self.assertAlmostEqual(stm.p4_s(4.0), 19.809, places=3)
 
-    def test_p4_s_region1(self):
+    def test_p4_s_region3(self):
         self.assertAlmostEqual(stm.p4_s(6.0), 4.710, places=3)
 
     def test_p4_s_exception(self):
