@@ -2236,34 +2236,57 @@ def s5_pt(pressure, temperature):
     gammar = sum(nir*pressure**iir*tau**jir)
     gammar_tau = sum(nir*pressure**iir*jir*tau**(jir - 1))
     return _R*(tau*(gamma0_tau + gammar_tau) - (gamma0 + gammar))
-#Rem Private Function Cv5_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem 'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
-#Rem 'Basic Equation for Region 5
-#Rem 'Eq 32,33, Page 36, Tables 37-41
-#Rem Dim Iir, Jir, nir, ni0, Ji0 As Variant, tau, gamma0_tautau, gammar_pi, gammar_pitau, gammar_pipi, gammar_tautau As Double, i As Integer
-#Rem Const R As Double = 0.461526   'kJ/(kg K)
-#Rem Ji0 = Array(0, 1, -3, -2, -1, 2)
-#Rem ni0 = Array(-13.179983674201, 6.8540841634434, -0.024805148933466, 0.36901534980333, -3.1161318213925, -0.32961626538917)
-#Rem Iir = Array(1, 1, 1, 2, 3)
-#Rem Jir = Array(0, 1, 3, 9, 3)
-#Rem nir = Array(-1.2563183589592E-04, 2.1774678714571E-03, -0.004594282089991, -3.9724828359569E-06, 1.2919228289784E-07)
-#Rem tau = 1000 / T
-#Rem gamma0_tautau = 0
-#Rem For i = 0 To 5
-#Rem   gamma0_tautau = gamma0_tautau + ni0(i) * (Ji0(i) - 1) * Ji0(i) * tau ^ (Ji0(i) - 2)
-#Rem Next i
-#Rem gammar_pi = 0
-#Rem gammar_pitau = 0
-#Rem gammar_pipi = 0
-#Rem gammar_tautau = 0
-#Rem For i = 0 To 4
-#Rem   gammar_pi = gammar_pi + nir(i) * Iir(i) * p ^ (Iir(i) - 1) * tau ^ Jir(i)
-#Rem   gammar_pitau = gammar_pitau + nir(i) * Iir(i) * p ^ (Iir(i) - 1) * Jir(i) * tau ^ (Jir(i) - 1)
-#Rem   gammar_pipi = gammar_pipi + nir(i) * Iir(i) * (Iir(i) - 1) * p ^ (Iir(i) - 2) * tau ^ Jir(i)
-#Rem   gammar_tautau = gammar_tautau + nir(i) * p ^ Iir(i) * Jir(i) * (Jir(i) - 1) * tau ^ (Jir(i) - 2)
-#Rem Next i
-#Rem w5_pT = (1000 * R * T * (1 + 2 * p * gammar_pi + p ^ 2 * gammar_pi ^ 2) / ((1 - p ^ 2 * gammar_pipi) + (1 + p * gammar_pi - tau * p * gammar_pitau) ^ 2 / (tau ^ 2 * (gamma0_tautau + gammar_tautau)))) ^ 0.5
-#Rem End Function
+
+def cv5_pt(pressure, temperature):
+    '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997 Basic Equation for Region 5
+    Eq 32,33, Page 36, Tables 37-41'''
+    ji0 = np.array([0, 1, -3, -2, -1, 2])
+    ni0 = np.array([-13.179983674201, 6.8540841634434, -0.024805148933466, 0.36901534980333, -3.1161318213925, -0.32961626538917])
+    iir = np.array([1, 1, 1, 2, 3])
+    jir = np.array([0, 1, 3, 9, 3])
+    nir = np.array([-1.2563183589592E-04, 2.1774678714571E-03, -0.004594282089991, -3.9724828359569E-06, 1.2919228289784E-07])
+    tau = 1000.0/temperature
+    gamma0_tautau = sum(ni0*(ji0 - 1)*ji0*tau**(ji0 - 2))
+    gammar_pi = sum(nir*iir*pressure**(iir - 1)*tau**jir)
+    gammar_pitau = sum(nir*iir*pressure**(iir - 1)*jir*tau**(jir - 1))
+    gammar_pipi = sum(nir*iir*(iir - 1)*pressure**(iir - 2)*tau**jir)
+    gammar_tautau = sum(nir*pressure**iir*jir*(jir - 1)*tau**(jir - 2))
+    print(gamma0_tautau)
+    print(gammar_pi)
+    print(gammar_pitau)
+    print(gammar_pipi)
+    print(gammar_tautau)
+    return _R*(-(tau**2*(gamma0_tautau + gammar_tautau)) - (1.0 + pressure*gammar_pi - tau*pressure*gammar_pitau)**2 / (1.0 - pressure**2*gammar_pipi))
+
+#Function w5_pT(ByVal p As Double, ByVal T As Double) As Double
+#'Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997
+#'Basic Equation for Region 5
+#'Eq 32,33, Page 36, Tables 37-41
+#Dim Iir, Jir, nir, ni0, Ji0 As Variant, tau, gamma0_tautau, gammar_pi, gammar_pitau, gammar_pipi, gammar_tautau As Double, i As Integer
+#Const R As Double = 0.461526   'kJ/(kg K)
+#Ji0 = Array(0, 1, -3, -2, -1, 2)
+#ni0 = Array(-13.179983674201, 6.8540841634434, -0.024805148933466, 0.36901534980333, -3.1161318213925, -0.32961626538917)
+#Iir = Array(1, 1, 1, 2, 3)
+#Jir = Array(0, 1, 3, 9, 3)
+#nir = Array(-1.2563183589592E-04, 2.1774678714571E-03, -0.004594282089991, -3.9724828359569E-06, 1.2919228289784E-07)
+#tau = 1000 / T
+#gamma0_tautau = 0
+#For i = 0 To 5
+#  gamma0_tautau = gamma0_tautau + ni0(i) * (Ji0(i) - 1) * Ji0(i) * tau ^ (Ji0(i) - 2)
+#Next i
+#gammar_pi = 0
+#gammar_pitau = 0
+#gammar_pipi = 0
+#gammar_tautau = 0
+#For i = 0 To 4
+#  gammar_pi = gammar_pi + nir(i) * Iir(i) * p ^ (Iir(i) - 1) * tau ^ Jir(i)
+#  gammar_pitau = gammar_pitau + nir(i) * Iir(i) * p ^ (Iir(i) - 1) * Jir(i) * tau ^ (Jir(i) - 1)
+#  gammar_pipi = gammar_pipi + nir(i) * Iir(i) * (Iir(i) - 1) * p ^ (Iir(i) - 2) * tau ^ Jir(i)
+#  gammar_tautau = gammar_tautau + nir(i) * p ^ Iir(i) * Jir(i) * (Jir(i) - 1) * tau ^ (Jir(i) - 2)
+#Next i
+#w5_pT = (1000 * R * T * (1 + 2 * p * gammar_pi + p ^ 2 * gammar_pi ^ 2) / ((1 - p ^ 2 * gammar_pipi) + (1 + p * gammar_pi - tau * p * gammar_pitau) ^ 2 / (tau ^ 2 * (gamma0_tautau + gammar_tautau)))) ^ 0.5
+#End Function
+
 def t5_ph(pressure, enthalpy):
     '''Solve with half interval method'''
     lowBound, highBound = 1073.15, 2273.15
