@@ -387,12 +387,13 @@ class Test_sX_pt(unittest.TestCase):
 class Test_cpX_pt(unittest.TestCase):
 
     def test_cp1_pt(self):
-
         self.assertAlmostEqual(stm.cp1_pt(100.0, 400.0), 4.0604, places=4)
 
     def test_cp2_pt(self):
-
         self.assertAlmostEqual(stm.cp2_pt(10.0, 600.0), 5.141, places=3)
+
+    def test_cp5_pt(self):
+        self.assertAlmostEqual(stm.cp5_pt(15.0, 600.0), 6.058, places=3)
 
 class Test_cvX_pt(unittest.TestCase):
 
