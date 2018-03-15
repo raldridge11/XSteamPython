@@ -289,3 +289,4 @@ __pycache__/
 /env
 /XSteamPython/env
 /XSteamPython/coverage.xml
+/coverage.xml
