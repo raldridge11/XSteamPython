@@ -2518,74 +2518,38 @@ def region_hs(enthalpy, entropy):
                 return 2
     raise ArithmeticError('Enthalpy and Entropy are out of bounds')
 
-#Rem '***********************************************************************************************************
-#Rem '*3.5 Regions as a function of p and rho
-#Rem Private Function Region_prho(ByVal p As Double, ByVal rho) As Integer
-#Rem   Dim v As Double
-#Rem   v = 1 / rho
-#Rem   If p < 0.000611657 Or p > 100 Then
-#Rem     Region_prho = 0
-#Rem     Exit Function
-#Rem   End If
-#Rem   If p < 16.5292 Then 'Bellow region 3, Check region 1,4,2
-#Rem     If v < v1_pT(p, 273.15) Then 'Observe that this is not actually min of v. Not valid Water of 4°C is ligther.
-#Rem       Region_prho = 0
-#Rem       Exit Function
-#Rem     End If
-#Rem     If v <= v1_pT(p, T4_p(p)) Then
-#Rem       Region_prho = 1
-#Rem       Exit Function
-#Rem     End If
-#Rem     If v < v2_pT(p, T4_p(p)) Then
-#Rem       Region_prho = 4
-#Rem       Exit Function
-#Rem     End If
-#Rem     If v <= v2_pT(p, 1073.15) Then
-#Rem       Region_prho = 2
-#Rem       Exit Function
-#Rem     End If
-#Rem     If p > 10 Then 'Above region 5
-#Rem       Region_prho = 0
-#Rem       Exit Function
-#Rem     End If
-#Rem     If v <= v5_pT(p, 2073.15) Then
-#Rem       Region_prho = 5
-#Rem       Exit Function
-#Rem     End If
-#Rem   Else 'Check region 1,3,4,3,2 (Above the lowest point of region 3.)
-#Rem     If v < v1_pT(p, 273.15) Then 'Observe that this is not actually min of v. Not valid Water of 4°C is ligther.
-#Rem       Region_prho = 0
-#Rem       Exit Function
-#Rem     End If
-#Rem     If v < v1_pT(p, 623.15) Then
-#Rem       Region_prho = 1
-#Rem       Exit Function
-#Rem     End If
-#Rem     'Check if in region 3 or 4 (Bellow Reg 2)
-#Rem     If v < v2_pT(p, B23T_p(p)) Then
-#Rem      'Region 3 or 4
-#Rem       If p > 22.064 Then 'Above region 4
-#Rem         Region_prho = 3
-#Rem         Exit Function
-#Rem       End If
-#Rem       If v < v3_ph(p, h4L_p(p)) Or v > v3_ph(p, h4V_p(p)) Then 'Uses iteration!!
-#Rem         Region_prho = 3
-#Rem         Exit Function
-#Rem       Else
-#Rem         Region_prho = 4
-#Rem         Exit Function
-#Rem       End If
-#Rem     End If
-#Rem     'Check if region 2
-#Rem     If v < v2_pT(p, 1073.15) Then
-#Rem       Region_prho = 2
-#Rem       Exit Function
-#Rem     End If
-#Rem   End If
-#Rem
-#Rem   Region_prho = 0
-#Rem End Function
-#Rem
+def region_prho(pressure, density):
+    ''' Regions as a function of pressure and density '''
+    specificVolume = 1.0/density
+    if pressure < 0.000611657 or pressure > 100.0:
+        raise ArithmeticError('Pressure is out of bounds')
+    if specificVolume < v1_pt(pressure, 273.15):
+        raise ArithmeticError('Density is out of bounds')
+    if pressure < 16.5292: # Below region 3, check region 1, 4, and 2
+        if specificVolume < v1_pt(pressure, t4_p(pressure)):
+            return 1
+        if specificVolume < v2_pt(pressure, t4_p(pressure)):
+            return 4
+        if specificVolume < v2_pt(pressure, 1073.15):
+            return 2
+        if pressure > 10: # Above region 5
+            raise ArithmeticError('Pressure is out of bounds')
+        if specificVolume <= v5_pt(pressure, 2073.15):
+            return 5
+    else: # Check region 1, 3, 4, 3, 2 (above the lowest point of region 3.)
+        if specificVolume < v1_pt(pressure, 623.15):
+            return 1
+        # Check if in region 3 or 4 (below region 2)
+        if specificVolume < v2_pt(pressure, b23t_p(pressure)):
+            if pressure > 22.064: # Above region 4
+                return 3
+            if specificVolume < v3_ph(pressure, h4_p(pressure, 'liq')) or specificVolume > v3_ph(pressure, h4_p(pressure, 'vap')):
+                return 3
+            else:
+                return 4
+        # Check region 2
+        if specificVolume < v2_pt(pressure, 1073.15):
+            return 2
 
 # Region Borders
 def b23p_t(temperature):

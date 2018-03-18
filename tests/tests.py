@@ -315,6 +315,44 @@ class Test_region_hs(unittest.TestCase):
     def test_region_hs_exception_regionnotdetermined(self):
         self.assertRaises(ArithmeticError, stm.region_hs, 3000.0, 5.2)
 
+class Test_region_prho(unittest.TestCase):
+
+    def test_region_prho_exceptionOnPressure(self):
+        self.assertRaises(ArithmeticError, stm.region_prho, 0.0, 700.0)
+
+    def test_region_prho_exceptionOnDensity(self):
+        self.assertRaises(ArithmeticError, stm.region_prho, 10.0, 1005.0)
+
+    def test_region_prho_region1_lowPressure(self):
+        self.assertEqual(stm.region_prho(15.0, 700.0), 1)
+
+    def test_region_prho_region4_lowPressure(self):
+        self.assertEqual(stm.region_prho(15.0, 96.72), 4)
+
+    def test_region_prho_lowPressure_exception(self):
+        self.assertRaises(ArithmeticError, stm.region_prho, 15.0, 31.0)
+
+    def test_region_prho_region2_lowPressure(self):
+        self.assertEqual(stm.region_prho(10.0, 21.0), 2)
+
+    def test_region_prho_region5_lowPressure(self):
+        self.assertEqual(stm.region_prho(10.0, 11.0), 5)
+
+    def test_region_prho_region1_highPressure(self):
+        self.assertEqual(stm.region_prho(17.0, 580.0), 1)
+
+    def test_region_prho_region3_superCritical(self):
+        self.assertEqual(stm.region_prho(23.0, 145.0), 3)
+
+    def test_region_prho_region3_highPressure(self):
+        self.assertEqual(stm.region_prho(17.0, 115.0), 3)
+
+    def test_region_prho_region4_highPressure(self):
+        self.assertEqual(stm.region_prho(17.0, 145.0), 4)
+
+    def test_region_prho_region2_highPressure(self):
+        self.assertEqual(stm.region_prho(17.0, 36.0), 2)
+
 class Test_BoundaryFunctions(unittest.TestCase):
 
     def test_b23t_p(self):
