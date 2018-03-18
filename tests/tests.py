@@ -285,6 +285,15 @@ class Test_region_hs(unittest.TestCase):
     def test_region_hs_exception_upperB23(self):
         self.assertRaises(ArithmeticError, stm.region_hs, 4000.0, 6.05)
 
+    def test_region_hs_region4_underCritical(self):
+        self.assertEqual(stm.region_hs(1800.0, 4.0), 4)
+
+    def test_region_hs_region3_underCritical(self):
+        self.assertEqual(stm.region_hs(1900.0, 4.0), 3)
+
+    def test_region_hs_excpetion_underCritical(self):
+        self.assertRaises(ArithmeticError, stm.region_hs, 2000.0, 4.0)
+
 
 
 class Test_BoundaryFunctions(unittest.TestCase):

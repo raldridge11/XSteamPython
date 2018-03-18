@@ -2598,8 +2598,8 @@ def region_hs(enthalpy, entropy):
             if enthalpy < enthalpyBoundary:
                 return 1
             temperatureMax = t3_ps(100.0, entropy)
-            specificVolumMax = v3_ps(100.0, entropy)
-            enthalpyMax = h3_rhot(1.0/specificVolumMax, temperatureMax)
+            specificVolumeMax = v3_ps(100.0, entropy)
+            enthalpyMax = h3_rhot(1.0/specificVolumeMax, temperatureMax)
             if enthalpy < enthalpyMax:
                 return 3
             else:
@@ -2625,6 +2625,18 @@ def region_hs(enthalpy, entropy):
             enthalpyMax = -2.988734*entropy**4 + 121.4015*entropy**3 - 1805.15*entropy**2 + 11720.16*entropy - 23998.33
         if enthalpy < enthalpyMax: # Region 2 over region 3
             return 2
+        else:
+            raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+    # Check region 3 or 4 below the critical point
+    if entropy >= 3.77828134 and entropy <= 4.41202148223476:
+        liquidEnthalpy = h4_s(entropy)
+        if enthalpy < liquidEnthalpy:
+            return 4
+        temperatureMax = t3_ps(100.0, entropy)
+        specificVolumeMax = v3_ps(100.0, entropy)
+        enthalpyMax = h3_rhot(1.0/specificVolumeMax, temperatureMax)
+        if enthalpy < enthalpyMax:
+            return 3
         else:
             raise ArithmeticError('Enthalpy and Entropy are out of bounds')
 
