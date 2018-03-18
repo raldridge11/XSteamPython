@@ -195,6 +195,32 @@ class Test_region_ph(unittest.TestCase):
 
         self.assertEqual(stm.region_ph(19.0, 2500.0), 3)
 
+class Test_region_pt(unittest.TestCase):
+
+    def test_region_pt_region5(self):
+        self.assertEqual(stm.region_pt(9.0, 2000.0), 5)
+
+    def test_region_pt_region3_highT(self):
+        self.assertEqual(stm.region_pt(19.0, 640.0), 3)
+
+    def test_region_pt_region4_highT(self):
+        self.assertEqual(stm.region_pt(20.26594,640.0), 4)
+
+    def test_region_pt_region2_highT(self):
+        self.assertEqual(stm.region_pt(18.0, 640.0), 2)
+
+    def test_region_pt_region4_lowT(self):
+        self.assertEqual(stm.region_pt(2.63890, 500.0), 4)
+
+    def test_region_pt_region1_lowT(self):
+        self.assertEqual(stm.region_pt(3.0, 500.0), 1)
+
+    def test_region_pt_region2_lowT(self):
+        self.assertEqual(stm.region_pt(2.0, 500.0), 2)
+
+    def test_region_pt_region_pt_exception(self):
+        self.assertRaises(ArithmeticError, stm.region_pt, 200, 3000.0)
+
 class Test_BoundaryFunctions(unittest.TestCase):
 
     def test_b23t_p(self):

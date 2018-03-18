@@ -2318,45 +2318,37 @@ def t5_prho(pressure, denisty):
 
     return temperature
 
-#Rem '***********************************************************************************************************
-#Rem '*3 Region Selection
-#Rem '***********************************************************************************************************
-#Rem '*3.1 Regions as a function of pT
-#Rem Private Function region_pT(ByVal p As Double, ByVal T As Double) As Integer
-#Rem Dim ps As Double
-#Rem If T > 1073.15 And p < 10 And T < 2273.15 And p > 0.000611 Then
-#Rem   region_pT = 5
-#Rem ElseIf T <= 1073.15 And T > 273.15 And p <= 100 And p > 0.000611 Then
-#Rem   If T > 623.15 Then
-#Rem     If p > B23p_T(T) Then
-#Rem      region_pT = 3
-#Rem      If T < 647.096 Then
-#Rem         ps = p4_T(T)
-#Rem         If Abs(p - ps) < 0.00001 Then
-#Rem            region_pT = 4
-#Rem         End If
-#Rem      End If
-#Rem     Else
-#Rem      region_pT = 2
-#Rem     End If
-#Rem    Else
-#Rem     ps = p4_T(T)
-#Rem     If Abs(p - ps) < 0.00001 Then
-#Rem       region_pT = 4
-#Rem     ElseIf p > ps Then
-#Rem       region_pT = 1
-#Rem     Else
-#Rem       region_pT = 2
-#Rem     End If
-#Rem    End If
-#Rem   Else
-#Rem     region_pT = 0 '**Error, Outside valid area
-#Rem   End If
-#Rem End Function
-#Rem '***********************************************************************************************************
-#Rem '*3.2 Regions as a function of ph
-def region_ph(pressure, enthalpy):
+# Region Selection
+def region_pt(pressure, temperature):
+    ''' Regions as a function of pressure and temperature '''
+    region = 0
+    if (temperature > 1073.15 and temperature < 2273.15) and (pressure < 10.0  and pressure > 0.000611):
+        region = 5
+    elif (temperature <= 1073.15 and temperature > 273.15) and (pressure <= 100 and pressure > 0.000611):
+        if temperature > 623.15:
+            if pressure > b23p_t(temperature):
+                region = 3
+                if temperature < 647.096:
+                    ps = p4_t(temperature)
+                    if abs(pressure - ps) < 0.00001:
+                        region = 4
+            else:
+                region = 2
+        else:
+            ps = p4_t(temperature)
+            if abs(pressure - ps) < 0.00001:
+                region = 4
+            elif pressure > ps:
+                region = 1
+            else:
+                region = 2
+    else:
+        raise ArithmeticError('Temperature and Pressure Out Of Bounds')
 
+    return region
+
+def region_ph(pressure, enthalpy):
+    ''' Regions as a function of pressure and enthalpy '''
     pressureMin, pressureMax = 0.000611657, 100.0
     enthalpyMin = 0.963 * pressure + 2.2 # Linear adaption to h1_pt()+2 to speed up calcualations.
 
@@ -2398,8 +2390,6 @@ def region_ph(pressure, enthalpy):
         elif enthalpy < h2_pt(pressure, 1073.15):
 
             return 2
-
-
 
 #Rem '***********************************************************************************************************
 #Rem '*3.3 Regions as a function of ps
