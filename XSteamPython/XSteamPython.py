@@ -2391,63 +2391,37 @@ def region_ph(pressure, enthalpy):
 
             return 2
 
-#Rem '***********************************************************************************************************
-#Rem '*3.3 Regions as a function of ps
-#Rem Private Function region_ps(ByVal p As Double, ByVal s) As Integer
-#Rem Dim ss As Double
-#Rem   If p < 0.000611657 Or p > 100 Or s < 0 Or s > s5_pT(p, 2273.15) Then
-#Rem    region_ps = 0
-#Rem    Exit Function
-#Rem   End If
-#Rem
-#Rem   'Check region 5
-#Rem   If s > s2_pT(p, 1073.15) Then
-#Rem     If p <= 10 Then
-#Rem       region_ps = 5
-#Rem       Exit Function
-#Rem     Else
-#Rem       region_ps = 0
-#Rem       Exit Function
-#Rem     End If
-#Rem   End If
-#Rem
-#Rem   'Check region 2
-#Rem   If p > 16.529 Then
-#Rem     ss = s2_pT(p, B23T_p(p)) 'Between 5.047 and 5.261. Use to speed up!
-#Rem   Else
-#Rem     ss = s2_pT(p, T4_p(p))
-#Rem   End If
-#Rem   If s > ss Then
-#Rem       region_ps = 2
-#Rem       Exit Function
-#Rem   End If
-#Rem
-#Rem   'Check region 3
-#Rem   ss = s1_pT(p, 623.15)
-#Rem   If p > 16.529 And s > ss Then
-#Rem     If p > p3sat_s(s) Then
-#Rem       region_ps = 3
-#Rem       Exit Function
-#Rem     Else
-#Rem       region_ps = 4
-#Rem       Exit Function
-#Rem     End If
-#Rem   End If
-#Rem
-#Rem   'Check region 4 (Not inside region 3)
-#Rem   If p < 16.529 And s > s1_pT(p, T4_p(p)) Then
-#Rem     region_ps = 4
-#Rem     Exit Function
-#Rem   End If
-#Rem
-#Rem   'Check region 1
-#Rem   If p > 0.000611657 And s > s1_pT(p, 273.15) Then
-#Rem     region_ps = 1
-#Rem     Exit Function
-#Rem   End If
-#Rem   region_ps = 1
-#Rem End Function
-#Rem '***********************************************************************************************************
+def region_ps(pressure, entropy):
+    ''' Regions as a function of pressure and enthalpy '''
+    if pressure < 0.000611657 or pressure > 100.0 or entropy < 0.0 or entropy > s5_pt(pressure, 2273.15):
+        raise ArithmeticError('Pressure and enthalpy out of bounds')
+
+    # Check region 5
+    if entropy > s2_pt(pressure, 1073.15):
+        if pressure <= 10.0:
+            return 5
+        else:
+            raise ArithmeticError('Pressure and enthalpy out of bounds')
+    # Check region 2
+    if pressure > 16.529:
+        entropyS = s2_pt(pressure, b23t_p(pressure)) # Between 5.047 and 5.261. Use to speed up!
+    else:
+        entropyS = s2_pt(pressure, t4_p(pressure))
+    if entropy > entropyS:
+        return 2
+    # Check region 3
+    entropyS = s1_pt(pressure, 623.15)
+    if pressure > 16.529 and entropy > entropyS:
+        if pressure > p3sat_s(entropy):
+            return 3
+        else:
+            return 4
+    # Check region 4
+    if pressure < 16.529 and entropy > s1_pt(pressure, t4_p(pressure)):
+        return 4
+    # If it hasn't reached this point then return region 1
+    return 1
+
 #Rem '*3.4 Regions as a function of hs
 #Rem Private Function Region_hs(ByVal h, ByVal s) As Integer
 #Rem Dim TMax, hMax, hB, hL, hV, vmax, Tmin, hMin As Double
