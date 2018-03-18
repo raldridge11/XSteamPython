@@ -2580,6 +2580,34 @@ def region_ps(pressure, entropy):
 #Rem    End If
 #Rem    Region_hs = CVErr(xlErrValue)
 #Rem End Function
+def region_hs(enthalpy, entropy):
+    ''' Regions as a function of enthalpy and entropy '''
+    enthalpyMin = (((-0.0415878 - 2500.89262) / (-0.00015455 - 9.155759))*entropy)
+    if enthalpy < -0.0001545495919 or (entropy < 9.155759395 and enthalpy < enthalpyMin):
+        raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+    # Check region 1 or 4 plus a small bit over B13
+    if entropy >= -0.0001545495919 and entropy <= 3.77828134:
+        if enthalpy < h4_s(entropy):
+            return 4
+        elif entropy < 3.397782955: # 100 MPa line is limiting
+            temperatureMax = t1_ps(100.0, entropy)
+            enthalpyMax = h1_pt(100.0, temperatureMax)
+            if enthalpy < enthalpyMax:
+                return 1
+            else:
+                raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+        else: # The point is either in region 4, 1, or 3. Check B23
+            enthalpyBoundary = hB13_s(entropy)
+            if enthalpy < enthalpyBoundary:
+                return 1
+            temperatureMax = t3_ps(100.0, entropy)
+            specificVolumMax = v3_ps(100.0, entropy)
+            enthalpyMax = h3_rhot(1.0/specificVolumMax, temperatureMax)
+            if enthalpy < enthalpyMax:
+                return 3
+            else:
+                raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+
 #Rem '***********************************************************************************************************
 #Rem '*3.5 Regions as a function of p and rho
 #Rem Private Function Region_prho(ByVal p As Double, ByVal rho) As Integer

@@ -250,6 +250,26 @@ class Test_region_ps(unittest.TestCase):
     def test_region_ps_region1(self):
         self.assertEqual(stm.region_ps(10.0, 1.0), 1)
 
+class Test_region_hs(unittest.TestCase):
+
+    def test_region_hs_exception(self):
+        self.assertRaises(ArithmeticError, stm.region_hs, -1.0, -1.0)
+
+    def test_region_hs_region4_bitoverb13(self):
+        self.assertEqual(stm.region_hs(274.0, 1.0), 4)
+
+    def test_region_hs_region1_bitoverb13_100Mpa_limit(self):
+        self.assertEqual(stm.region_hs(309.0, 1.0), 1)
+
+    def test_region_hs_region1_b23(self):
+        self.assertEqual(stm.region_hs(1500.0, 3.4), 1)
+
+    def test_region_hs_region3_b23(self):
+        self.assertEqual(stm.region_hs(1747.0, 3.7), 3)
+
+    def test_region_hs_exception_bitoverb13(self):
+        self.assertRaises(ArithmeticError, stm.region_hs, 1800.0, 3.7)
+
 class Test_BoundaryFunctions(unittest.TestCase):
 
     def test_b23t_p(self):
