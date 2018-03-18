@@ -309,7 +309,7 @@ class Test_region_hs(unittest.TestCase):
     def test_region_hs_region3_aboveCritical_underb23_check3(self):
         self.assertEqual(stm.region_hs(2600.0, 5.2), 3)
 
-    def test_region_hs_region2_aboveCritical_underb23(self):
+    def test_region_hs_region2_aboveCritical_aboveb23(self):
         self.assertEqual(stm.region_hs(2700.0, 5.2), 2)
 
     def test_region_hs_exception_regionnotdetermined(self):
