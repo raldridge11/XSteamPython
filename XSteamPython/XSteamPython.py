@@ -2485,10 +2485,7 @@ def region_ps(pressure, entropy):
 #Rem         Exit Function
 #Rem       End If
 #Rem     End If
-#Rem
-#Rem
-#Rem       hV = h4_s(s)
-#Rem
+#Rem     hV = h4_s(s)
 #Rem     If h < hV Then  'Region 4. Under region 3.
 #Rem         Region_hs = 4
 #Rem         Exit Function
@@ -2607,6 +2604,29 @@ def region_hs(enthalpy, entropy):
                 return 3
             else:
                 raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+    # Check region 2 or 4 upper part of area b23 -> max
+    if entropy >= 5.260578707 and entropy <= 11.9212156897728:
+        if entropy > 9.155759395: # Above region 4
+            temperatureMin = t2_ps(0.000611, entropy)
+            enthalpyMin = h2_pt(0.000611, temperatureMin)
+            enthalpyMax = -0.07554022*entropy**4 + 3.341571*entropy**3 - 55.42151*entropy**2 + 408.515*entropy + 3031.338
+            if enthalpy > enthalpyMin and enthalpy < enthalpyMax:
+                return 2
+            else:
+                raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+        vaporEnthalpy = h4_s(entropy)
+        if enthalpy < vaporEnthalpy: # Region 4 under region 3
+            return 4
+        if entropy < 6.04048367171238:
+            temperatureMax = t2_ps(100.0, entropy)
+            enthalpyMax = h2_pt(100.0, temperatureMax)
+        else:
+            # Function adapted to h(1073.15,s)
+            enthalpyMax = -2.988734*entropy**4 + 121.4015*entropy**3 - 1805.15*entropy**2 + 11720.16*entropy - 23998.33
+        if enthalpy < enthalpyMax: # Region 2 over region 3
+            return 2
+        else:
+            raise ArithmeticError('Enthalpy and Entropy are out of bounds')
 
 #Rem '***********************************************************************************************************
 #Rem '*3.5 Regions as a function of p and rho

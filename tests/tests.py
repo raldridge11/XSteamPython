@@ -270,6 +270,23 @@ class Test_region_hs(unittest.TestCase):
     def test_region_hs_exception_bitoverb13(self):
         self.assertRaises(ArithmeticError, stm.region_hs, 1800.0, 3.7)
 
+    def test_region_hs_region2_upperB23(self):
+        self.assertEqual(stm.region_hs(3000.0, 9.2), 2)
+
+    def test_region_hs_region4_upperB23(self):
+        self.assertEqual(stm.region_hs(2700.0, 7.0), 4)
+
+    def test_region_hs_region2_upperB23_lowEntropy(self):
+        self.assertEqual(stm.region_hs(3000.0, 6.03), 2)
+
+    def test_region_hs_region2_upperB23_highEntropy(self):
+        self.assertEqual(stm.region_hs(3000.0, 6.05), 2)
+
+    def test_region_hs_exception_upperB23(self):
+        self.assertRaises(ArithmeticError, stm.region_hs, 4000.0, 6.05)
+
+
+
 class Test_BoundaryFunctions(unittest.TestCase):
 
     def test_b23t_p(self):
