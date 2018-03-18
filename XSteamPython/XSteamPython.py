@@ -2422,161 +2422,6 @@ def region_ps(pressure, entropy):
     # If it hasn't reached this point then return region 1
     return 1
 
-#Rem '*3.4 Regions as a function of hs
-#Rem Private Function Region_hs(ByVal h, ByVal s) As Integer
-#Rem Dim TMax, hMax, hB, hL, hV, vmax, Tmin, hMin As Double
-#Rem   If s < -0.0001545495919 Then
-#Rem     Region_hs = 0
-#Rem     Exit Function
-#Rem   End If
-#Rem   'Check linear adaption to p=0.000611. If bellow region 4.
-#Rem   hMin = (((-0.0415878 - 2500.89262) / (-0.00015455 - 9.155759)) * s)
-#Rem   If s < 9.155759395 And h < hMin Then
-#Rem     Region_hs = 0
-#Rem     Exit Function
-#Rem   End If
-#Rem
-#Rem   '******Kolla 1 eller 4. (+liten bit över B13)
-#Rem   If s >= -0.0001545495919 And s <= 3.77828134 Then
-#Rem     If h < h4_s(s) Then
-#Rem       Region_hs = 4
-#Rem       Exit Function
-#Rem     ElseIf s < 3.397782955 Then '100MPa line is limiting
-#Rem       TMax = T1_ps(100, s)
-#Rem       hMax = h1_pT(100, TMax)
-#Rem       If h < hMax Then
-#Rem        Region_hs = 1
-#Rem        Exit Function
-#Rem       Else
-#Rem        Region_hs = 0
-#Rem        Exit Function
-#Rem       End If
-#Rem      Else 'The point is either in region 4,1,3. Check B23
-#Rem       hB = hB13_s(s)
-#Rem       If h < hB Then
-#Rem         Region_hs = 1
-#Rem         Exit Function
-#Rem       End If
-#Rem       TMax = T3_ps(100, s)
-#Rem       vmax = v3_ps(100, s)
-#Rem       hMax = h3_rhoT(1 / vmax, TMax)
-#Rem       If h < hMax Then
-#Rem         Region_hs = 3
-#Rem         Exit Function
-#Rem       Else
-#Rem         Region_hs = 0
-#Rem         Exit Function
-#Rem       End If
-#Rem      End If
-#Rem   End If
-#Rem
-#Rem   '******Kolla region 2 eller 4. (Övre delen av område b23-> max)
-#Rem   If s >= 5.260578707 And s <= 11.9212156897728 Then
-#Rem     If s > 9.155759395 Then 'Above region 4
-#Rem       Tmin = T2_ps(0.000611, s)
-#Rem       hMin = h2_pT(0.000611, Tmin)
-#Rem       'Function adapted to h(1073.15,s)
-#Rem       hMax = -0.07554022 * s ^ 4 + 3.341571 * s ^ 3 - 55.42151 * s ^ 2 + 408.515 * s + 3031.338
-#Rem       If h > hMin And h < hMax Then
-#Rem         Region_hs = 2
-#Rem         Exit Function
-#Rem       Else
-#Rem         Region_hs = 0
-#Rem         Exit Function
-#Rem       End If
-#Rem     End If
-#Rem     hV = h4_s(s)
-#Rem     If h < hV Then  'Region 4. Under region 3.
-#Rem         Region_hs = 4
-#Rem         Exit Function
-#Rem     End If
-#Rem     If s < 6.04048367171238 Then
-#Rem       TMax = T2_ps(100, s)
-#Rem       hMax = h2_pT(100, TMax)
-#Rem     Else
-#Rem      'Function adapted to h(1073.15,s)
-#Rem       hMax = -2.988734 * s ^ 4 + 121.4015 * s ^ 3 - 1805.15 * s ^ 2 + 11720.16 * s - 23998.33
-#Rem     End If
-#Rem      If h < hMax Then  'Region 2. Över region 4.
-#Rem         Region_hs = 2
-#Rem         Exit Function
-#Rem     Else
-#Rem         Region_hs = 0
-#Rem         Exit Function
-#Rem     End If
-#Rem    End If
-#Rem
-#Rem    'Kolla region 3 eller 4. Under kritiska punkten.
-#Rem    If s >= 3.77828134 And s <= 4.41202148223476 Then
-#Rem      hL = h4_s(s)
-#Rem      If h < hL Then
-#Rem        Region_hs = 4
-#Rem        Exit Function
-#Rem      End If
-#Rem      TMax = T3_ps(100, s)
-#Rem      vmax = v3_ps(100, s)
-#Rem      hMax = h3_rhoT(1 / vmax, TMax)
-#Rem      If h < hMax Then
-#Rem         Region_hs = 3
-#Rem         Exit Function
-#Rem      Else
-#Rem         Region_hs = 0
-#Rem         Exit Function
-#Rem     End If
-#Rem    End If
-#Rem
-#Rem    'Kolla region 3 eller 4 från kritiska punkten till övre delen av b23
-#Rem    If s >= 4.41202148223476 And s <= 5.260578707 Then
-#Rem      hV = h4_s(s)
-#Rem      If h < hV Then
-#Rem         Region_hs = 4
-#Rem         Exit Function
-#Rem      End If
-#Rem      'Kolla om vi är under b23 giltighetsområde.
-#Rem      If s <= 5.048096828 Then
-#Rem        TMax = T3_ps(100, s)
-#Rem        vmax = v3_ps(100, s)
-#Rem        hMax = h3_rhoT(1 / vmax, TMax)
-#Rem        If h < hMax Then
-#Rem          Region_hs = 3
-#Rem          Exit Function
-#Rem        Else
-#Rem          Region_hs = 0
-#Rem          Exit Function
-#Rem        End If
-#Rem      Else 'Inom området för B23 i s led.
-#Rem        If (h > 2812.942061) Then 'Ovanför B23 i h_led
-#Rem          If s > 5.09796573397125 Then
-#Rem            TMax = T2_ps(100, s)
-#Rem            hMax = h2_pT(100, TMax)
-#Rem            If h < hMax Then
-#Rem              Region_hs = 2
-#Rem              Exit Function
-#Rem            Else
-#Rem              Region_hs = 0
-#Rem              Exit Function
-#Rem            End If
-#Rem          Else
-#Rem            Region_hs = 0
-#Rem            Exit Function
-#Rem          End If
-#Rem        End If
-#Rem        If (h < 2563.592004) Then   'Nedanför B23 i h_led men vi har redan kollat ovanför hV2c3b
-#Rem           Region_hs = 3
-#Rem           Exit Function
-#Rem        End If
-#Rem        'Vi är inom b23 området i både s och h led.
-#Rem        If p2_hs(h, s) > B23p_T(TB23_hs(h, s)) Then
-#Rem          Region_hs = 3
-#Rem          Exit Function
-#Rem        Else
-#Rem          Region_hs = 2
-#Rem          Exit Function
-#Rem        End If
-#Rem      End If
-#Rem    End If
-#Rem    Region_hs = CVErr(xlErrValue)
-#Rem End Function
 def region_hs(enthalpy, entropy):
     ''' Regions as a function of enthalpy and entropy '''
     enthalpyMin = (((-0.0415878 - 2500.89262) / (-0.00015455 - 9.155759))*entropy)
@@ -2639,6 +2484,39 @@ def region_hs(enthalpy, entropy):
             return 3
         else:
             raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+    # Check region 3 or 4 from critical point to top of b23
+    if entropy >= 4.41202148223476 and entropy <= 5.260578707:
+        vaporEnthalpy = h4_s(entropy)
+        if enthalpy < vaporEnthalpy:
+            return 4
+        # Check if under validity of B23
+        if entropy <= 5.048096828:
+            temperatureMax = t3_ps(100.0, entropy)
+            specificVolumeMax = v3_ps(100.0, entropy)
+            enthalpyMax = h3_rhot(1.0/specificVolumeMax, temperatureMax)
+            if enthalpy < enthalpyMax:
+                return 3
+            else:
+                raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+        else: # In the area of B23
+            if enthalpy > 2812.942061: # above b23 in h
+                if entropy > 5.09796573397125:
+                    temperatureMax = t2_ps(100.0, entropy)
+                    enthalpyMax = h2_pt(100.0, temperatureMax)
+                    if enthalpy < enthalpyMax:
+                        return 2
+                    else:
+                        raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+                else:
+                    raise ArithmeticError('Enthalpy and Entropy are out of bounds')
+            if enthalpy < 2563.592004: # Below B23 in h but we have already checked above hV2c3b
+                return 3
+            # We are within the b23 area in both s and h
+            if p2_hs(enthalpy, entropy) > b23p_t(tB23_hs(enthalpy, entropy)):
+                return 3
+            else:
+                return 2
+    raise ArithmeticError('Enthalpy and Entropy are out of bounds')
 
 #Rem '***********************************************************************************************************
 #Rem '*3.5 Regions as a function of p and rho
