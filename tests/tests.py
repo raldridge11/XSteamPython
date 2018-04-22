@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-
 import numpy as np
 import pandas as pd
 
 import XSteamPython as stm
 
-siData = pd.ExcelFile('SIUnits_testCompare.xlsm')
-englishData = pd.ExcelFile('EnglishUnits_testCompare.xlsm')
+try:
+    siData = pd.ExcelFile('SIUnits_testCompare.xlsm')
+    englishData = pd.ExcelFile('EnglishUnits_testCompare.xlsm')
+except Exception:
+    siData = pd.ExcelFile('tests\SIUnits_testCompare.xlsm')
+    englishData = pd.ExcelFile('tests\EnglishUnits_testCompare.xlsm')
 
 class Test_Conversions(unittest.TestCase):
 
