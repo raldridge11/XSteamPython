@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 import unittest
 
+
+import numpy as np
+import pandas as pd
+
 import XSteamPython as stm
+
+siData = pd.ExcelFile('SIUnits_testCompare.xlsm')
+englishData = pd.ExcelFile('EnglishUnits_testCompare.xlsm')
 
 class Test_Conversions(unittest.TestCase):
 
@@ -123,12 +130,30 @@ class Test_Tsat_p(unittest.TestCase):
 
     def test_Tsat_p(self):
 
-        self.assertAlmostEqual(stm.Tsat_p(101.0), 99.88, places=2)
+        data = pd.read_excel(siData, 'Tsat_p')
+        data = data.as_matrix()
+        pressure = data[0, 1:]
+        TsatCompare = data[1, 1:]
+
+        Tsat = np.empty(shape=0)
+        for p in pressure:
+            Tsat = np.append(Tsat, stm.Tsat_p(p))
+
+        np.testing.assert_array_almost_equal(TsatCompare, Tsat, decimal=3)
 
     def test_Tsat_p_English(self):
 
         stm.englishUnits = True
-        self.assertAlmostEqual(stm.Tsat_p(14.7), 212.0, 1)
+        data = pd.read_excel(englishData, 'Tsat_p')
+        data = data.as_matrix()
+        pressure = data[0, 1:]
+        TsatCompare = data[1, 1:]
+
+        Tsat = np.empty(shape=0)
+        for p in pressure:
+            Tsat = np.append(Tsat, stm.Tsat_p(p))
+
+        np.testing.assert_array_almost_equal(TsatCompare, Tsat, decimal=3)
 
     def test_Tsat_p_error(self):
 
