@@ -13,6 +13,18 @@ except Exception:
     siData = pd.ExcelFile('tests/SIUnits_testCompare.xlsm')
     englishData = pd.ExcelFile('tests/EnglishUnits_testCompare.xlsm')
 
+def getOneDimensionalTestData(excelFile, excelPage):
+
+    data = pd.read_excel(excelFile, excelPage)
+    dataAsMatrix = data.as_matrix()
+    return dataAsMatrix[0, 1:], dataAsMatrix[1, 1:]
+
+def calculateOneDimensionalProperty(function, independentVariable):
+    property = np.empty(shape=0)
+    for x in independentVariable:
+        property = np.append(property, function(x))
+    return property
+
 class Test_Conversions(unittest.TestCase):
 
     def tearDown(self):
@@ -133,29 +145,16 @@ class Test_Tsat_p(unittest.TestCase):
 
     def test_Tsat_p(self):
 
-        data = pd.read_excel(siData, 'Tsat_p')
-        data = data.as_matrix()
-        pressure = data[0, 1:]
-        TsatCompare = data[1, 1:]
-
-        Tsat = np.empty(shape=0)
-        for p in pressure:
-            Tsat = np.append(Tsat, stm.Tsat_p(p))
-
+        pressure, TsatCompare = getOneDimensionalTestData(siData, 'Tsat_p')
+        Tsat = calculateOneDimensionalProperty(stm.Tsat_p, pressure)
         np.testing.assert_array_almost_equal(TsatCompare, Tsat, decimal=3)
+
 
     def test_Tsat_p_English(self):
 
         stm.englishUnits = True
-        data = pd.read_excel(englishData, 'Tsat_p')
-        data = data.as_matrix()
-        pressure = data[0, 1:]
-        TsatCompare = data[1, 1:]
-
-        Tsat = np.empty(shape=0)
-        for p in pressure:
-            Tsat = np.append(Tsat, stm.Tsat_p(p))
-
+        pressure, TsatCompare = getOneDimensionalTestData(englishData, 'Tsat_p')
+        Tsat = calculateOneDimensionalProperty(stm.Tsat_p, pressure)
         np.testing.assert_array_almost_equal(TsatCompare, Tsat, decimal=3)
 
     def test_Tsat_p_error(self):
