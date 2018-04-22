@@ -10,8 +10,8 @@ try:
     siData = pd.ExcelFile('SIUnits_testCompare.xlsm')
     englishData = pd.ExcelFile('EnglishUnits_testCompare.xlsm')
 except Exception:
-    siData = pd.ExcelFile('tests\SIUnits_testCompare.xlsm')
-    englishData = pd.ExcelFile('tests\EnglishUnits_testCompare.xlsm')
+    siData = pd.ExcelFile('tests/SIUnits_testCompare.xlsm')
+    englishData = pd.ExcelFile('tests/EnglishUnits_testCompare.xlsm')
 
 class Test_Conversions(unittest.TestCase):
 
