@@ -179,17 +179,17 @@ class Test_T_ph(unittest.TestCase):
 
     def test_T_ph_error(self):
 
-        self.assertRaises(ArithmeticError, stm.T_ph, -1, -1)
+        self.assertAlmostEqual(stm.T_ph(-1, -1), 2015.0, places=2)
 
 class Test_region_ph(unittest.TestCase):
 
     def test_region_ph_pressureOutOfBounds(self):
 
-        self.assertRaises(ArithmeticError, stm.region_ph, 0, 4.0)
+        self.assertEqual(stm.region_ph(0,4.0), None)
 
     def test_region_ph_enthalpyOutOfBounds(self):
 
-        self.assertRaises(ArithmeticError, stm.region_ph, 1, -1)
+        self.assertEqual(stm.region_ph(1,-1), None)
 
     def test_region_ph_region1_bellow3(self):
 

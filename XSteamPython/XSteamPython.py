@@ -50,6 +50,7 @@ def T_ph(pressure, enthalpy):
     temperature = 0
 
     region = region_ph(pressure, enthalpy)
+    if region is None: return 2015.0
 
     if region == 1:
         temperature = t1_ph(pressure, enthalpy)
@@ -61,13 +62,6 @@ def T_ph(pressure, enthalpy):
         temperature = t4_p(pressure)
     elif region == 5:
         temperature = t5_ph(pressure, enthalpy)
-    else:
-        pressure = fromSIUnit(pressure, 'pressure')
-        units = ['kPa', 'kJ/kg']
-        if englishUnits:
-            units = ['psi', 'btu/lb']
-            enthalpy = fromSIUnit(enthalpy, 'enthalpy')
-        raise ArithmeticError('Pressure {} {} and enthalpy {} {} are out of bounds'.format(pressure, units[0], enthalpy, units[1]))
 
     return fromSIUnit(temperature, 'temperature')
 
@@ -2353,11 +2347,11 @@ def region_ph(pressure, enthalpy):
     enthalpyMin = 0.963 * pressure + 2.2 # Linear adaption to h1_pt()+2 to speed up calcualations.
 
     if pressure < pressureMin or pressure > pressureMax:
-        raise ArithmeticError
+        return None
 
     if enthalpy < enthalpyMin:
         if enthalpy < h1_pt(pressure, 273.150):
-            raise ArithmeticError
+            return None
 
     if pressure < 16.5292: #Bellow region 3, check region 1,4,2,5
 
