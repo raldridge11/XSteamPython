@@ -8,9 +8,11 @@ install:
   - pip install XSteamPython/.
 # command to run tests
 script:
-  - python tests/tests.py
+  - cd tests
+  - python tests.py
 # run coverage to generate coverage report
 after_success:
+  - cd ..
   - "coverage run --branch --include=XSteamPython/XSteamPython.py,tests/tests.py tests/tests.py"
   - coverage report
   - coverage xml
