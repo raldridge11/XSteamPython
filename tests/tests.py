@@ -19,11 +19,21 @@ def getOneDimensionalTestData(excelFile, excelPage):
     dataAsMatrix = data.as_matrix()
     return dataAsMatrix[0, 1:], dataAsMatrix[1, 1:]
 
-def calculateOneDimensionalProperty(function, independentVariable):
-    property = np.empty(shape=0)
-    for x in independentVariable:
-        property = np.append(property, function(x))
-    return property
+def getTwoDimensionalTestData(excelFile, excelPage):
+    data = pd.read_excel(excelFile, excelPage)
+    dataAsMatrix = data.as_matrix()
+    return dataAsMatrix[0, 1:], dataAsMatrix[1:, 0], dataAsMatrix[1:, 1:]
+
+def calculatePropertyFromOneDimension(function, independentVariable):
+    thProperty = np.fromiter((function(x) for x in independentVariable), float)
+    return thProperty
+
+def calculatePropertyFromTwoDimensions(function, independentVariable1, independentVariable2):
+    thProperty = np.empty(shape=(len(independentVariable1), len(independentVariable2)))
+    for i, x in enumerate(independentVariable1):
+        for j, y in enumerate(independentVariable2):
+            thProperty[i, j] = function(x, y)
+    return thProperty.T
 
 class Test_Conversions(unittest.TestCase):
 
@@ -146,16 +156,15 @@ class Test_Tsat_p(unittest.TestCase):
     def test_Tsat_p(self):
 
         pressure, TsatCompare = getOneDimensionalTestData(siData, 'Tsat_p')
-        Tsat = calculateOneDimensionalProperty(stm.Tsat_p, pressure)
-        np.testing.assert_array_almost_equal(TsatCompare, Tsat, decimal=3)
-
+        Tsat = calculatePropertyFromOneDimension(stm.Tsat_p, pressure)
+        np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
 
     def test_Tsat_p_English(self):
 
         stm.englishUnits = True
         pressure, TsatCompare = getOneDimensionalTestData(englishData, 'Tsat_p')
-        Tsat = calculateOneDimensionalProperty(stm.Tsat_p, pressure)
-        np.testing.assert_array_almost_equal(TsatCompare, Tsat, decimal=3)
+        Tsat = calculatePropertyFromOneDimension(stm.Tsat_p, pressure)
+        np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
 
     def test_Tsat_p_error(self):
 
@@ -169,12 +178,16 @@ class Test_T_ph(unittest.TestCase):
 
     def test_T_ph(self):
 
-        self.assertAlmostEqual(stm.T_ph(100.0, 100.0), 23.84, places=2)
+        pressure, enthalpy, temperatureCompare = getTwoDimensionalTestData(siData, 'T_ph')
+        temperature = calculatePropertyFromTwoDimensions(stm.T_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=3)
 
     def test_T_ph_English(self):
 
         stm.englishUnits = True
-        self.assertAlmostEqual(stm.T_ph(1.0, 100.0), 101.69, places=2)
+        pressure, enthalpy, temperatureCompare = getTwoDimensionalTestData(englishData, 'T_ph')
+        temperature = calculatePropertyFromTwoDimensions(stm.T_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=1)
 
     def test_T_ph_error(self):
 

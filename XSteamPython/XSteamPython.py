@@ -1804,7 +1804,7 @@ def t3_ph(pressure, enthalpy):
 
         ps = pressure/100.0
         hs = enthalpy/2300.0
-        Ts = ni*(ps + 0.24)**I1*(hs - 0.615)**Ji
+        Ts = ni*(ps + 0.24)**Ii*(hs - 0.615)**Ji
         return 760.0*Ts.sum()
     else:
         ## Subregion 3b Eq3, Table 4, Page 7,8
