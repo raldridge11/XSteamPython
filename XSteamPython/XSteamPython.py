@@ -9,6 +9,7 @@
 '''
 
 from math import sqrt, log, exp
+from scipy import optimize
 import numpy as np
 
 englishUnits = False
@@ -1452,20 +1453,9 @@ def p1_hs(enthalpy, entropy):
     return sum(p)*100.0
 
 def t1_prho(pressure, density):
-    '''Solve by iteration. Observe that fo low temperatures this equation has 2 solutions. Solve with half interval method'''
-    lowBound = 273.15
-    highBound = t4_p(pressure)
-    rhos = 0.0
-    temperature = 0.0
-    error = 0.00001
-    while abs(density - rhos) > error:
-        temperature = (lowBound + highBound)/2.0
-        rhos = 1.0/v1_pt(pressure, temperature)
-        if rhos < density:
-            highBound = temperature
-        else:
-            lowBound = temperature
-    return temperature
+    '''Solve with Secant Method'''
+    f = lambda temperature: 1.0/v1_pt(pressure, temperature) - density
+    return optimize.newton(f, 273.15, tol=1e-6)
 
 # Functions for region 2
 def v2_pt(pressure, temperature):
@@ -1680,30 +1670,15 @@ def p2_hs(enthalpy, entropy):
     return pressure
 
 def t2_prho(pressure, density):
-    '''Solve by iteration. Observe that fo low temperatures this equation has 2 solutions.
-    Solve with half interval method'''
+    '''Solve with Secant Method'''
     pressureMax = 16.5292
-    lowBound = 0.0
-    highBound = 1073.15
-    rhos = 0.0
-    tolerance = 0.000001
-    temperature = 0.0
-
     if pressure < pressureMax:
         lowBound = t4_p(pressure)
     else:
         lowBound = b23t_p(pressure)
+    f = lambda temperature: 1.0/v2_pt(pressure, temperature) - density
+    return optimize.newton(f, lowBound, tol=1e-6)
 
-    while abs(density - rhos) > tolerance:
-        temperature = (lowBound + highBound)/2.0
-        rhos = 1.0/v2_pt(pressure, temperature)
-
-        if rhos < density:
-            highBound = temperature
-        else:
-            lowBound = temperature
-
-    return temperature
 
 # Functions for region 3
 def p3_rhot(density, temperature):
@@ -1941,22 +1916,9 @@ def h3_pt(pressure, temperature):
     return enthalpy
 
 def t3_prho(pressure, density):
-    '''Solve by iteration. Observe that for low temperatures this equation has 2 solutions.
-    Solve with half interval method'''
-    lowBound = 623.15
-    highBound = 1073.15
-    tolerance = 0.00000001
-    temperature = 0.0
-    ps = 0.0
-    while abs(pressure - ps) > tolerance:
-        temperature = (lowBound + highBound)/2.0
-        ps = p3_rhot(density, temperature)
-        if ps > pressure:
-            highBound = temperature
-        else:
-            lowBound = temperature
-
-    return temperature
+    '''Solve with Secant Method'''
+    f = lambda temperature: p3_rhot(density, temperature) - pressure
+    return optimize.newton(f, 623.15, tol=1e-8)
 
 # Functions for region 4
 def p4_t(temperature):
@@ -2035,25 +1997,13 @@ def h4_p(pressure, phase):
             else:
                 enthalpy = h2_pt(pressure, ts)
         else:
-            # Iterate to find the the backward solution of p3sat_h
+            # Solve with Secant Method
             if phase is 'liq':
-                lowBound, highBound = 1670.858218, 2087.23500164864
+                start = 1670.858218
             else:
-                lowBound, highBound = 2087.23500164864, 2563.592004 + 5.0 # 5 added to extrapolate to ensure even the border ==350°C solved.
-            ps, tolerance = 0.0, 0.00001
-            while abs(pressure - ps) > tolerance:
-                enthalpy = (lowBound + highBound)/2.0
-                ps = p3sat_h(enthalpy)
-                if phase is 'liq':
-                    if ps > pressure:
-                        highBound = enthalpy
-                    else:
-                        lowBound = enthalpy
-                else:
-                    if ps < pressure:
-                        highBound = enthalpy
-                    else:
-                        lowBound = enthalpy
+                start =2563.592004 + 5.0 # 5 added to extrapolate to ensure even the border ==350°C solved.
+            f = lambda enthalpy: p3sat_h(enthalpy) - pressure
+            enthalpy = optimize.newton(f, start, tol=1e-5)
     else:
         raise ArithmeticError('Pressure needs to be between {} and {} MPa'.format(pressureMin, pressureMax))
 
@@ -2264,53 +2214,19 @@ def w5_pt(pressure, temperature):
     return sqrt(1000.0*_R*temperature*(1.0 + 2.0*pressure*gammar_pi + pressure**2*gammar_pi**2) / ((1.0 - pressure**2*gammar_pipi) + (1.0 + pressure*gammar_pi - tau*pressure*gammar_pitau)**2 / (tau**2*(gamma0_tautau + gammar_tautau))))
 
 def t5_ph(pressure, enthalpy):
-    '''Solve with half interval method'''
-    lowBound, highBound = 1073.15, 2273.15
-    enthalpyGuess, error = 0.0, 0.00001
-
-    while abs(enthalpy - enthalpyGuess) > error:
-
-        temperature = (lowBound + highBound)/2.0
-        enthalpyGuess = h5_pt(pressure, temperature)
-
-        if enthalpyGuess > enthalpy:
-            highBound = temperature
-        else:
-            lowBound = temperature
-
-    return temperature
+    '''Solve with Secant Method'''
+    f = lambda temperature: h5_pt(pressure, temperature) - enthalpy
+    return optimize.newton(f, 1073.15, tol=1e-5)
 
 def t5_ps(pressure, entropy):
-    ''' Solve with half interval method '''
-    lowBound, highBound = 1073.15, 2273.15
-    entropyS, tolerance = 0.0, 0.00001
-    temperature = 0.0
-    while abs(entropy - entropyS) > tolerance:
-        temperature = (lowBound + highBound)/2.0
-        entropyS = s5_pt(pressure, temperature)
-        if entropyS > entropy:
-            highBound = temperature
-        else:
-            lowBound = temperature
+    '''Solve with Secant Method'''
+    f = lambda temperature: s5_pt(pressure, temperature) - entropy
+    return optimize.newton(f, 1073.15, tol=1e-6)
 
-    return temperature
-
-def t5_prho(pressure, denisty):
-    '''Solve by iteration. Observe that for low temperatures this equation has 2 solutions.
-    Solve with half interval method'''
-    lowBound, highBound = 1073.15, 2073.15
-    densityS, tolerance = 0.0, 0.000001
-    temperature = 0.0
-
-    while abs(denisty - densityS) > tolerance:
-        temperature = (highBound + lowBound)/2.0
-        densityS = 1.0/v2_pt(pressure, temperature)
-        if densityS < denisty:
-            highBound = temperature
-        else:
-            lowBound = temperature
-
-    return temperature
+def t5_prho(pressure, density):
+    '''Solve with Secant Method'''
+    f = lambda temperature: 1.0/v2_pt(pressure, temperature) - density
+    return optimize.newton(f, 1073.15, tol=1e-6)
 
 # Region Selection
 def region_pt(pressure, temperature):
