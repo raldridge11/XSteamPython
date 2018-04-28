@@ -224,6 +224,25 @@ class Test_T_ps(unittest.TestCase):
     def test_T_ps_error(self):
         self.assertAlmostEqual(stm.T_ps(1.0, -1.0), 2015.0, places=2)
 
+class Test_T_hs(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_T_hs(self):
+        enthalpy, entropy, temperatureCompare = getTwoDimensionalTestData(siData, 'T_hs')
+        temperature = calculatePropertyFromTwoDimensions(stm.T_hs, enthalpy, entropy)
+        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
+
+    def test_T_English(self):
+        stm.englishUnits = True
+        enthalpy, entropy, temperatureCompare = getTwoDimensionalTestData(englishData, 'T_hs')
+        temperature = calculatePropertyFromTwoDimensions(stm.T_hs, enthalpy, entropy)
+        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
+
+    def test_T_hs_error(self):
+        self.assertAlmostEqual(stm.T_hs(1.0, 1.0), 2015.0, places=2)
+
 class Test_region_ph(unittest.TestCase):
 
     def test_region_ph_pressureOutOfBounds(self):
@@ -324,7 +343,7 @@ class Test_region_ps(unittest.TestCase):
 class Test_region_hs(unittest.TestCase):
 
     def test_region_hs_exception(self):
-        self.assertRaises(ArithmeticError, stm.region_hs, -1.0, -1.0)
+        self.assertEqual(stm.region_hs(-1.0, -1.0), None)
 
     def test_region_hs_region4_bitoverb13(self):
         self.assertEqual(stm.region_hs(274.0, 1.0), 4)
@@ -339,7 +358,7 @@ class Test_region_hs(unittest.TestCase):
         self.assertEqual(stm.region_hs(1747.0, 3.7), 3)
 
     def test_region_hs_exception_bitoverb13(self):
-        self.assertRaises(ArithmeticError, stm.region_hs, 1800.0, 3.7)
+        self.assertEqual(stm.region_hs(1800.0, 3.7), None)
 
     def test_region_hs_region2_upperB23(self):
         self.assertEqual(stm.region_hs(3000.0, 9.2), 2)
@@ -354,7 +373,7 @@ class Test_region_hs(unittest.TestCase):
         self.assertEqual(stm.region_hs(3000.0, 6.05), 2)
 
     def test_region_hs_exception_upperB23(self):
-        self.assertRaises(ArithmeticError, stm.region_hs, 4000.0, 6.05)
+        self.assertEqual(stm.region_hs(4000.0, 6.05), None)
 
     def test_region_hs_region4_underCritical(self):
         self.assertEqual(stm.region_hs(1800.0, 4.0), 4)
@@ -363,7 +382,7 @@ class Test_region_hs(unittest.TestCase):
         self.assertEqual(stm.region_hs(1900.0, 4.0), 3)
 
     def test_region_hs_excpetion_underCritical(self):
-        self.assertRaises(ArithmeticError, stm.region_hs, 2000.0, 4.0)
+        self.assertEqual(stm.region_hs(2000.0, 4.0), None)
 
     def test_region_hs_region4_aboveCritical(self):
         self.assertEqual(stm.region_hs(1900.0, 4.5), 4)
@@ -384,7 +403,7 @@ class Test_region_hs(unittest.TestCase):
         self.assertEqual(stm.region_hs(2700.0, 5.2), 2)
 
     def test_region_hs_exception_regionnotdetermined(self):
-        self.assertRaises(ArithmeticError, stm.region_hs, 3000.0, 5.2)
+        self.assertEqual(stm.region_hs(3000.0, 5.2), None)
 
 class Test_region_prho(unittest.TestCase):
 
