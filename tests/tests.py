@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pprint
 import unittest
 
 import numpy as np
@@ -194,16 +195,39 @@ class Test_T_ph(unittest.TestCase):
     def test_T_ph(self):
         pressure, enthalpy, temperatureCompare = getTwoDimensionalTestData(siData, 'T_ph')
         temperature = calculatePropertyFromTwoDimensions(stm.T_ph, pressure, enthalpy)
-        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=3)
+        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
     def test_T_ph_English(self):
         stm.englishUnits = True
         pressure, enthalpy, temperatureCompare = getTwoDimensionalTestData(englishData, 'T_ph')
         temperature = calculatePropertyFromTwoDimensions(stm.T_ph, pressure, enthalpy)
-        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=1)
+        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
     def test_T_ph_error(self):
         self.assertAlmostEqual(stm.T_ph(-1, -1), 2015.0, places=2)
+
+class Test_T_ps(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_T_ps(self):
+        pressure, entropy, temperatureCompare = getTwoDimensionalTestData(siData, 'T_ps')
+        temperature = calculatePropertyFromTwoDimensions(stm.T_ps, pressure, entropy)
+        np.savetxt('calc.csv', temperature, fmt='%.2f', delimiter=',')
+        np.savetxt('compare.csv', temperatureCompare, fmt='%.2f', delimiter=',')
+        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
+
+    def test_T_ps_English(self):
+        stm.englishUnits = True
+        pressure, entropy, temperatureCompare = getTwoDimensionalTestData(englishData, 'T_ps')
+        temperature = calculatePropertyFromTwoDimensions(stm.T_ps, pressure, entropy)
+        #np.savetxt('calc.csv', temperature, fmt='%.1f', delimiter=',')
+        #np.savetxt('compare.csv', temperatureCompare, fmt='%.1f', delimiter=',')
+        np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
+
+    def test_T_ps_error(self):
+        self.assertAlmostEqual(stm.T_ps(1.0, -1.0), 2015.0, places=2)
 
 class Test_region_ph(unittest.TestCase):
 
@@ -276,10 +300,10 @@ class Test_region_pt(unittest.TestCase):
 class Test_region_ps(unittest.TestCase):
 
     def test_region_ps_exception(self):
-        self.assertRaises(ArithmeticError, stm.region_ps, 200.0, 100.0)
+        self.assertEqual(stm.region_ps(200.0, 100.0), None)
 
     def test_region_ps_exception_region5(self):
-        self.assertRaises(ArithmeticError, stm.region_ps, 11.0, 7.5)
+        self.assertEqual(stm.region_ps(11.0, 7.5), None)
 
     def test_region_ps_region5(self):
         self.assertEqual(stm.region_ps(9, 7.5), 5)
@@ -596,7 +620,6 @@ class Test_sX_pt(unittest.TestCase):
 
     def test_s5_pt(self):
         self.assertAlmostEqual(stm.s5_pt(15.0, 600.0), 5.343, places=3)
-
 
 class Test_cpX_pt(unittest.TestCase):
 

@@ -20,19 +20,18 @@ _rhoc = 322.0 # kg/m**3
 _errorValue = 2015.0
 
 def Tsat_p(pressure):
-    '''Returns saturation temperature given a pressure in kPa'''
+    '''Returns saturation temperature as a function of pressure'''
     pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
-    pressure = toSIUnit(pressure, 'pressure')
+    pressure = toSIUnit(float(pressure), 'pressure')
 
     if pressure >= pressureMin and pressure <= pressureMax:
         return fromSIUnit(t4_p(pressure), 'temperature')
     else:
         return _errorValue
 
-
 def Tsat_s(entropy):
-    if englishUnits:
-        entropy = toSIUnit(entropy, 'entropy')
+    '''Returns saturation temperature as a function of entropy'''
+    if englishUnits: entropy = toSIUnit(float(entropy), 'entropy')
     entropyMin, entropyMax = -0.0001545495919, 9.155759395
 
     if entropy > entropyMin and entropy < entropyMax:
@@ -41,46 +40,51 @@ def Tsat_s(entropy):
         return _errorValue
 
 def T_ph(pressure, enthalpy):
-
-    pressure = toSIUnit(pressure, 'pressure')
+    '''Returns temperature as a function of pressure and enthalpy'''
+    pressure = toSIUnit(float(pressure), 'pressure')
+    enthalpy = float(enthalpy)
     if englishUnits: enthalpy = toSIUnit(enthalpy, 'enthalpy')
-    temperature = 0
+    temperature = 0.0
 
     region = region_ph(pressure, enthalpy)
     if region is None: return _errorValue
 
-    if region == 1:
+    if region is 1:
         temperature = t1_ph(pressure, enthalpy)
-    elif region == 2:
+    elif region is 2:
         temperature = t2_ph(pressure, enthalpy)
-    elif region == 3:
+    elif region is 3:
         temperature = t3_ph(pressure, enthalpy)
-    elif region == 4:
+    elif region is 4:
         temperature = t4_p(pressure)
-    elif region == 5:
+    elif region is 5:
         temperature = t5_ph(pressure, enthalpy)
 
     return fromSIUnit(temperature, 'temperature')
 
-#Rem Function T_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  s = toSIunit_s(s)
-#Rem  Select Case region_ps(p, s)
-#Rem  Case 1
-#Rem    T_ps = fromSIunit_T(T1_ps(p, s))
-#Rem  Case 2
-#Rem    T_ps = fromSIunit_T(T2_ps(p, s))
-#Rem  Case 3
-#Rem    T_ps = fromSIunit_T(T3_ps(p, s))
-#Rem  Case 4
-#Rem    T_ps = fromSIunit_T(T4_p(p))
-#Rem  Case 5
-#Rem    T_ps = fromSIunit_T(T5_ps(p, s))
-#Rem  Case Else
-#Rem   T_ps = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def T_ps(pressure, entropy):
+    '''Returns temperature as a function of pressure and entropy'''
+    pressure = toSIUnit(float(pressure), 'pressure')
+    entropy = float(entropy)
+    if englishUnits: entropy = toSIUnit(entropy, 'entropy')
+    temperature = 0
+
+    region = region_ps(pressure, entropy)
+    if region is None: return _errorValue
+
+    if region is 1:
+        temperature = t1_ps(pressure, entropy)
+    elif region is 2:
+        temperature = t2_ps(pressure, entropy)
+    elif region is 3:
+        temperature = t3_ps(pressure, entropy)
+    elif region is 4:
+        temperature = t4_p(pressure)
+    elif region is 5:
+        temperature = t5_ps(pressure, entropy)
+
+    return fromSIUnit(temperature, 'temperature')
+
 #Rem Function T_pv(ByVal p As Double, ByVal v As Double) As Double
 #Rem Dim rho As Double
 #Rem Dim h As Double
@@ -2299,14 +2303,14 @@ def region_ph(pressure, enthalpy):
 def region_ps(pressure, entropy):
     ''' Regions as a function of pressure and enthalpy '''
     if pressure < 0.000611657 or pressure > 100.0 or entropy < 0.0 or entropy > s5_pt(pressure, 2273.15):
-        raise ArithmeticError('Pressure and enthalpy out of bounds')
+        return None
 
     # Check region 5
     if entropy > s2_pt(pressure, 1073.15):
         if pressure <= 10.0:
             return 5
         else:
-            raise ArithmeticError('Pressure and enthalpy out of bounds')
+            return None
     # Check region 2
     if pressure > 16.529:
         entropyS = s2_pt(pressure, b23t_p(pressure)) # Between 5.047 and 5.261. Use to speed up!
