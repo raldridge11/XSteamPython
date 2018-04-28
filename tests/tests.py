@@ -150,25 +150,40 @@ class Test_Conversions(unittest.TestCase):
 class Test_Tsat_p(unittest.TestCase):
 
     def tearDown(self):
-
         stm.englishUnits = False
 
     def test_Tsat_p(self):
-
         pressure, TsatCompare = getOneDimensionalTestData(siData, 'Tsat_p')
         Tsat = calculatePropertyFromOneDimension(stm.Tsat_p, pressure)
         np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
 
     def test_Tsat_p_English(self):
-
         stm.englishUnits = True
         pressure, TsatCompare = getOneDimensionalTestData(englishData, 'Tsat_p')
         Tsat = calculatePropertyFromOneDimension(stm.Tsat_p, pressure)
         np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
 
     def test_Tsat_p_error(self):
-
         self.assertAlmostEqual(stm.Tsat_p(23000.0), 2015.0, places=2)
+
+class Test_Tsat_s(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_Tsat_s(self):
+        entropy, TsatCompare = getOneDimensionalTestData(siData, 'Tsat_s')
+        Tsat = calculatePropertyFromOneDimension(stm.Tsat_s, entropy)
+        np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
+
+    def test_Tsat_s_English(self):
+        stm.englishUnits = True
+        entropy, TsatCompare = getOneDimensionalTestData(englishData, 'Tsat_s')
+        Tsat = calculatePropertyFromOneDimension(stm.Tsat_s, entropy)
+        np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
+
+    def test_Tsat_s_error(self):
+        self.assertAlmostEqual(stm.Tsat_s(10.0), 2015.0, places=2)
 
 class Test_T_ph(unittest.TestCase):
 
@@ -177,20 +192,17 @@ class Test_T_ph(unittest.TestCase):
         stm.englishUnits = False
 
     def test_T_ph(self):
-
         pressure, enthalpy, temperatureCompare = getTwoDimensionalTestData(siData, 'T_ph')
         temperature = calculatePropertyFromTwoDimensions(stm.T_ph, pressure, enthalpy)
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=3)
 
     def test_T_ph_English(self):
-
         stm.englishUnits = True
         pressure, enthalpy, temperatureCompare = getTwoDimensionalTestData(englishData, 'T_ph')
         temperature = calculatePropertyFromTwoDimensions(stm.T_ph, pressure, enthalpy)
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=1)
 
     def test_T_ph_error(self):
-
         self.assertAlmostEqual(stm.T_ph(-1, -1), 2015.0, places=2)
 
 class Test_region_ph(unittest.TestCase):

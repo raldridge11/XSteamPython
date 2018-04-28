@@ -29,15 +29,16 @@ def Tsat_p(pressure):
     else:
         return _errorValue
 
-#Rem Function Tsat_s(ByVal s As Double) As Double
-#Rem  s = toSIunit_s(s)
-#Rem  If s > -0.0001545495919 And s < 9.155759395 Then
-#Rem    Tsat_s = fromSIunit_T(T4_p(p4_s(s)))
-#Rem  Else
-#Rem    Tsat_s = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
-#Rem
+
+def Tsat_s(entropy):
+    if englishUnits:
+        entropy = toSIUnit(entropy, 'entropy')
+    entropyMin, entropyMax = -0.0001545495919, 9.155759395
+
+    if entropy > entropyMin and entropy < entropyMax:
+        return fromSIUnit(t4_p(p4_s(entropy)), 'temperature')
+    else:
+        return _errorValue
 
 def T_ph(pressure, enthalpy):
 
@@ -60,7 +61,6 @@ def T_ph(pressure, enthalpy):
         temperature = t5_ph(pressure, enthalpy)
 
     return fromSIUnit(temperature, 'temperature')
-
 
 #Rem Function T_ps(ByVal p As Double, ByVal s As Double) As Double
 #Rem  p = p / 100
@@ -2660,54 +2660,34 @@ conversionFactors = { 'enthalpy': 2.326, #[btu/lb]/[kJ/kg]
     }
 
 def toSIUnit(value, quantity):
-
     quantity = quantity.lower()
-
     if quantity == 'pressure':
-
         if not englishUnits:
-
             value /= 1000.0
         else:
-
             value *= 0.00689475729
     elif quantity == 'temperature':
-
         if not englishUnits:
-
             value +=  273.15
         else:
-
             value = (5.0/9.0)*(value - 32.0) + 273.15
     else:
-
         value *= conversionFactors[quantity]
-
     return value
 
 def fromSIUnit(value, quantity):
-
     quantity = quantity.lower()
-
     if quantity == 'pressure':
-
         if not englishUnits:
-
             value *= 1000.0
         else:
-
             value /= 0.00689475729
     elif quantity == 'temperature':
-
         if not englishUnits:
-
             value -=  273.15
         else:
-
             value = (value - 273.15)*(9.0/5.0) + 32.0
     else:
-
         value /= conversionFactors[quantity]
-
     return value
 
