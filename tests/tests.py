@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import pprint
 import unittest
 
 import numpy as np
@@ -214,16 +213,12 @@ class Test_T_ps(unittest.TestCase):
     def test_T_ps(self):
         pressure, entropy, temperatureCompare = getTwoDimensionalTestData(siData, 'T_ps')
         temperature = calculatePropertyFromTwoDimensions(stm.T_ps, pressure, entropy)
-        np.savetxt('calc.csv', temperature, fmt='%.2f', delimiter=',')
-        np.savetxt('compare.csv', temperatureCompare, fmt='%.2f', delimiter=',')
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
     def test_T_ps_English(self):
         stm.englishUnits = True
         pressure, entropy, temperatureCompare = getTwoDimensionalTestData(englishData, 'T_ps')
         temperature = calculatePropertyFromTwoDimensions(stm.T_ps, pressure, entropy)
-        #np.savetxt('calc.csv', temperature, fmt='%.1f', delimiter=',')
-        #np.savetxt('compare.csv', temperatureCompare, fmt='%.1f', delimiter=',')
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
     def test_T_ps_error(self):
