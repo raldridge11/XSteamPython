@@ -17,6 +17,7 @@ _R = 0.461526 # kJ/(kg K)
 _tc = 647.096 # K
 _pc = 22.064 # MPa
 _rhoc = 322.0 # kg/m**3
+_errorValue = 2015.0
 
 def Tsat_p(pressure):
     '''Returns saturation temperature given a pressure in kPa'''
@@ -26,13 +27,7 @@ def Tsat_p(pressure):
     if pressure >= pressureMin and pressure <= pressureMax:
         return fromSIUnit(t4_p(pressure), 'temperature')
     else:
-        if not englishUnits:
-            unit = 'kPa'
-        else:
-            unit = 'psi'
-
-        pmin, pmax = fromSIUnit(pressureMin, 'pressure'), fromSIUnit(pressureMax, 'pressure')
-        raise ArithmeticError('Pressure needs to be between {} and {} {}'.format(pmin, pmax, unit))
+        return _errorValue
 
 #Rem Function Tsat_s(ByVal s As Double) As Double
 #Rem  s = toSIunit_s(s)
@@ -51,7 +46,7 @@ def T_ph(pressure, enthalpy):
     temperature = 0
 
     region = region_ph(pressure, enthalpy)
-    if region is None: return 2015.0
+    if region is None: return _errorValue
 
     if region == 1:
         temperature = t1_ph(pressure, enthalpy)

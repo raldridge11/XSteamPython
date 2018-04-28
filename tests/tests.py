@@ -168,7 +168,7 @@ class Test_Tsat_p(unittest.TestCase):
 
     def test_Tsat_p_error(self):
 
-        self.assertRaises(ArithmeticError, stm.Tsat_p, 0.0)
+        self.assertAlmostEqual(stm.Tsat_p(23000.0), 2015.0, places=2)
 
 class Test_T_ph(unittest.TestCase):
 
