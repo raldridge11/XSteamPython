@@ -243,6 +243,25 @@ class Test_T_hs(unittest.TestCase):
     def test_T_hs_error(self):
         self.assertAlmostEqual(stm.T_hs(1.0, 1.0), 2015.0, places=2)
 
+class Test_Psat_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_Psat_T(self):
+        temperature, PsatCompare = getOneDimensionalTestData(siData, 'Psat_T')
+        Psat = calculatePropertyFromOneDimension(stm.Psat_T, temperature)
+        np.testing.assert_array_almost_equal(Psat, PsatCompare, decimal=3)
+
+    def test_Psat_T_English(self):
+        stm.englishUnits = True
+        temperature, PsatCompare = getOneDimensionalTestData(englishData, 'Psat_T')
+        Psat = calculatePropertyFromOneDimension(stm.Psat_T, temperature)
+        np.testing.assert_array_almost_equal(Psat, PsatCompare, decimal=3)
+
+    def test_Psat_T_error(self):
+        self.assertAlmostEqual(stm.Psat_T(0.0), 2015.0, places=2)
+
 class Test_region_ph(unittest.TestCase):
 
     def test_region_ph_pressureOutOfBounds(self):

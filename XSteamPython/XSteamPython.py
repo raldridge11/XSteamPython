@@ -85,14 +85,6 @@ def T_ps(pressure, entropy):
 
     return fromSIUnit(temperature, 'temperature')
 
-#Rem Function T_pv(ByVal p As Double, ByVal v As Double) As Double
-#Rem Dim rho As Double
-#Rem Dim h As Double
-#Rem rho = 1 / v
-#Rem h = h_prho(p, rho)
-#Rem T_pv = T_ph(p, h)
-#Rem End Function
-
 def T_hs(enthalpy, entropy):
     enthalpy, entropy = float(enthalpy), float(entropy)
     if englishUnits:
@@ -126,6 +118,15 @@ def T_hs(enthalpy, entropy):
 #Rem  End If
 #Rem    psat_T = psat_T * 100
 #Rem End Function
+def Psat_T(temperature):
+    '''Saturation Pressure as a function of temperature'''
+    temperature = toSIUnit(float(temperature), 'temperature')
+    pressure = 0.0
+    if temperature <= 647.096 and temperature > 273.15:
+        pressure = fromSIUnit(p4_t(temperature), 'pressure')
+    else:
+        pressure = _errorValue
+    return pressure
 #Rem Function psat_s(ByVal s As Double) As Double
 #Rem  s = toSIunit_s(s)
 #Rem  If s > -0.0001545495919 And s < 9.155759395 Then
