@@ -106,18 +106,6 @@ def T_hs(enthalpy, entropy):
 
     return fromSIUnit(temperature, 'temperature')
 
-#Rem '***********************************************************************************************************
-#Rem '*1.3 Pressure (p)
-#Rem Function psat_T(ByVal T As Double) As Double
-#Rem  T = toSIunit_T(T)
-#Rem  If T <= 647.096 And T > 273.15 Then
-#Rem    psat_T = fromSIunit_p(p4_T(T))
-#Rem
-#Rem  Else
-#Rem    psat_T = CVErr(xlErrValue)
-#Rem  End If
-#Rem    psat_T = psat_T * 100
-#Rem End Function
 def Psat_T(temperature):
     '''Saturation Pressure as a function of temperature'''
     temperature = toSIUnit(float(temperature), 'temperature')
