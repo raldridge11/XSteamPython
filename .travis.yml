@@ -5,7 +5,7 @@ python:
 # command to install dependencies
 install:
   - pip install -r XSteamPython/requirements.txt
-  - pip install XSteamPython/.
+  - pip install -e XSteamPython
 # command to run tests
 script:
   - "coverage run --branch --include=XSteamPython/XSteamPython.py,tests/tests.py tests/tests.py"
