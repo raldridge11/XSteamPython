@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "XSteamPython", "XSteamPython\XSteamPython.pyproj", "{BA0BFA36-DF9D-4857-AEE5-620348D2A7C2}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "tests", "tests\tests.pyproj", "{FF53F884-2C28-4870-97BD-71501084C41C}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "XSteamPython_Tests", "tests\XSteamPython_Tests.pyproj", "{FF53F884-2C28-4870-97BD-71501084C41C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FFDD2555-80B5-4A35-B073-D62AA64137F1}"
 	ProjectSection(SolutionItems) = preProject
