@@ -4,6 +4,7 @@ import numpy as np
 import scipy
 from scipy import optimize
 
+import Boundaries
 import Constants
 import Region1
 import Region2
@@ -212,7 +213,7 @@ def h3_pt(pressure, temperature):
     Solve function T3_ph-T=0 with half interval method.'''
     ts = temperature + 1
     lowBound = Region1.h1_pt(pressure, 623.15)
-    highBound = Region2.h2_pt(pressure, b23t_p(pressure))
+    highBound = Region2.h2_pt(pressure, Boundaries.b23t_p(pressure))
     tolerance = 0.00001
     enthalpy = 0.0
     while abs(temperature - ts) > tolerance:

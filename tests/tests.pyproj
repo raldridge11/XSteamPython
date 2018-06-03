@@ -29,6 +29,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Boundaries_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Convert_Tests.py">
       <SubType>Code</SubType>
     </Compile>

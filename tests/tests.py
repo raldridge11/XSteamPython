@@ -350,24 +350,6 @@ class Test_region_prho(unittest.TestCase):
     def test_region_prho_region2_highPressure(self):
         self.assertEqual(stm.region_prho(17.0, 36.0), 2)
 
-class Test_BoundaryFunctions(unittest.TestCase):
-
-    def test_b23t_p(self):
-
-        self.assertAlmostEqual(stm.b23t_p(15.0), 605.11, places=2)
-
-    def test_b23p_t(self):
-
-        self.assertAlmostEqual(stm.b23p_t(100.0), 241.526, places=3)
-
-    def test_hb13_s(self):
-
-        self.assertAlmostEqual(stm.hB13_s(3.0), 1612.0467, places=3)
-
-    def test_tB23_hs(self):
-
-        self.assertAlmostEqual(stm.tB23_hs(1000.0, 3.0), 1611.524, places=3)
-
 class Test_Transport_Properties(unittest.TestCase):
 
     def test_surfaceTension_T(self):

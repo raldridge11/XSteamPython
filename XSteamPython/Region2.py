@@ -4,6 +4,7 @@ import numpy as np
 import scipy
 from scipy import optimize
 
+import Boundaries
 import Constants
 import Region4
 
@@ -195,6 +196,6 @@ def t2_prho(pressure, density):
     if pressure < pressureMax:
         lowBound = Region4.t4_p(pressure)
     else:
-        lowBound = b23t_p(pressure)
+        lowBound = Boundaries.b23t_p(pressure)
     f = lambda temperature: 1.0/v2_pt(pressure, temperature) - density
     return optimize.newton(f, lowBound, tol=1e-6)
