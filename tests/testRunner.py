@@ -5,6 +5,7 @@ import Region1_Tests
 import Region2_Tests
 import Region3_Tests
 import Region4_Tests
+import Region5_Tests
 import Boundaries_Tests
 
 def main():
@@ -17,6 +18,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(Region2_Tests))
     suite.addTest(loader.loadTestsFromModule(Region3_Tests))
     suite.addTest(loader.loadTestsFromModule(Region4_Tests))
+    suite.addTest(loader.loadTestsFromModule(Region5_Tests))
     suite.addTest(loader.loadTestsFromModule(Boundaries_Tests))
 
     runner = unittest.TextTestRunner()
