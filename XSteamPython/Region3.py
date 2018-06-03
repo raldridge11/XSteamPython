@@ -229,3 +229,22 @@ def t3_prho(pressure, density):
     '''Solve with Secant Method'''
     f = lambda temperature: p3_rhot(density, temperature) - pressure
     return optimize.newton(f, 623.15, tol=1e-8)
+
+def p3sat_h(enthalpy):
+    '''Revised Supplementary Release on Backward Equations for the Functions T(p,h), v(p,h) and T(p,s), v(p,s) for   Region 3 of the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam 2004
+       Section 4 Boundary Equations psat(h) and psat(s) for the Saturation Lines of Region 3 see pictures Page 17, Eq 10, Table 17, Page 18'''
+    i = np.array([0, 1, 1, 1, 1, 5, 7, 8, 14, 20, 22, 24, 28, 36])
+    j = np.array([0, 1, 3, 4, 36, 3, 0, 24, 16, 16, 3, 18, 8, 24])
+    n = np.array([0.600073641753024, -9.36203654849857, 24.6590798594147, -107.014222858224, -91582131580576.8, -8623.32011700662, -23.5837344740032, 2.52304969384128E+17, -3.89718771997719E+18, -3.33775713645296E+22, 35649946963.6328, -1.48547544720641E+26, 3.30611514838798E+18, 8.13641294467829E+37])
+
+    h = enthalpy/2600.0
+    ps = n*(h - 1.02)**i*(h - 0.608)**j
+    return ps.sum()*22.0
+
+def p3sat_s(entropy):
+    i = np.array([0, 1, 1, 4, 12, 12, 16, 24, 28, 32])
+    j = np.array([0, 1, 32, 7, 4, 14, 36, 10, 0, 18])
+    n = np.array([0.639767553612785, -12.9727445396014, -2.24595125848403E+15, 1774667.41801846, 7170793495.71538, -3.78829107169011E+17, -9.55586736431328E+34, 1.87269814676188E+23, 119254746466.473, 1.10649277244882E+36])
+    sigma = entropy/5.2
+    pressure = sum(n*(sigma - 1.03)**i*(sigma - 0.699)**j)
+    return pressure*22.0

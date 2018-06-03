@@ -4,6 +4,7 @@ import Convert_Tests
 import Region1_Tests
 import Region2_Tests
 import Region3_Tests
+import Region4_Tests
 
 def main():
 
@@ -14,6 +15,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(Region1_Tests))
     suite.addTest(loader.loadTestsFromModule(Region2_Tests))
     suite.addTest(loader.loadTestsFromModule(Region3_Tests))
+    suite.addTest(loader.loadTestsFromModule(Region4_Tests))
 
     runner = unittest.TextTestRunner()
     result = runner.run(suite)

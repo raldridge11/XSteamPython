@@ -59,7 +59,11 @@ class Test_Region3_Tests(unittest.TestCase):
     def test_w3_rhot(self):
         self.assertAlmostEqual(Region3.w3_rhot(500.0, 644.0), 473.134, places=3)
 
+    def test_p3sat_h(self):
+        self.assertAlmostEqual(Region3.p3sat_h(2674.95), 11.62, places=2)
 
+    def test_p3sat_s(self):
+        self.assertAlmostEqual(Region3.p3sat_s(4.0), 19.809, places=3)
 
 if __name__ == '__main__':
     unittest.main()

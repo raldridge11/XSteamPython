@@ -5,6 +5,7 @@ import scipy
 from scipy import optimize
 
 import Constants
+import Region4
 
 ir = np.array([1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 5, 6, 6, 6, 7, 7, 7, 8, 8, 9, 10, 10, 10, 16, 16, 18, 20, 20, 20, 21, 22, 23, 24, 24, 24])
 jr = np.array([0, 1, 2, 3, 6, 1, 2, 4, 7, 36, 0, 1, 3, 6, 35, 1, 2, 3, 7, 3, 16, 35, 0, 11, 25, 8, 36, 13, 4, 10, 14, 29, 50, 57, 20, 35, 48, 21, 53, 39, 26, 40, 58])
@@ -192,7 +193,7 @@ def t2_prho(pressure, density):
     '''Solve with Secant Method'''
     pressureMax = 16.5292
     if pressure < pressureMax:
-        lowBound = t4_p(pressure)
+        lowBound = Region4.t4_p(pressure)
     else:
         lowBound = b23t_p(pressure)
     f = lambda temperature: 1.0/v2_pt(pressure, temperature) - density
