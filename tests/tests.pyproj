@@ -4,9 +4,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>ff53f884-2c28-4870-97bd-71501084c41c</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>tests.py</StartupFile>
-    <SearchPath>
-    </SearchPath>
+    <StartupFile>testRunner.py</StartupFile>
+    <SearchPath>..\tests</SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>tests</Name>
@@ -29,6 +28,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Convert_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Region1_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="testRunner.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="tests.py">
       <SubType>Code</SubType>
     </Compile>

@@ -35,118 +35,6 @@ def calculatePropertyFromTwoDimensions(function, independentVariable1, independe
             thProperty[i, j] = function(x, y)
     return thProperty.T
 
-class Test_Conversions(unittest.TestCase):
-
-    def tearDown(self):
-
-        stm.englishUnits = False
-
-    def test_toSIUnit_pressure(self):
-
-        self.assertEqual(stm.toSIUnit(100.0, 'pressure'), 0.1)
-
-    def test_toSIUnit_pressure_English(self):
-
-        stm.englishUnits = True
-        self.assertAlmostEqual(stm.toSIUnit(14.7, 'pressure'), 0.1013529, 7)
-
-    def test_fromSIUnit_pressure(self):
-
-        self.assertEqual(stm.fromSIUnit(0.1, 'pressure'), 100.0)
-
-    def test_fromSIUnit_pressure_English(self):
-
-        stm.englishUnits = True
-        self.assertAlmostEqual(stm.fromSIUnit(0.1013529, 'pressure'), 14.7, 1)
-
-    def test_toSIUnit_temperature(self):
-
-        self.assertEqual(stm.toSIUnit(100.0, 'temperature'), 373.15)
-
-    def test_toSIUnit_temperature_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.toSIUnit(212.0, 'temperature'), 373.15)
-
-    def test_fromSIUnit_temperature(self):
-
-        self.assertEqual(stm.fromSIUnit(373.15, 'temperature'), 100.0)
-
-    def test_fromSIUnit_temperature_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.fromSIUnit(373.15, 'temperature'), 212.0)
-
-    def test_toSIUnit_entropy_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.toSIUnit(1.0, 'entropy'), 1.0/0.238845896627)
-
-    def test_fromSIUnit_entropy_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.fromSIUnit(1.0, 'entropy'), 0.238845896627)
-
-    def test_toSIUnit_enthalpy_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.toSIUnit(1.0, 'enthalpy'), 2.326)
-
-    def test_fromSIUnit_enthalpy_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.fromSIUnit(1.0, 'enthalpy'), 1.0/2.326)
-
-    def test_toSIUnit_specificVolume_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.toSIUnit(1.0, 'specific volume'), 0.0624279606)
-
-    def test_fromSIUnit_specificVolume_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.fromSIUnit(1.0, 'specific volume'), 1.0/0.0624279606)
-
-    def test_toSIUnit_velocity_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.toSIUnit(1.0, 'velocity'), 0.3048)
-
-    def test_fromSIUnit_velocity_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.fromSIUnit(1.0, 'velocity'), 1.0/0.3048)
-
-    def test_toSIUnit_thermalConductivity_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.toSIUnit(1.0, 'thermal conductivity'), 1.0/0.577789)
-
-    def test_fromSIUnit_thermalConductivity_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.fromSIUnit(1.0, 'thermal conductivity'), 0.577789)
-
-    def test_toSIUnit_surfaceTension_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.toSIUnit(1.0, 'surface tension'), 1.0/0.068521766)
-
-    def test_fromSIUnit_surfaceTension_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.fromSIUnit(1.0, 'surface tension'), 0.068521766)
-
-    def test_toSIUnit_dynamicViscosity_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.toSIUnit(1.0, 'viscosity'), 1.0/2419.088311)
-
-    def test_fromSIUnit_dynamicViscosity_English(self):
-
-        stm.englishUnits = True
-        self.assertEqual(stm.fromSIUnit(1.0, 'viscosity'), 2419.088311)
-
 class Test_Tsat_p(unittest.TestCase):
 
     def tearDown(self):
@@ -555,10 +443,6 @@ class Test_hX_p(unittest.TestCase):
 
 class Test_hX_pt(unittest.TestCase):
 
-    def test_h1_pt(self):
-
-        self.assertAlmostEqual(stm.h1_pt(17.0, 623.15), 1666.589, places=3)
-
     def test_h2_pt(self):
 
         self.assertAlmostEqual(stm.h2_pt(15.0, 1073.15), 4091.326, places=3)
@@ -582,10 +466,6 @@ class Test_pXsat_s(unittest.TestCase):
         self.assertAlmostEqual(stm.p3sat_s(4.0), 19.809, places=3)
 
 class Test_tX_ph(unittest.TestCase):
-
-    def test_t1_ph(self):
-
-        self.assertAlmostEqual(stm.t1_ph(10.0, 100.0), 294.775, places=3)
 
     def test_t2_ph(self):
 
@@ -623,8 +503,7 @@ class Test_vX_ph(unittest.TestCase):
 
 class Test_vX_pt(unittest.TestCase):
 
-    def test_v1_pt(self):
-        self.assertAlmostEqual(stm.v1_pt(100.0, 400.0), 0.0010185, places=7)
+
 
     def test_v2_pt(self):
         self.assertAlmostEqual(stm.v2_pt(10.0, 600.0), 0.020093, places=6)
@@ -634,8 +513,7 @@ class Test_vX_pt(unittest.TestCase):
 
 class Test_uX_pt(unittest.TestCase):
 
-    def test_u1_pt(self):
-        self.assertAlmostEqual(stm.u1_pt(100.0, 400.0), 501.925, places=3)
+
 
     def test_u2_pt(self):
         self.assertAlmostEqual(stm.u2_pt(10.0, 600.0), 2618.897, places=3)
@@ -645,8 +523,7 @@ class Test_uX_pt(unittest.TestCase):
 
 class Test_sX_pt(unittest.TestCase):
 
-    def test_s1_pt(self):
-        self.assertAlmostEqual(stm.s1_pt(100.0, 400.0), 1.519, places=3)
+
 
     def test_s2_pt(self):
         self.assertAlmostEqual(stm.s2_pt(10.0, 600.0), 5.775, places=3)
@@ -656,9 +533,6 @@ class Test_sX_pt(unittest.TestCase):
 
 class Test_cpX_pt(unittest.TestCase):
 
-    def test_cp1_pt(self):
-        self.assertAlmostEqual(stm.cp1_pt(100.0, 400.0), 4.0604, places=4)
-
     def test_cp2_pt(self):
         self.assertAlmostEqual(stm.cp2_pt(10.0, 600.0), 5.141, places=3)
 
@@ -667,8 +541,7 @@ class Test_cpX_pt(unittest.TestCase):
 
 class Test_cvX_pt(unittest.TestCase):
 
-    def test_cv1_pt(self):
-        self.assertAlmostEqual(stm.cv1_pt(100.0, 400.0), 3.533, places=3)
+
 
     def test_cv2_pt(self):
         self.assertAlmostEqual(stm.cv2_pt(10.0, 600.0), 2.626, places=3)
@@ -678,8 +551,7 @@ class Test_cvX_pt(unittest.TestCase):
 
 class Test_wX_pt(unittest.TestCase):
 
-    def test_w1_pt(self):
-        self.assertAlmostEqual(stm.w1_pt(100.0, 400.0), 1717.663, places=3)
+
 
     def test_w2_pt(self):
         self.assertAlmostEqual(stm.w2_pt(10.0, 600.0), 503.347, places=3)
@@ -689,8 +561,7 @@ class Test_wX_pt(unittest.TestCase):
 
 class Test_tX_ps(unittest.TestCase):
 
-    def test_t1_ps(self):
-        self.assertAlmostEqual(stm.t1_ps(100.0, 2.0), 450.051, places=3)
+
 
     def test_t2_ps_region1(self):
         self.assertAlmostEqual(stm.t2_ps(3.9, 1.0), 82.311, places=3)
@@ -712,8 +583,7 @@ class Test_tX_ps(unittest.TestCase):
 
 class Test_pX_hs(unittest.TestCase):
 
-    def test_p1_hs(self):
-        self.assertAlmostEqual(stm.p1_hs(100.0, 0.2), 44.451, places=3)
+
 
     def test_p2_hs_region1(self):
         self.assertAlmostEqual(stm.p2_hs(1700.0, 4.0), 175.162, places=3)
@@ -740,8 +610,7 @@ class Test_vX_ps(unittest.TestCase):
 
 class Test_tX_prho(unittest.TestCase):
 
-    def test_t1_prho(self):
-        self.assertAlmostEqual(stm.t1_prho(100.0, 990.0), 388.110, places=3)
+
 
     def test_t2_prho(self):
         self.assertAlmostEqual(stm.t2_prho(1.01, 5.0), 466.334, places=3)
