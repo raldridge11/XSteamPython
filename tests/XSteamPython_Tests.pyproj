@@ -36,6 +36,12 @@
     <Compile Include="Convert_Tests.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Data.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Psat_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Region1_Tests.py">
       <SubType>Code</SubType>
     </Compile>
@@ -54,10 +60,16 @@
     <Compile Include="Regions_Tests.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Temperature_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="testRunner.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="XSteam_Tests.py">
+    <Compile Include="Tsat_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TransportProperties_Tests.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
