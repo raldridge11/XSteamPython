@@ -443,10 +443,9 @@ class Test_hX_p(unittest.TestCase):
 
 class Test_hX_pt(unittest.TestCase):
 
-    
 
-    def test_h3_pt(self):
-        self.assertAlmostEqual(stm.h3_pt(21.0, 650.0), 2545.682, places=3)
+
+
 
     def test_h5_pt(self):
 
@@ -465,11 +464,9 @@ class Test_pXsat_s(unittest.TestCase):
 
 class Test_tX_ph(unittest.TestCase):
 
-    
 
-    def test_t3_ph(self):
 
-        self.assertAlmostEqual(stm.t3_ph(19.0, 2500.0), 635.926, places=3)
+
 
     def test_t5_ph(self):
 
@@ -489,19 +486,11 @@ class Test_tX_hs(unittest.TestCase):
     def test_t4_hs_exception(self):
         self.assertRaises(ArithmeticError, stm.t4_hs, 100.0, 100.0)
 
-class Test_vX_ph(unittest.TestCase):
-
-    def test_v3_ph_region3a(self):
-        self.assertAlmostEqual(stm.v3_ph(22.0, 2000.0), 0.002638, places=6)
-
-    def test_v3_ph_region3b(self):
-        self.assertAlmostEqual(stm.v3_ph(22.5, 2089.0), 0.003065, places=6)
-
 class Test_vX_pt(unittest.TestCase):
 
 
 
-    
+
 
     def test_v5_pt(self):
         self.assertAlmostEqual(stm.v5_pt(15.0, 600.0), 0.010378, places=6)
@@ -510,7 +499,7 @@ class Test_uX_pt(unittest.TestCase):
 
 
 
-    
+
 
     def test_u5_pt(self):
         self.assertAlmostEqual(stm.u5_pt(15.0, 600.0), 2479.857, places=3)
@@ -519,14 +508,14 @@ class Test_sX_pt(unittest.TestCase):
 
 
 
-    
+
 
     def test_s5_pt(self):
         self.assertAlmostEqual(stm.s5_pt(15.0, 600.0), 5.343, places=3)
 
 class Test_cpX_pt(unittest.TestCase):
 
-    
+
 
     def test_cp5_pt(self):
         self.assertAlmostEqual(stm.cp5_pt(15.0, 600.0), 6.058, places=3)
@@ -535,7 +524,7 @@ class Test_cvX_pt(unittest.TestCase):
 
 
 
-    
+
 
     def test_cv5_pt(self):
         self.assertAlmostEqual(stm.cv5_pt(15.0, 600.0), 2.390, places=3)
@@ -544,7 +533,7 @@ class Test_wX_pt(unittest.TestCase):
 
 
 
-    
+
 
     def test_w5_pt(self):
         self.assertAlmostEqual(stm.w5_pt(15.0, 600.0), 436.314, places=3)
@@ -553,83 +542,23 @@ class Test_tX_ps(unittest.TestCase):
 
 
 
-    
 
-    def test_t3_ps_region3a(self):
-        self.assertAlmostEqual(stm.t3_ps(20.0, 4.0), 638.449, places=3)
 
-    def test_t3_ps_region3b(self):
-        self.assertAlmostEqual(stm.t3_ps(20.0, 5.0), 640.118, places=3)
+
 
     def test_t5_ps(self):
         self.assertAlmostEqual(stm.t5_ps(9.0, 7.5), 1090.51, places=2)
-
-class Test_pX_hs(unittest.TestCase):
-
-
-
-    
-
-    def test_p3_hs_region3a(self):
-        self.assertAlmostEqual(stm.p3_hs(1900.0, 4.0), 66.314, places=3)
-
-    def test_p3_hs_region3b(self):
-        self.assertAlmostEqual(stm.p3_hs(2200.0, 4.42), 67.465, places=3)
-
-class Test_vX_ps(unittest.TestCase):
-
-    def test_v3_ps_region3a(self):
-        self.assertAlmostEqual(stm.v3_ps(20.0, 4.0), 0.002010, places=6)
-
-    def test_v3_ps_region3b(self):
-        self.assertAlmostEqual(stm.v3_ps(20.0, 5.0), 0.006262, places=6)
 
 class Test_tX_prho(unittest.TestCase):
 
 
 
-    
 
-    def test_t3_prho(self):
-        self.assertAlmostEqual(stm.t3_prho(21.0, 148.0), 649.829, places=3)
+
+
 
     def test_t5_prho(self):
         self.assertAlmostEqual(stm.t5_prho(9.0, 10.0), 1943.669, places=3)
-
-class Test_pX_rhot(unittest.TestCase):
-
-    def test_p3_rhot(self):
-        self.assertAlmostEqual(stm.p3_rhot(500.0, 644.0), 22.689, places=3)
-
-class Test_uX_rhot(unittest.TestCase):
-
-    def test_u3_rhot(self):
-        self.assertAlmostEqual(stm.u3_rhot(500.0, 644.0), 1792.867, places=3)
-
-class Test_hX_rhot(unittest.TestCase):
-
-    def test_h3_rhot(self):
-        self.assertAlmostEqual(stm.h3_rhot(500.0, 644.0), 1838.244, places=3)
-
-class Test_sX_rhot(unittest.TestCase):
-
-    def test_s3_pt(self):
-        self.assertAlmostEqual(stm.s3_rhot(500.0, 644.0), 4.024, places=3)
-
-class Test_cpX_rhot(unittest.TestCase):
-
-    def test_cp3_rhot(self):
-        self.assertAlmostEqual(stm.cp3_rhot(500.0, 644.0), 16.128, places=3)
-
-class Test_cvX_rhot(unittest.TestCase):
-
-    def test_cv3_rhot(self):
-        self.assertAlmostEqual(stm.cv3_rhot(500.0, 644.0), 3.278, places=3)
-
-class Test_wX_rhot(unittest.TestCase):
-
-    def test_w3_rhot(self):
-        self.assertAlmostEqual(stm.w3_rhot(500.0, 644.0), 473.134, places=3)
 
 class Test_xX_ph(unittest.TestCase):
 

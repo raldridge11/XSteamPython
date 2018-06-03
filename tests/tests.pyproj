@@ -5,7 +5,8 @@
     <ProjectGuid>ff53f884-2c28-4870-97bd-71501084c41c</ProjectGuid>
     <ProjectHome>.</ProjectHome>
     <StartupFile>testRunner.py</StartupFile>
-    <SearchPath>..\tests</SearchPath>
+    <SearchPath>
+    </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>tests</Name>
@@ -35,6 +36,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Region2_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Region3_Tests.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="testRunner.py">
