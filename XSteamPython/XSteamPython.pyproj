@@ -46,6 +46,9 @@
     <Compile Include="Region5.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Regions.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="setup.py">
       <SubType>Code</SubType>
     </Compile>

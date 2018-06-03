@@ -7,108 +7,112 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
-
-from math import sqrt, log, exp
-from scipy import optimize
-import numpy as np
+import Constants
+import Convert
+import Region1
+import Region2
+import Region3
+import Region4
+import Region5
+import Regions
 
 englishUnits = False
 
 def Tsat_p(pressure):
     '''Returns saturation temperature as a function of pressure'''
     pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
-    pressure = toSIUnit(float(pressure), 'pressure')
+    pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
 
     if pressure >= pressureMin and pressure <= pressureMax:
-        return fromSIUnit(t4_p(pressure), 'temperature')
+        return Convert.fromSIUnit(Region4.t4_p(pressure), 'temperature', englishUnits=englishUnits)
     else:
-        return _errorValue
+        return Constants._errorValue
 
 def Tsat_s(entropy):
     '''Returns saturation temperature as a function of entropy'''
-    if englishUnits: entropy = toSIUnit(float(entropy), 'entropy')
+    if englishUnits: entropy = Convert.toSIUnit(float(entropy), 'entropy')
     entropyMin, entropyMax = -0.0001545495919, 9.155759395
 
     if entropy > entropyMin and entropy < entropyMax:
-        return fromSIUnit(t4_p(p4_s(entropy)), 'temperature')
+        return Convert.fromSIUnit(Region4.t4_p(Region4.p4_s(entropy)), 'temperature', englishUnits=englishUnits)
     else:
-        return _errorValue
+        return Constants._errorValue
 
 def T_ph(pressure, enthalpy):
     '''Returns temperature as a function of pressure and enthalpy'''
-    pressure = toSIUnit(float(pressure), 'pressure')
+    pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
     enthalpy = float(enthalpy)
-    if englishUnits: enthalpy = toSIUnit(enthalpy, 'enthalpy')
+    if englishUnits: enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
     temperature = 0.0
 
-    region = region_ph(pressure, enthalpy)
-    if region is None: return _errorValue
+    region = Regions.region_ph(pressure, enthalpy)
+    if region is None: return Constants._errorValue
 
     if region is 1:
-        temperature = t1_ph(pressure, enthalpy)
+        temperature = Region1.t1_ph(pressure, enthalpy)
     elif region is 2:
-        temperature = t2_ph(pressure, enthalpy)
+        temperature = Region2.t2_ph(pressure, enthalpy)
     elif region is 3:
-        temperature = t3_ph(pressure, enthalpy)
+        temperature = Region3.t3_ph(pressure, enthalpy)
     elif region is 4:
-        temperature = t4_p(pressure)
+        temperature = Region4.t4_p(pressure)
     elif region is 5:
-        temperature = t5_ph(pressure, enthalpy)
+        temperature = Region5.t5_ph(pressure, enthalpy)
 
-    return fromSIUnit(temperature, 'temperature')
+    return Convert.fromSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
 def T_ps(pressure, entropy):
     '''Returns temperature as a function of pressure and entropy'''
-    pressure = toSIUnit(float(pressure), 'pressure')
+    pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
     entropy = float(entropy)
-    if englishUnits: entropy = toSIUnit(entropy, 'entropy')
+    if englishUnits: entropy = Convert.toSIUnit(entropy, 'entropy')
     temperature = 0
 
-    region = region_ps(pressure, entropy)
-    if region is None: return _errorValue
+    region = Regions.region_ps(pressure, entropy)
+    if region is None: return Constants._errorValue
 
     if region is 1:
-        temperature = t1_ps(pressure, entropy)
+        temperature = Region1.t1_ps(pressure, entropy)
     elif region is 2:
-        temperature = t2_ps(pressure, entropy)
+        temperature = Region2.t2_ps(pressure, entropy)
     elif region is 3:
-        temperature = t3_ps(pressure, entropy)
+        temperature = Region3.t3_ps(pressure, entropy)
     elif region is 4:
-        temperature = t4_p(pressure)
+        temperature = Region4.t4_p(pressure)
     elif region is 5:
-        temperature = t5_ps(pressure, entropy)
+        temperature = Region5.t5_ps(pressure, entropy)
 
-    return fromSIUnit(temperature, 'temperature')
+    return Convert.fromSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
 def T_hs(enthalpy, entropy):
     enthalpy, entropy = float(enthalpy), float(entropy)
     if englishUnits:
-        enthalpy = toSIUnit(enthalpy, 'enthalpy')
-        entropy = toSIUnit(entropy, 'entropy')
+        enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
+        entropy = Convert.toSIUnit(entropy, 'entropy')
     temperature = 0.0
 
-    region = region_hs(enthalpy, entropy)
-    if region is None or region is 5: return _errorValue
+    region = Regions.region_hs(enthalpy, entropy)
+    if region is None or region is 5: return Constants._errorValue
 
     if region is 1:
-        temperature = t1_ph(p1_hs(enthalpy, entropy), enthalpy)
+        temperature = Region1.t1_ph(Region1.p1_hs(enthalpy, entropy), enthalpy)
     elif region is 2:
-        temperature = t2_ph(p2_hs(enthalpy, entropy), enthalpy)
+        temperature = Region2.t2_ph(Region2.p2_hs(enthalpy, entropy), enthalpy)
     elif region is 3:
-        temperature = t3_ph(p3_hs(enthalpy, entropy), enthalpy)
+        temperature = Region3.t3_ph(Region3.p3_hs(enthalpy, entropy), enthalpy)
     elif region is 4:
-        temperature = t4_hs(enthalpy, entropy)
+        temperature = Region4.t4_hs(enthalpy, entropy)
 
-    return fromSIUnit(temperature, 'temperature')
+    return Convert.fromSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
 def Psat_T(temperature):
     '''Saturation Pressure as a function of temperature'''
-    temperature = toSIUnit(float(temperature), 'temperature')
+    temperature = Convert.toSIUnit(float(temperature), 'temperature', englishUnits=englishUnits)
     pressure = 0.0
     if temperature <= 647.096 and temperature > 273.15:
-        pressure = fromSIUnit(p4_t(temperature), 'pressure')
+        pressure = Convert.fromSIUnit(Region4.p4_t(temperature), 'pressure', englishUnits=englishUnits)
     else:
-        pressure = _errorValue
+        pressure = Constants._errorValue
     return pressure
 #Rem Function psat_s(ByVal s As Double) As Double
 #Rem  s = toSIunit_s(s)
@@ -1315,242 +1319,6 @@ def Psat_T(temperature):
 #Rem End Function
 #Rem
 
-# Functions for region 5
-
-
-# Region Selection
-def region_pt(pressure, temperature):
-    ''' Regions as a function of pressure and temperature '''
-    region = 0
-    if (temperature > 1073.15 and temperature < 2273.15) and (pressure < 10.0  and pressure > 0.000611):
-        region = 5
-    elif (temperature <= 1073.15 and temperature > 273.15) and (pressure <= 100 and pressure > 0.000611):
-        if temperature > 623.15:
-            if pressure > b23p_t(temperature):
-                region = 3
-                if temperature < 647.096:
-                    ps = p4_t(temperature)
-                    if abs(pressure - ps) < 0.00001:
-                        region = 4
-            else:
-                region = 2
-        else:
-            ps = p4_t(temperature)
-            if abs(pressure - ps) < 0.00001:
-                region = 4
-            elif pressure > ps:
-                region = 1
-            else:
-                region = 2
-    else:
-        raise ArithmeticError('Temperature and Pressure Out Of Bounds')
-
-    return region
-
-def region_ph(pressure, enthalpy):
-    ''' Regions as a function of pressure and enthalpy '''
-    pressureMin, pressureMax = 0.000611657, 100.0
-    enthalpyMin = 0.963 * pressure + 2.2 # Linear adaption to h1_pt()+2 to speed up calcualations.
-
-    if pressure < pressureMin or pressure > pressureMax:
-        return None
-
-    if enthalpy < enthalpyMin:
-        if enthalpy < h1_pt(pressure, 273.150):
-            return None
-
-    if pressure < 16.5292: #Bellow region 3, check region 1,4,2,5
-
-        tsatt = t4_p(pressure)
-        if enthalpy <= h1_pt(pressure, tsatt):
-
-            return 1
-        elif enthalpy < h2_pt(pressure, tsatt):
-
-            return 4
-        elif enthalpy <= h2_pt(pressure, 1073.15):
-
-            return 2
-        elif enthalpy < h5_pt(pressure, 2273.15):
-
-            return 5
-    else:
-
-        if enthalpy < h1_pt(pressure, 623.15):
-
-            return 1
-        elif enthalpy < h2_pt(pressure, b23t_p(pressure)):
-
-            if pressure > p3sat_h(enthalpy):
-
-                return 3
-            else:
-
-                return 4
-        elif enthalpy < h2_pt(pressure, 1073.15):
-
-            return 2
-
-def region_ps(pressure, entropy):
-    ''' Regions as a function of pressure and enthalpy '''
-    if pressure < 0.000611657 or pressure > 100.0 or entropy < 0.0 or entropy > s5_pt(pressure, 2273.15):
-        return None
-
-    # Check region 5
-    if entropy > s2_pt(pressure, 1073.15):
-        if pressure <= 10.0:
-            return 5
-        else:
-            return None
-    # Check region 2
-    if pressure > 16.529:
-        entropyS = s2_pt(pressure, b23t_p(pressure)) # Between 5.047 and 5.261. Use to speed up!
-    else:
-        entropyS = s2_pt(pressure, t4_p(pressure))
-    if entropy > entropyS:
-        return 2
-    # Check region 3
-    entropyS = s1_pt(pressure, 623.15)
-    if pressure > 16.529 and entropy > entropyS:
-        if pressure > p3sat_s(entropy):
-            return 3
-        else:
-            return 4
-    # Check region 4
-    if pressure < 16.529 and entropy > s1_pt(pressure, t4_p(pressure)):
-        return 4
-    # If it hasn't reached this point then return region 1
-    return 1
-
-def region_hs(enthalpy, entropy):
-    ''' Regions as a function of enthalpy and entropy '''
-    enthalpyMin = (((-0.0415878 - 2500.89262) / (-0.00015455 - 9.155759))*entropy)
-    if enthalpy < -0.0001545495919 or (entropy < 9.155759395 and enthalpy < enthalpyMin):
-        return None
-    # Check region 1 or 4 plus a small bit over B13
-    if entropy >= -0.0001545495919 and entropy <= 3.77828134:
-        if enthalpy < h4_s(entropy):
-            return 4
-        elif entropy < 3.397782955: # 100 MPa line is limiting
-            temperatureMax = t1_ps(100.0, entropy)
-            enthalpyMax = h1_pt(100.0, temperatureMax)
-            if enthalpy < enthalpyMax:
-                return 1
-            else:
-                return None
-        else: # The point is either in region 4, 1, or 3. Check B23
-            enthalpyBoundary = hB13_s(entropy)
-            if enthalpy < enthalpyBoundary:
-                return 1
-            temperatureMax = t3_ps(100.0, entropy)
-            specificVolumeMax = v3_ps(100.0, entropy)
-            enthalpyMax = h3_rhot(1.0/specificVolumeMax, temperatureMax)
-            if enthalpy < enthalpyMax:
-                return 3
-            else:
-                return None
-    # Check region 2 or 4 upper part of area b23 -> max
-    if entropy >= 5.260578707 and entropy <= 11.9212156897728:
-        if entropy > 9.155759395: # Above region 4
-            temperatureMin = t2_ps(0.000611, entropy)
-            enthalpyMin = h2_pt(0.000611, temperatureMin)
-            enthalpyMax = -0.07554022*entropy**4 + 3.341571*entropy**3 - 55.42151*entropy**2 + 408.515*entropy + 3031.338
-            if enthalpy > enthalpyMin and enthalpy < enthalpyMax:
-                return 2
-            else:
-                return None
-        vaporEnthalpy = h4_s(entropy)
-        if enthalpy < vaporEnthalpy: # Region 4 under region 3
-            return 4
-        if entropy < 6.04048367171238:
-            temperatureMax = t2_ps(100.0, entropy)
-            enthalpyMax = h2_pt(100.0, temperatureMax)
-        else:
-            # Function adapted to h(1073.15,s)
-            enthalpyMax = -2.988734*entropy**4 + 121.4015*entropy**3 - 1805.15*entropy**2 + 11720.16*entropy - 23998.33
-        if enthalpy < enthalpyMax: # Region 2 over region 3
-            return 2
-        else:
-            return None
-    # Check region 3 or 4 below the critical point
-    if entropy >= 3.77828134 and entropy <= 4.41202148223476:
-        liquidEnthalpy = h4_s(entropy)
-        if enthalpy < liquidEnthalpy:
-            return 4
-        temperatureMax = t3_ps(100.0, entropy)
-        specificVolumeMax = v3_ps(100.0, entropy)
-        enthalpyMax = h3_rhot(1.0/specificVolumeMax, temperatureMax)
-        if enthalpy < enthalpyMax:
-            return 3
-        else:
-            return None
-    # Check region 3 or 4 from critical point to top of b23
-    if entropy >= 4.41202148223476 and entropy <= 5.260578707:
-        vaporEnthalpy = h4_s(entropy)
-        if enthalpy < vaporEnthalpy:
-            return 4
-        # Check if under validity of B23
-        if entropy <= 5.048096828:
-            temperatureMax = t3_ps(100.0, entropy)
-            specificVolumeMax = v3_ps(100.0, entropy)
-            enthalpyMax = h3_rhot(1.0/specificVolumeMax, temperatureMax)
-            if enthalpy < enthalpyMax:
-                return 3
-            else:
-                return None
-        else: # In the area of B23
-            if enthalpy > 2812.942061: # above b23 in h
-                if entropy > 5.09796573397125:
-                    temperatureMax = t2_ps(100.0, entropy)
-                    enthalpyMax = h2_pt(100.0, temperatureMax)
-                    if enthalpy < enthalpyMax:
-                        return 2
-                    else:
-                        return None
-                else:
-                    return None
-            if enthalpy < 2563.592004: # Below B23 in h but we have already checked above hV2c3b
-                return 3
-            # We are within the b23 area in both s and h
-            if p2_hs(enthalpy, entropy) > b23p_t(tB23_hs(enthalpy, entropy)):
-                return 3
-            else:
-                return 2
-    return None
-
-def region_prho(pressure, density):
-    ''' Regions as a function of pressure and density '''
-    specificVolume = 1.0/density
-    if pressure < 0.000611657 or pressure > 100.0:
-        raise ArithmeticError('Pressure is out of bounds')
-    if specificVolume < v1_pt(pressure, 273.15):
-        raise ArithmeticError('Density is out of bounds')
-    if pressure < 16.5292: # Below region 3, check region 1, 4, and 2
-        if specificVolume < v1_pt(pressure, t4_p(pressure)):
-            return 1
-        if specificVolume < v2_pt(pressure, t4_p(pressure)):
-            return 4
-        if specificVolume < v2_pt(pressure, 1073.15):
-            return 2
-        if pressure > 10: # Above region 5
-            raise ArithmeticError('Pressure is out of bounds')
-        if specificVolume <= v5_pt(pressure, 2073.15):
-            return 5
-    else: # Check region 1, 3, 4, 3, 2 (above the lowest point of region 3.)
-        if specificVolume < v1_pt(pressure, 623.15):
-            return 1
-        # Check if in region 3 or 4 (below region 2)
-        if specificVolume < v2_pt(pressure, b23t_p(pressure)):
-            if pressure > 22.064: # Above region 4
-                return 3
-            if specificVolume < v3_ph(pressure, h4_p(pressure, 'liq')) or specificVolume > v3_ph(pressure, h4_p(pressure, 'vap')):
-                return 3
-            else:
-                return 4
-        # Check region 2
-        if specificVolume < v2_pt(pressure, 1073.15):
-            return 2
-
 #'***********************************************************************************************************
 #Rem '*5 Transport properties
 #Rem '***********************************************************************************************************
@@ -1688,7 +1456,7 @@ def region_prho(pressure, density):
 
 def surfaceTension_T(temperature):
     '''IAPWS Release on Surface Tension of Ordinary Water Substance, September 1994'''
-    if temperature < 0.01 or temperature > _tc:
-        raise ArithmeticError('Temperature must be between {} and {}'.format(0.01, _tc))
-    tau = 1.0 - temperature/_tc
+    if temperature < 0.01 or temperature > Constants._tc:
+        raise ArithmeticError('Temperature must be between {} and {}'.format(0.01, Constants._tc))
+    tau = 1.0 - temperature/Constants._tc
     return 0.2358*tau**1.256*(1.0 - 0.625*tau)

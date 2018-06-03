@@ -50,10 +50,13 @@
     <Compile Include="Region5_Tests.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Regions_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="testRunner.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="tests.py">
+    <Compile Include="XSteam_Tests.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
