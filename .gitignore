@@ -290,3 +290,4 @@ __pycache__/
 /XSteamPython/env
 /XSteamPython/coverage.xml
 /coverage.xml
+/XSteamPython/XSteamPython.egg-info
