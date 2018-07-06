@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.travis.yml = .travis.yml
 	EndProjectSection
 EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "ExtractSteamData", "ExtractSteamData\ExtractSteamData.pyproj", "{6EC5D3A7-413A-470D-9C4E-7936076FCDA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,6 +24,8 @@ Global
 		{BA0BFA36-DF9D-4857-AEE5-620348D2A7C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF53F884-2C28-4870-97BD-71501084C41C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FF53F884-2C28-4870-97BD-71501084C41C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EC5D3A7-413A-470D-9C4E-7936076FCDA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EC5D3A7-413A-470D-9C4E-7936076FCDA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
