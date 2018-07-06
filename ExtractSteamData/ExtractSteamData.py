@@ -29,15 +29,13 @@ def main():
     data = pd.read_excel(args.f, args.s)
 
     units = args.f.split('_')[0]
-    dependentVariableName, indep = args.s.split('_')
-    independentXVariableName, independentYVariableName = indep[0], indep[-1]
 
     if data.shape[0] == 2:
         independentXVariable, dependentVariable = getOneDimensionalTestData(data)
-        np.savez_compressed('{}_{}'.format(units, args.s), independentXVariableName=independentXVariable, dependentVariableName=dependentVariable)
+        np.savez_compressed('{}_{}'.format(units, args.s), x=independentXVariable, f=dependentVariable)
     elif data.shape[0] > 2:
         independentXVariable, independentYVariable, dependentVariable = getTwoDimensionalTestData(data)
-        np.savez_compressed('{}_{}'.format(units, args.s), independentXVariableName=independentXVariable, independentYVariableName=independentYVariable, dependentVariableName=dependentVariable)
+        np.savez_compressed('{}_{}'.format(units, args.s), x=independentXVariable, y=independentYVariable, f=dependentVariable)
     else:
         raise(ValueError)
 

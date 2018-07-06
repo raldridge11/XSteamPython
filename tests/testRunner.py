@@ -44,7 +44,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(TransportProperties_Tests))
 
     runner = unittest.TextTestRunner()
-    result = runner.run(suite)
+    runner.run(suite)
 
 if __name__ == '__main__':
     main()

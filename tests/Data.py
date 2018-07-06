@@ -11,11 +11,11 @@ import numpy as np
 
 def getOneDimensionalTestData(npzfile):
     data = np.load(npzfile)
-    return data['independentXVariableName'], data['dependentVariableName']
+    return data['x'], data['f']
 
 def getTwoDimensionalTestData(npzfile):
     data = np.load(npzfile)
-    return data['independentXVariableName'], data['independentYVariableName'], data['dependentVariableName']
+    return data['x'], data['y'], data['f']
 
 def calculatePropertyFromOneDimension(function, independentVariable):
     thProperty = np.fromiter((function(x) for x in independentVariable), float)
