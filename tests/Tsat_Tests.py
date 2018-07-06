@@ -20,13 +20,13 @@ class Test_Tsat_p(unittest.TestCase):
         stm.englishUnits = False
 
     def test_Tsat_p(self):
-        pressure, TsatCompare = Data.getOneDimensionalTestData(Data.siData, 'Tsat_p')
+        pressure, TsatCompare = Data.getOneDimensionalTestData('SIUnits_Tsat_p.npz')
         Tsat = Data.calculatePropertyFromOneDimension(stm.Tsat_p, pressure)
         np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
 
     def test_Tsat_p_English(self):
         stm.englishUnits = True
-        pressure, TsatCompare = Data.getOneDimensionalTestData(Data.englishData, 'Tsat_p')
+        pressure, TsatCompare = Data.getOneDimensionalTestData('EnglishUnits_Tsat_p.npz')
         Tsat = Data.calculatePropertyFromOneDimension(stm.Tsat_p, pressure)
         np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
 
@@ -39,13 +39,13 @@ class Test_Tsat_s(unittest.TestCase):
         stm.englishUnits = False
 
     def test_Tsat_s(self):
-        entropy, TsatCompare = Data.getOneDimensionalTestData(Data.siData, 'Tsat_s')
+        entropy, TsatCompare = Data.getOneDimensionalTestData('SIUnits_Tsat_s.npz')
         Tsat = Data.calculatePropertyFromOneDimension(stm.Tsat_s, entropy)
         np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
 
     def test_Tsat_s_English(self):
         stm.englishUnits = True
-        entropy, TsatCompare = Data.getOneDimensionalTestData(Data.englishData, 'Tsat_s')
+        entropy, TsatCompare = Data.getOneDimensionalTestData('EnglishUnits_Tsat_s.npz')
         Tsat = Data.calculatePropertyFromOneDimension(stm.Tsat_s, entropy)
         np.testing.assert_array_almost_equal(Tsat, TsatCompare, decimal=3)
 

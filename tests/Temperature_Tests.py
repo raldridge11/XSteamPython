@@ -21,13 +21,13 @@ class Test_T_ph(unittest.TestCase):
         stm.englishUnits = False
 
     def test_T_ph(self):
-        pressure, enthalpy, temperatureCompare = Data.getTwoDimensionalTestData(Data.siData, 'T_ph')
+        pressure, enthalpy, temperatureCompare = Data.getTwoDimensionalTestData('SIUnits_T_ph.npz')
         temperature = Data.calculatePropertyFromTwoDimensions(stm.T_ph, pressure, enthalpy)
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
     def test_T_ph_English(self):
         stm.englishUnits = True
-        pressure, enthalpy, temperatureCompare = Data.getTwoDimensionalTestData(Data.englishData, 'T_ph')
+        pressure, enthalpy, temperatureCompare = Data.getTwoDimensionalTestData('EnglishUnits_T_ph.npz')
         temperature = Data.calculatePropertyFromTwoDimensions(stm.T_ph, pressure, enthalpy)
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
@@ -40,13 +40,13 @@ class Test_T_ps(unittest.TestCase):
         stm.englishUnits = False
 
     def test_T_ps(self):
-        pressure, entropy, temperatureCompare = Data.getTwoDimensionalTestData(Data.siData, 'T_ps')
+        pressure, entropy, temperatureCompare = Data.getTwoDimensionalTestData('SIUnits_T_ps.npz')
         temperature = Data.calculatePropertyFromTwoDimensions(stm.T_ps, pressure, entropy)
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
     def test_T_ps_English(self):
         stm.englishUnits = True
-        pressure, entropy, temperatureCompare = Data.getTwoDimensionalTestData(Data.englishData, 'T_ps')
+        pressure, entropy, temperatureCompare = Data.getTwoDimensionalTestData('EnglishUnits_T_ps.npz')
         temperature = Data.calculatePropertyFromTwoDimensions(stm.T_ps, pressure, entropy)
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
@@ -59,13 +59,13 @@ class Test_T_hs(unittest.TestCase):
         stm.englishUnits = False
 
     def test_T_hs(self):
-        enthalpy, entropy, temperatureCompare = Data.getTwoDimensionalTestData(Data.siData, 'T_hs')
+        enthalpy, entropy, temperatureCompare = Data.getTwoDimensionalTestData('SIUnits_T_hs.npz')
         temperature = Data.calculatePropertyFromTwoDimensions(stm.T_hs, enthalpy, entropy)
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 
-    def test_T_English(self):
+    def test_T_hs_English(self):
         stm.englishUnits = True
-        enthalpy, entropy, temperatureCompare = Data.getTwoDimensionalTestData(Data.englishData, 'T_hs')
+        enthalpy, entropy, temperatureCompare = Data.getTwoDimensionalTestData('EnglishUnits_T_hs.npz')
         temperature = Data.calculatePropertyFromTwoDimensions(stm.T_hs, enthalpy, entropy)
         np.testing.assert_array_almost_equal(temperature, temperatureCompare, decimal=2)
 

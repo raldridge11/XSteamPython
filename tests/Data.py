@@ -8,7 +8,14 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 import numpy as np
-import pandas as pd
+
+def getOneDimensionalTestData(npzfile):
+    data = np.load(npzfile)
+    return data['independentXVariableName'], data['dependentVariableName']
+
+def getTwoDimensionalTestData(npzfile):
+    data = np.load(npzfile)
+    return data['independentXVariableName'], data['independentYVariableName'], data['dependentVariableName']
 
 def calculatePropertyFromOneDimension(function, independentVariable):
     thProperty = np.fromiter((function(x) for x in independentVariable), float)

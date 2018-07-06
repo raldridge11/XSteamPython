@@ -20,13 +20,13 @@ class Test_Psat_T(unittest.TestCase):
         stm.englishUnits = False
 
     def test_Psat_T(self):
-        temperature, PsatCompare = Data.getOneDimensionalTestData(Data.siData, 'Psat_T')
+        temperature, PsatCompare = Data.getOneDimensionalTestData('SIUnits_Psat_T.npz')
         Psat = Data.calculatePropertyFromOneDimension(stm.Psat_T, temperature)
         np.testing.assert_array_almost_equal(Psat, PsatCompare, decimal=3)
 
     def test_Psat_T_English(self):
         stm.englishUnits = True
-        temperature, PsatCompare = Data.getOneDimensionalTestData(Data.englishData, 'Psat_T')
+        temperature, PsatCompare = Data.getOneDimensionalTestData('EnglishUnits_Psat_T.npz')
         Psat = Data.calculatePropertyFromOneDimension(stm.Psat_T, temperature)
         np.testing.assert_array_almost_equal(Psat, PsatCompare, decimal=3)
 
