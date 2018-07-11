@@ -14,11 +14,11 @@ import numpy as np
 def loadnpz(npzfile):
 
     print('npz in current directory? {}'.format(os.path.isfile(npzfile)))
-    print('npz in tests directory? {}'.format(os.path.isfile('tests\\{}'.format(npzfile))))
+    print('npz in tests directory? {}'.format(os.path.isfile('tests/{}'.format(npzfile))))
     if os.path.isfile(npzfile):
         return np.load(npzfile)
-    elif os.path.isfile('tests\\{}'.format(npzfile)):
-        return np.load('tests\\{}'.format(npzfile))
+    elif os.path.isfile('tests/{}'.format(npzfile)):
+        return np.load('tests/{}'.format(npzfile))
     else:
         raise Exception('npz file not found')
 
