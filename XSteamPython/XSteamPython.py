@@ -114,15 +114,18 @@ def Psat_T(temperature):
     else:
         pressure = Constants._errorValue
     return pressure
-#Rem Function psat_s(ByVal s As Double) As Double
-#Rem  s = toSIunit_s(s)
-#Rem  If s > -0.0001545495919 And s < 9.155759395 Then
-#Rem    psat_s = fromSIunit_p(p4_s(s))
-#Rem  Else
-#Rem    psat_s = CVErr(xlErrValue)
-#Rem  End If
-#Rem  psat_s = psat_s * 100
-#Rem End Function
+
+def Psat_s(entropy):
+    entropy = float(entropy)
+
+    if englishUnits:
+        entropy = Convert.toSIUnit(entropy, 'entropy')
+
+    if entropy > -0.0001545495919 and entropy < 9.155759395:
+        return Convert.fromSIUnit(Region4.p4_s(entropy), 'pressure', englishUnits=englishUnits)
+    else:
+        return Constants._errorValue
+
 #Rem Function p_hs(ByVal h As Double, ByVal s As Double) As Double
 #Rem  h = toSIunit_h(h)
 #Rem  s = toSIunit_s(s)
@@ -142,6 +145,8 @@ def Psat_T(temperature):
 #Rem  End Select
 #Rem  p_hs = p_hs * 100
 #Rem End Function
+
+
 #Rem Function p_hrho(ByVal h As Double, ByVal rho As Double) As Double
 #Rem '*Not valid for water or sumpercritical since water rho does not change very much with p.
 #Rem '*Uses iteration to find p.

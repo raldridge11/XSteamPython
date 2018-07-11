@@ -33,5 +33,19 @@ class Test_Psat_T(unittest.TestCase):
     def test_Psat_T_error(self):
         self.assertAlmostEqual(stm.Psat_T(0.0), 2015.0, places=2)
 
+    def test_Psat_s(self):
+        entropy, PsatCompare = Data.getOneDimensionalTestData('SIUnits_Psat_s.npz')
+        Psat = Data.calculatePropertyFromOneDimension(stm.Psat_s, entropy)
+        np.testing.assert_array_almost_equal(Psat, PsatCompare, decimal=3)
+
+    def test_Psat_s_English(self):
+        stm.englishUnits = True
+        entropy, PsatCompare = Data.getOneDimensionalTestData('EnglishUnits_Psat_s.npz')
+        Psat = Data.calculatePropertyFromOneDimension(stm.Psat_s, entropy)
+        np.testing.assert_array_almost_equal(Psat, PsatCompare, decimal=3)
+
+    def test_Psat_s_error(self):
+        self.assertAlmostEqual(stm.Psat_s(-100.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()
