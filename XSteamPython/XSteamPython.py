@@ -126,33 +126,28 @@ def Psat_s(entropy):
     else:
         return Constants._errorValue
 
-#Rem Function p_hs(ByVal h As Double, ByVal s As Double) As Double
-#Rem  h = toSIunit_h(h)
-#Rem  s = toSIunit_s(s)
-#Rem  Select Case Region_hs(h, s)
-#Rem  Case 1
-#Rem    p_hs = fromSIunit_p(p1_hs(h, s))
-#Rem  Case 2
-#Rem    p_hs = fromSIunit_p(p2_hs(h, s))
-#Rem  Case 3
-#Rem    p_hs = fromSIunit_p(p3_hs(h, s))
-#Rem  Case 4
-#Rem    p_hs = fromSIunit_p(p4_T(T4_hs(h, s)))
-#Rem  Case 5
-#Rem    p_hs = CVErr(xlErrValue) 'Functions of hs is not implemented in region 5
-#Rem  Case Else
-#Rem   p_hs = CVErr(xlErrValue)
-#Rem  End Select
-#Rem  p_hs = p_hs * 100
-#Rem End Function
+def P_hs(enthalpy, entropy):
+    enthalpy, entropy = float(enthalpy), float(entropy)
+    if englishUnits:
+        enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
+        entropy = Convert.toSIUnit(entropy, 'entropy')
+    pressure = 0.0
 
+    region = Regions.region_hs(enthalpy, entropy)
+    if region is None or region == 5: return Constants._errorValue
 
-#Rem Function p_hrho(ByVal h As Double, ByVal rho As Double) As Double
-#Rem '*Not valid for water or sumpercritical since water rho does not change very much with p.
-#Rem '*Uses iteration to find p.
-#Rem   Dim High_Bound As Double
-#Rem   Dim Low_Bound As Double
-#Rem   Dim p As Double
+    if region == 1:
+        pressure = Region1.p1_hs(enthalpy, entropy)
+    elif region == 2:
+        pressure = Region2.p2_hs(enthalpy, entropy)
+    elif region == 3:
+        pressure = Region3.p3_hs(enthalpy, entropy)
+    elif region == 4:
+        pressure = Region4.p4_t(Region4.t4_hs(enthalpy, entropy))
+
+    return Convert.fromSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+
+#Rem Function p_hrho(ByVal h As Double, ByVal rho As Double) As Double #7 and #18
 #Rem   Dim rhos As Double
 #Rem   High_Bound = fromSIunit_p(5000)
 #Rem   Low_Bound = fromSIunit_p(0.000611657)
@@ -171,7 +166,8 @@ def Psat_s(entropy):
 #Rem     Loop
 #Rem     p_hrho = p    ' should be kPa
 #Rem End Function
-#Rem 'Function p_Tv(ByVal T As Double, ByVal v As Double) As Double
+
+#Rem 'Function p_Tv(ByVal T As Double, ByVal v As Double) As Double #19
 #Rem 'Dim p_max As Double
 #Rem 'Dim p_min As Double
 #Rem 'Dim p_mid As Double

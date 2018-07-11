@@ -9,6 +9,7 @@
 '''
 import unittest
 
+import Boundaries_Tests
 import Convert_Tests
 import Region1_Tests
 import Region2_Tests
@@ -16,8 +17,8 @@ import Region3_Tests
 import Region4_Tests
 import Region5_Tests
 import Regions_Tests
-import Boundaries_Tests
 
+import Pressure_Tests
 import Psat_Tests
 import Tsat_Tests
 import Temperature_Tests
@@ -42,6 +43,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(Tsat_Tests))
     suite.addTest(loader.loadTestsFromModule(Temperature_Tests))
     suite.addTest(loader.loadTestsFromModule(TransportProperties_Tests))
+    suite.addTest(loader.loadTestsFromModule(Pressure_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)
