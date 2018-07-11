@@ -14,10 +14,10 @@ import numpy as np
 def loadnpz(npzfile):
     if os.path.isfile(npzfile):
         return np.load(npzfile)
-    elif os.path.islink('tests\\{}'.format(npzfile)):
+    elif os.path.isfile('tests\\{}'.format(npzfile)):
         return np.load(npzfile)
     else:
-        raise FileNotFoundError
+        raise Exception('npz file not found')
 
 def getOneDimensionalTestData(npzfile):
     data = loadnpz(npzfile)
