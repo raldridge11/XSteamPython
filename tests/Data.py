@@ -7,14 +7,24 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
+import os
+
 import numpy as np
 
+def loadnpz(npzfile):
+    if os.path.isfile(npzfile):
+        return np.load(npzfile)
+    elif os.path.islink('tests\\{}'.format(npzfile)):
+        return np.load(npzfile)
+    else:
+        raise FileNotFoundError
+
 def getOneDimensionalTestData(npzfile):
-    data = np.load(npzfile)
+    data = loadnpz(npzfile)
     return data['x'], data['f']
 
 def getTwoDimensionalTestData(npzfile):
-    data = np.load(npzfile)
+    data = loadnpz(npzfile)
     return data['x'], data['y'], data['f']
 
 def calculatePropertyFromOneDimension(function, independentVariable):
