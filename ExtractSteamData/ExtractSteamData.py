@@ -28,7 +28,7 @@ def main():
 
     data = pd.read_excel(args.f, args.s)
 
-    units = args.f.split('_')[0]
+    units = args.f.split('.xlsm')[0]
 
     if data.shape[0] == 2:
         independentXVariable, dependentVariable = getOneDimensionalTestData(data)

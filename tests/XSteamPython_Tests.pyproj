@@ -39,6 +39,9 @@
     <Compile Include="Data.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enthalpy_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Pressure_Tests.py">
       <SubType>Code</SubType>
     </Compile>

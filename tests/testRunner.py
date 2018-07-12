@@ -18,6 +18,7 @@ import Region4_Tests
 import Region5_Tests
 import Regions_Tests
 
+import Enthalpy_Tests
 import Pressure_Tests
 import Psat_Tests
 import Tsat_Tests
@@ -44,6 +45,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(Temperature_Tests))
     suite.addTest(loader.loadTestsFromModule(TransportProperties_Tests))
     suite.addTest(loader.loadTestsFromModule(Pressure_Tests))
+    suite.addTest(loader.loadTestsFromModule(Enthalpy_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)

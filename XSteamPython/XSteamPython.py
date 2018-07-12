@@ -199,6 +199,21 @@ def P_hs(enthalpy, entropy):
 #Rem    hV_p = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
+
+
+def hV_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    low, high = 0.000611657, 22.06395
+    if pressure > low and pressure < high:
+        enthalpy = Region4.h4_p(pressure, 'vap')
+        if englishUnits:
+            return Convert.fromSIUnit(enthalpy, 'enthalpy')
+        else:
+            return enthalpy
+    else:
+        return Constants._errorValue
+
+
 #Rem Function hL_p(ByVal p As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
