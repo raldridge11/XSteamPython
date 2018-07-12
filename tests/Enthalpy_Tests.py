@@ -75,6 +75,20 @@ class Test_Enthalpy(unittest.TestCase):
     def test_hL_T_error(self):
         self.assertAlmostEqual(stm.hL_T(-1.0), 2015.0, places=1)
 
+    def test_h_pT(self):
+        temperature, pressure, enthalpyCompare = Data.getTwoDimensionalTestData('SIUnits_h_pT.npz')
+        enthalpy = Data.calculatePropertyFromTwoDimensions(stm.h_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(enthalpy.T, enthalpyCompare, decimal=2)
+
+    def test_h_pT_English(self):
+        stm.englishUnits = True
+        temperature, pressure, enthalpyCompare = Data.getTwoDimensionalTestData('EnglishUnits_h_pT.npz')
+        enthalpy = Data.calculatePropertyFromTwoDimensions(stm.h_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(enthalpy.T, enthalpyCompare, decimal=2)
+
+    def test_h_pT_error(self):
+        self.assertAlmostEqual(stm.h_pT(1.0, -1.0), 2015.0, places=2)
+
 
 
 if __name__ == '__main__':

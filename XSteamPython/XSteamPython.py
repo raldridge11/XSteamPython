@@ -234,25 +234,28 @@ def hL_T(temperature):
     else:
         return Constants._errorValue
 
-#Rem Function h_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  T = toSIunit_T(T)
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 1
-#Rem    h_pT = fromSIunit_h(h1_pT(p, T))
-#Rem  Case 2
-#Rem    h_pT = fromSIunit_h(h2_pT(p, T))
-#Rem  Case 3
-#Rem    h_pT = fromSIunit_h(h3_pT(p, T))
-#Rem  Case 4
-#Rem    h_pT = CVErr(xlErrValue)
-#Rem  Case 5
-#Rem    h_pT = fromSIunit_h(h5_pT(p, T))
-#Rem  Case Else
-#Rem   h_pT = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def h_pT(pressure, temperature):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    region = Regions.region_pt(pressure, temperature)
+    enthalpy = 0.0
+
+    if region is None or region == 4: return Constants._errorValue
+
+    if region == 1:
+        enthalpy = Region1.h1_pt(pressure, temperature)
+    elif region == 2:
+        enthalpy = Region2.h2_pt(pressure, temperature)
+    elif region == 3:
+        enthalpy = Region3.h3_pt(pressure, temperature)
+    elif region == 5:
+        enthalpy = Region5.h5_pt(pressure, temperature)
+
+    if englishUnits:
+        return Convert.fromSIUnit(enthalpy, 'enthalpy')
+    else:
+        return enthalpy
+
 #Rem Function h_ps(ByVal p As Double, ByVal s As Double) As Double
 #Rem  Dim xs As Double
 #Rem  p = p / 100

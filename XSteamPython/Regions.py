@@ -38,7 +38,7 @@ def region_pt(pressure, temperature):
             else:
                 region = 2
     else:
-        raise ArithmeticError('Temperature and Pressure Out Of Bounds')
+        region = None
 
     return region
 

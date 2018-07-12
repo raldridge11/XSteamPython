@@ -65,7 +65,7 @@ class Test_Regions(unittest.TestCase):
         self.assertEqual(Regions.region_pt(2.0, 500.0), 2)
 
     def test_region_pt_region_pt_exception(self):
-        self.assertRaises(ArithmeticError, Regions.region_pt, 200, 3000.0)
+        self.assertEqual(Regions.region_pt(200, 3000.0), None )
 
     def test_region_ps_exception(self):
         self.assertEqual(Regions.region_ps(200.0, 100.0), None)
