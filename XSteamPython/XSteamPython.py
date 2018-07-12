@@ -223,14 +223,16 @@ def hV_T(temperature):
     else:
         return Constants._errorValue
 
-#Rem Function hL_T(ByVal T As Double) As Double
-#Rem  T = toSIunit_T(T)
-#Rem  If T > 273.15 And T < 647.096 Then
-#Rem   hL_T = fromSIunit_h(h4L_p(p4_T(T)))
-#Rem Else
-#Rem   hL_T = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def hL_T(temperature):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    low, high = 273.15, 647.096
+    if temperature > low and temperature < high:
+        enthalpy = Region4.h4_p(Region4.p4_t(temperature), 'liq')
+        if englishUnits:
+            return Convert.fromSIUnit(enthalpy, 'enthalpy')
+        return enthalpy
+    else:
+        return Constants._errorValue
 
 #Rem Function h_pT(ByVal p As Double, ByVal T As Double) As Double
 #Rem  p = p / 100

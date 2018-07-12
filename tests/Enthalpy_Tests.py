@@ -61,6 +61,20 @@ class Test_Enthalpy(unittest.TestCase):
     def test_hV_T_error(self):
         self.assertAlmostEqual(stm.hV_T(-1.0), 2015.0, places=1)
 
+    def test_hL_T(self):
+        temperature, enthalpyCompare = Data.getOneDimensionalTestData('SIUnits_hL_T.npz')
+        enthalpy = Data.calculatePropertyFromOneDimension(stm.hL_T, temperature)
+        np.testing.assert_array_almost_equal(enthalpy, enthalpyCompare, decimal=2)
+
+    def test_hL_T_English(self):
+        stm.englishUnits = True
+        temperature, enthalpyCompare = Data.getOneDimensionalTestData('EnglishUnits_hL_T.npz')
+        enthalpy = Data.calculatePropertyFromOneDimension(stm.hL_T, temperature)
+        np.testing.assert_array_almost_equal(enthalpy, enthalpyCompare, decimal=2)
+
+    def test_hL_T_error(self):
+        self.assertAlmostEqual(stm.hL_T(-1.0), 2015.0, places=1)
+
 
 
 if __name__ == '__main__':
