@@ -212,14 +212,16 @@ def hL_p(pressure):
     else:
         return Constants._errorValue
 
-#Rem Function hV_T(ByVal T As Double) As Double
-#Rem  T = toSIunit_T(T)
-#Rem  If T > 273.15 And T < 647.096 Then
-#Rem   hV_T = fromSIunit_h(h4V_p(p4_T(T)))
-#Rem  Else
-#Rem   hV_T = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def hV_T(temperature):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    low, high = 273.15, 647.096
+    if temperature > low and temperature < high:
+        enthalpy = Region4.h4_p(Region4.p4_t(temperature), 'vap')
+        if englishUnits:
+            return Convert.fromSIUnit(enthalpy, 'enthalpy')
+        return enthalpy
+    else:
+        return Constants._errorValue
 
 #Rem Function hL_T(ByVal T As Double) As Double
 #Rem  T = toSIunit_T(T)
