@@ -187,19 +187,6 @@ def P_hs(enthalpy, entropy):
 #Rem 'Loop
 #Rem 'p_Tv = p_mid * 100
 #Rem 'End Function
-#Rem
-#Rem '***********************************************************************************************************
-#Rem '*1.4 Enthalpy (h)
-#Rem Function hV_p(ByVal p As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem    hV_p = fromSIunit_h(h4V_p(p))
-#Rem  Else
-#Rem    hV_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
-
 
 def hV_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
@@ -213,16 +200,18 @@ def hV_p(pressure):
     else:
         return Constants._errorValue
 
+def hL_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    low, high = 0.000611657, 22.06395
+    if pressure > low and pressure < high:
+        enthalpy = Region4.h4_p(pressure, 'liq')
+        if englishUnits:
+            return Convert.fromSIUnit(enthalpy, 'enthalpy')
+        else:
+            return enthalpy
+    else:
+        return Constants._errorValue
 
-#Rem Function hL_p(ByVal p As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem    hL_p = fromSIunit_h(h4L_p(p))
-#Rem  Else
-#Rem    hL_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
 #Rem Function hV_T(ByVal T As Double) As Double
 #Rem  T = toSIunit_T(T)
 #Rem  If T > 273.15 And T < 647.096 Then
@@ -231,6 +220,7 @@ def hV_p(pressure):
 #Rem   hV_T = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
+
 #Rem Function hL_T(ByVal T As Double) As Double
 #Rem  T = toSIunit_T(T)
 #Rem  If T > 273.15 And T < 647.096 Then
@@ -239,6 +229,7 @@ def hV_p(pressure):
 #Rem   hL_T = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
+
 #Rem Function h_pT(ByVal p As Double, ByVal T As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
