@@ -88,7 +88,6 @@ def region_ph(pressure, enthalpy):
 
 def region_ps(pressure, entropy):
     ''' Regions as a function of pressure and enthalpy '''
-    r5 = Region5.s5_pt(pressure, 2273.15)
     if pressure < 0.000611657 or pressure > 100.0 or entropy < 0.0 or entropy > Region5.s5_pt(pressure, 2273.15):
         return None
 
