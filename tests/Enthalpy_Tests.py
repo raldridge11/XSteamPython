@@ -8,6 +8,7 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 import unittest
+import pprint
 
 import numpy as np
 
@@ -88,6 +89,20 @@ class Test_Enthalpy(unittest.TestCase):
 
     def test_h_pT_error(self):
         self.assertAlmostEqual(stm.h_pT(1.0, -1.0), 2015.0, places=2)
+
+    def test_h_ps(self):
+        entropy, pressure, enthalpyCompare = Data.getTwoDimensionalTestData('SIUnits_h_ps.npz')
+        enthalpy = Data.calculatePropertyFromTwoDimensions(stm.h_ps, pressure, entropy)
+        np.testing.assert_array_almost_equal(enthalpy.T, enthalpyCompare, decimal=1)
+
+    def test_h_ps_English(self):
+        stm.englishUnits = True
+        entropy, pressure, enthalpyCompare = Data.getTwoDimensionalTestData('EnglishUnits_h_ps.npz')
+        enthalpy = Data.calculatePropertyFromTwoDimensions(stm.h_ps, pressure, entropy)
+        np.testing.assert_array_almost_equal(enthalpy.T, enthalpyCompare, decimal=2)
+
+    def test_h_ps_error(self):
+        self.assertAlmostEqual(stm.h_ps(1.0, -1.0), 2015.0, places=2)
 
 
 

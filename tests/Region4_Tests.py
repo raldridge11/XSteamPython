@@ -56,7 +56,7 @@ class Test_Region4(unittest.TestCase):
         self.assertAlmostEqual(Region4.h4_p(17.0, 'liq'), 1690.036, places=3)
 
     def test_h4_p_liq_exception(self):
-        self.assertRaises(ArithmeticError, Region4.h4_p, 23.0, 'liq')
+        self.assertEqual(Region4.h4_p(23.0, 'liq'), 0.0)
 
     def test_h4_p_vap_region1(self):
         self.assertAlmostEqual(Region4.h4_p(15.0, 'vap'), 2610.865, places=3)
@@ -65,7 +65,7 @@ class Test_Region4(unittest.TestCase):
         self.assertAlmostEqual(Region4.h4_p(17.0, 'vap'), 2547.413, places=3)
 
     def test_h4_p_vap_exception(self):
-        self.assertRaises(ArithmeticError, Region4.h4_p, 23.0, 'vap')
+        self.assertEqual(Region4.h4_p(23.0, 'vap'), 0.0)
 
     def test_t4_hs_region1(self):
         self.assertAlmostEqual(Region4.t4_hs(2000.0, 6.0), 338.379, places=3)

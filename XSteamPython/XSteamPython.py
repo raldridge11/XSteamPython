@@ -256,27 +256,34 @@ def h_pT(pressure, temperature):
     else:
         return enthalpy
 
-#Rem Function h_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem  Dim xs As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  s = toSIunit_s(s)
-#Rem  Select Case region_ps(p, s)
-#Rem  Case 1
-#Rem    h_ps = fromSIunit_h(h1_pT(p, T1_ps(p, s)))
-#Rem  Case 2
-#Rem    h_ps = fromSIunit_h(h2_pT(p, T2_ps(p, s)))
-#Rem  Case 3
-#Rem    h_ps = fromSIunit_h(h3_rhoT(1 / v3_ps(p, s), T3_ps(p, s)))
-#Rem  Case 4
-#Rem    xs = x4_ps(p, s)
-#Rem    h_ps = fromSIunit_h(xs * h4V_p(p) + (1 - xs) * h4L_p(p))
-#Rem  Case 5
-#Rem    h_ps = fromSIunit_h(h5_pT(p, T5_ps(p, s)))
-#Rem  Case Else
-#Rem   h_ps = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def h_ps(pressure, entropy):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if englishUnits:
+        entropy = Convert.toSIUnit(entropy, 'entropy')
+    enthalpy = 0.0
+
+    region = Regions.region_ps(pressure, entropy)
+    if region is None: return Constants._errorValue
+
+    if region == 1:
+        enthalpy = Region1.h1_pt(pressure, Region1.t1_ps(pressure, entropy))
+    elif region == 2:
+        enthalpy = Region2.h2_pt(pressure, Region2.t2_ps(pressure, entropy))
+    elif region == 3:
+        enthalpy = Region3.h3_rhot(1.0/Region3.v3_ps(pressure, entropy), Region3.t3_ps(pressure, entropy))
+    elif region == 4:
+        quality = Region4.x4_ps(pressure, entropy)
+        enthalpy = quality*Region4.h4_p(pressure, 'vap') + (1.0 - quality)*Region4.h4_p(pressure, 'liq')
+        if enthalpy == 0.0:
+            return Constants._errorValue
+    elif region == 5:
+        enthalpy = Region5.h5_pt(pressure, Region5.t5_ps(pressure, entropy))
+
+    if englishUnits:
+        return Convert.fromSIUnit(enthalpy, 'enthalpy')
+    else:
+        return enthalpy
+
 #Rem Function h_px(ByVal p As Double, ByVal x As Double) As Double
 #Rem  Dim hL As Double
 #Rem  Dim hV As Double

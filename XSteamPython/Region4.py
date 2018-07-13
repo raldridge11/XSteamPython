@@ -99,8 +99,6 @@ def h4_p(pressure, phase):
                 start =2563.592004 + 5.0 # 5 added to extrapolate to ensure even the border ==350°C solved.
             f = lambda enthalpy: Region3.p3sat_h(enthalpy) - pressure
             enthalpy = optimize.newton(f, start, tol=1e-5)
-    else:
-        raise ArithmeticError('Pressure needs to be between {} and {} MPa'.format(pressureMin, pressureMax))
 
     return enthalpy
 
