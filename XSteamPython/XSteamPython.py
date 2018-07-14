@@ -351,21 +351,20 @@ def h_Tx(temperature, quality):
 #Rem 'p = p_Tv(T, v)
 #Rem 'h_Tv = h_pv(p, v)
 #Rem 'End Function
-#Rem '***********************************************************************************************************
-#Rem '*1.5 Specific Volume (v)
-#Rem Function vV_p(ByVal p As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem   If p < 16.529 Then
-#Rem    vV_p = fromSIunit_v(v2_pT(p, T4_p(p)))
-#Rem   Else
-#Rem    vV_p = fromSIunit_v(v3_ph(p, h4V_p(p)))
-#Rem   End If
-#Rem  Else
-#Rem    vV_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+
+def vV_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    specificVolume = Constants._errorValue
+    if pressure <= 0.000611657 or pressure >= 22.06395:
+        return Constants._errorValue
+    if pressure < 16.529:
+        specificVolume = Region2.v2_pt(pressure, Region4.t4_p(pressure))
+    else:
+        specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, phase='vap'))
+    if englishUnits:
+        specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
+    return specificVolume
+
 #Rem Function vL_p(ByVal p As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)

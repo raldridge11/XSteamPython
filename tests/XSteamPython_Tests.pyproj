@@ -66,6 +66,9 @@
     <Compile Include="Regions_Tests.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="SpecificVolume_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Temperature_Tests.py">
       <SubType>Code</SubType>
     </Compile>
