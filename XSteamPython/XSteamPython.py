@@ -406,7 +406,7 @@ def vL_T(temperature):
         specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
     return specificVolume
 
-#Rem Function v_pT(ByVal p As Double, ByVal T As Double) As Double
+#Rem Function v_pT(ByVal p As Double, ByVal T As Double) As Double #35
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
 #Rem  T = toSIunit_T(T)
@@ -425,8 +425,8 @@ def vL_T(temperature):
 #Rem   v_pT = CVErr(xlErrValue)
 #Rem  End Select
 #Rem End Function
-#Rem
-#Rem Function v_ph(ByVal p As Double, ByVal h As Double) As Double
+
+#Rem Function v_ph(ByVal p As Double, ByVal h As Double) As Double #36
 #Rem  Dim xs As Double
 #Rem  Dim v4V As Double
 #Rem  Dim v4L As Double
@@ -456,7 +456,8 @@ def vL_T(temperature):
 #Rem   v_ph = CVErr(xlErrValue)
 #Rem  End Select
 #Rem End Function
-#Rem Function v_ps(ByVal p As Double, ByVal s As Double) As Double
+
+#Rem Function v_ps(ByVal p As Double, ByVal s As Double) As Double #37
 #Rem  Dim xs As Double
 #Rem  Dim v4V As Double
 #Rem  Dim v4L As Double
@@ -490,31 +491,31 @@ def vL_T(temperature):
 #Rem '***********************************************************************************************************
 #Rem '*1.6 Density (rho)
 #Rem ' Density is calculated as 1/v
-#Rem Function rhoV_p(ByVal p As Double) As Double
+#Rem Function rhoV_p(ByVal p As Double) As Double #38
 #Rem   rhoV_p = 1 / vV_p(p)
 #Rem End Function
-#Rem Function rhoL_p(ByVal p As Double) As Double
+#Rem Function rhoL_p(ByVal p As Double) As Double #39
 #Rem   rhoL_p = 1 / vL_p(p)
 #Rem End Function
-#Rem Function rhoL_T(ByVal T As Double) As Double
+#Rem Function rhoL_T(ByVal T As Double) As Double #40
 #Rem   rhoL_T = 1 / vL_T(T)
 #Rem End Function
-#Rem Function rhoV_T(ByVal T As Double) As Double
+#Rem Function rhoV_T(ByVal T As Double) As Double #41
 #Rem   rhoV_T = 1 / vV_T(T)
 #Rem End Function
-#Rem Function rho_pT(ByVal p As Double, ByVal T As Double) As Double
+#Rem Function rho_pT(ByVal p As Double, ByVal T As Double) As Double #42
 #Rem   rho_pT = 1 / v_pT(p, T)
 #Rem End Function
-#Rem Function rho_ph(ByVal p As Double, ByVal h As Double) As Double
+#Rem Function rho_ph(ByVal p As Double, ByVal h As Double) As Double #43
 #Rem   rho_ph = 1 / v_ph(p, h)
 #Rem End Function
-#Rem Function rho_ps(ByVal p As Double, ByVal s As Double) As Double
+#Rem Function rho_ps(ByVal p As Double, ByVal s As Double) As Double #44
 #Rem   rho_ps = 1 / v_ps(p, s)
 #Rem End Function
 #Rem
 #Rem '***********************************************************************************************************
 #Rem '*1.7 Specific entropy (s)
-#Rem Function sV_p(ByVal p As Double) As Double
+#Rem Function sV_p(ByVal p As Double) As Double #45
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
 #Rem  If p > 0.000611657 And p < 22.06395 Then
@@ -527,7 +528,8 @@ def vL_T(temperature):
 #Rem    sV_p = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
-#Rem Function sL_p(ByVal p As Double) As Double
+
+#Rem Function sL_p(ByVal p As Double) As Double #46
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
 #Rem  If p > 0.000611657 And p < 22.06395 Then
@@ -540,7 +542,8 @@ def vL_T(temperature):
 #Rem    sL_p = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
-#Rem Function sV_T(ByVal T As Double) As Double
+
+#Rem Function sV_T(ByVal T As Double) As Double #47
 #Rem  T = toSIunit_T(T)
 #Rem  If T > 273.15 And T < 647.096 Then
 #Rem   If T <= 623.15 Then
@@ -552,7 +555,8 @@ def vL_T(temperature):
 #Rem    sV_T = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
-#Rem Function sL_T(ByVal T As Double) As Double
+
+#Rem Function sL_T(ByVal T As Double) As Double #48
 #Rem  T = toSIunit_T(T)
 #Rem  If T > 273.15 And T < 647.096 Then
 #Rem   If T <= 623.15 Then
@@ -564,7 +568,8 @@ def vL_T(temperature):
 #Rem    sL_T = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
-#Rem Function s_pT(ByVal p As Double, ByVal T As Double) As Double
+
+#Rem Function s_pT(ByVal p As Double, ByVal T As Double) As Double #49
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
 #Rem  T = toSIunit_T(T)
@@ -583,7 +588,8 @@ def vL_T(temperature):
 #Rem   s_pT = CVErr(xlErrValue)
 #Rem  End Select
 #Rem End Function
-#Rem Function s_ph(ByVal p As Double, ByVal h As Double) As Double
+
+#Rem Function s_ph(ByVal p As Double, ByVal h As Double) As Double #50
 #Rem  Dim Ts As Double
 #Rem  Dim xs As Double
 #Rem  Dim s4V As Double
@@ -619,18 +625,21 @@ def vL_T(temperature):
 #Rem   s_ph = CVErr(xlErrValue)
 #Rem  End Select
 #Rem End Function
-#Rem Function s_pv(ByVal p As Double, ByVal v As Double) As Double
+
+#Rem Function s_pv(ByVal p As Double, ByVal v As Double) As Double #51
 #Rem Dim rho As Double
 #Rem Dim h As Double
 #Rem rho = 1 / v
 #Rem h = h_prho(p, rho)
 #Rem s_pv = s_ph(p, h)
 #Rem End Function
-#Rem 'Function s_Tv(ByVal T As Double, ByVal v As Double) As Double
+
+#Rem 'Function s_Tv(ByVal T As Double, ByVal v As Double) As Double #52
 #Rem 'Dim p As Double
 #Rem 'p = p_Tv(T, v)
 #Rem 's_Tv = s_pv(p, v)
 #Rem 'End Function
+
 #Rem '***********************************************************************************************************
 #Rem '*1.8 Specific internal energy (u)
 #Rem Function uV_p(ByVal p As Double) As Double
