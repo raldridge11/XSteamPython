@@ -426,6 +426,28 @@ def vL_T(temperature):
 #Rem  End Select
 #Rem End Function
 
+def v_pT(pressure, temperature):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    specificVolume = Constants._errorValue
+
+    region = Regions.region_pt(pressure, temperature)
+    if region is None or region == 4: return Constants._errorValue
+
+    if region == 1:
+        specificVolume = Region1.v1_pt(pressure, temperature)
+    elif region == 2:
+        specificVolume = Region2.v2_pt(pressure, temperature)
+    elif region == 3:
+        specificVolume = Region3.v3_ph(pressure, Region3.h3_pt(pressure, temperature))
+    elif region == 5:
+        specificVolume = Region5.v5_pt(pressure, temperature)
+
+    if englishUnits:
+        specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
+
+    return specificVolume
+
 #Rem Function v_ph(ByVal p As Double, ByVal h As Double) As Double #36
 #Rem  Dim xs As Double
 #Rem  Dim v4V As Double
