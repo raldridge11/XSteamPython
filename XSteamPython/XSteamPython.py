@@ -284,20 +284,23 @@ def h_ps(pressure, entropy):
     else:
         return enthalpy
 
-#Rem Function h_px(ByVal p As Double, ByVal x As Double) As Double
-#Rem  Dim hL As Double
-#Rem  Dim hV As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  x = toSIunit_x(x)
-#Rem  If x > 1 Or x < 0 Or p >= 22.064 Then
-#Rem    h_px = CVErr(xlErrValue)
-#Rem    Exit Function
-#Rem  End If
-#Rem  hL = h4L_p(p)
-#Rem  hV = h4V_p(p)
-#Rem  h_px = fromSIunit_h(hL + x * (hV - hL))
-#Rem End Function
+def h_px(pressure, quality):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+
+    if quality > 1.0 or quality < 0.0 or pressure >= 22.064:
+        return Constants._errorValue
+
+    liquidEnthalpy = Region4.h4_p(pressure, phase='liq')
+    vaporEnthalpy = Region4.h4_p(pressure, phase='vap')
+
+    enthalpy = liquidEnthalpy + quality*(vaporEnthalpy - liquidEnthalpy)
+    if enthalpy == 0.0:
+        return Constants._errorValue
+    if englishUnits:
+        enthalpy = Convert.fromSIUnit(enthalpy, 'enthalpy')
+
+    return enthalpy
+
 #Rem Function h_Tx(ByVal T As Double, ByVal x As Double) As Double
 #Rem  Dim hL As Double
 #Rem  Dim hV As Double
@@ -313,6 +316,7 @@ def h_ps(pressure, entropy):
 #Rem  hV = h4V_p(p)
 #Rem  h_Tx = fromSIunit_h(hL + x * (hV - hL))
 #Rem End Function
+
 #Rem Function h_prho(ByVal p As Double, ByVal rho As Double) As Double
 #Rem   Dim hL, hV, vL, vV, x As Double
 #Rem   p = p / 100
