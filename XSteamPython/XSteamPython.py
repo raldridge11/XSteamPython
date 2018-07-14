@@ -406,26 +406,6 @@ def vL_T(temperature):
         specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
     return specificVolume
 
-#Rem Function v_pT(ByVal p As Double, ByVal T As Double) As Double #35
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  T = toSIunit_T(T)
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 1
-#Rem    v_pT = fromSIunit_v(v1_pT(p, T))
-#Rem  Case 2
-#Rem    v_pT = fromSIunit_v(v2_pT(p, T))
-#Rem  Case 3
-#Rem    v_pT = fromSIunit_v(v3_ph(p, h3_pT(p, T)))
-#Rem  Case 4
-#Rem    v_pT = CVErr(xlErrValue)
-#Rem  Case 5
-#Rem    v_pT = fromSIunit_v(v5_pT(p, T))
-#Rem  Case Else
-#Rem   v_pT = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
-
 def v_pT(pressure, temperature):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
