@@ -118,6 +118,20 @@ class Test_Enthalpy(unittest.TestCase):
     def test_h_px_error(self):
         self.assertAlmostEqual(stm.h_px(1.0, -1.0), 2015.0, places=2)
 
+    def test_h_Tx(self):
+        quality, temperature, enthalpyCompare = Data.getTwoDimensionalTestData('SIUnits_h_Tx.npz')
+        enthalpy = Data.calculatePropertyFromTwoDimensions(stm.h_Tx, temperature, quality)
+        np.testing.assert_array_almost_equal(enthalpy.T, enthalpyCompare, decimal=2)
+
+    def test_h_Tx_English(self):
+        stm.englishUnits = True
+        quality, temperature, enthalpyCompare = Data.getTwoDimensionalTestData('EnglishUnits_h_Tx.npz')
+        enthalpy = Data.calculatePropertyFromTwoDimensions(stm.h_Tx, temperature, quality)
+        np.testing.assert_array_almost_equal(enthalpy.T, enthalpyCompare, decimal=2)
+
+    def test_h_Tx_error(self):
+        self.assertAlmostEqual(stm.h_Tx(1.0, -1.0), 2015.0, places=2)
+
 
 
 if __name__ == '__main__':

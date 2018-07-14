@@ -301,21 +301,15 @@ def h_px(pressure, quality):
 
     return enthalpy
 
-#Rem Function h_Tx(ByVal T As Double, ByVal x As Double) As Double
-#Rem  Dim hL As Double
-#Rem  Dim hV As Double
-#Rem  Dim p As Double
-#Rem  T = toSIunit_T(T)
-#Rem  x = toSIunit_x(x)
-#Rem  If x > 1 Or x < 0 Or T >= 647.096 Then
-#Rem    h_Tx = CVErr(xlErrValue)
-#Rem    Exit Function
-#Rem  End If
-#Rem  p = p4_T(T)
-#Rem  hL = h4L_p(p)
-#Rem  hV = h4V_p(p)
-#Rem  h_Tx = fromSIunit_h(hL + x * (hV - hL))
-#Rem End Function
+def h_Tx(temperature, quality):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    if quality > 1.0 or quality < 0.0 or temperature >= 647.096:
+        return Constants._errorValue
+
+    pressure = Convert.fromSIUnit(Region4.p4_t(temperature), 'pressure', englishUnits=englishUnits)
+
+    return h_px(pressure, quality)
 
 #Rem Function h_prho(ByVal p As Double, ByVal rho As Double) As Double
 #Rem   Dim hL, hV, vL, vV, x As Double
