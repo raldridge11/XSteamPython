@@ -62,5 +62,19 @@ class Test_SpecificVolume(unittest.TestCase):
     def test_vV_T_error(self):
         self.assertAlmostEqual(stm.vV_T(-1.0), 2015.0, places=2)
 
+    def test_vL_T(self):
+        temperature, specificVolumeCompare = Data.getOneDimensionalTestData('SIUnits_vL_T.npz')
+        specificVolume = Data.calculatePropertyFromOneDimension(stm.vL_T, temperature)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+
+    def test_vL_T_English(self):
+        stm.englishUnits = True
+        temperature, specificVolumeCompare = Data.getOneDimensionalTestData('EnglishUnits_vL_T.npz')
+        specificVolume = Data.calculatePropertyFromOneDimension(stm.vL_T, temperature)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+
+    def test_vL_T_error(self):
+        self.assertAlmostEqual(stm.vL_T(-1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()

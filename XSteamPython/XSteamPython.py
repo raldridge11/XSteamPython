@@ -393,18 +393,19 @@ def vV_T(temperature):
         specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
     return specificVolume
 
-#Rem Function vL_T(ByVal T As Double) As Double
-#Rem  T = toSIunit_T(T)
-#Rem  If T > 273.15 And T < 647.096 Then
-#Rem   If T <= 623.15 Then
-#Rem    vL_T = fromSIunit_v(v1_pT(p4_T(T), T))
-#Rem   Else
-#Rem    vL_T = fromSIunit_v(v3_ph(p4_T(T), h4L_p(p4_T(T))))
-#Rem   End If
-#Rem  Else
-#Rem    vL_T = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def vL_T(temperature):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    specificVolume = Constants._errorValue
+    if temperature <= 273.15 or temperature >= 647.096:
+        return Constants._errorValue
+    if temperature <= 623.15:
+        specificVolume = Region1.v1_pt(Region4.p4_t(temperature), temperature)
+    else:
+        specificVolume = Region3.v3_ph(Region4.p4_t(temperature), Region4.h4_p(Region4.p4_t(temperature), phase='liq'))
+    if englishUnits:
+        specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
+    return specificVolume
+
 #Rem Function v_pT(ByVal p As Double, ByVal T As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
