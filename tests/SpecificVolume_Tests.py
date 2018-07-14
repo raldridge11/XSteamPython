@@ -29,10 +29,24 @@ class Test_SpecificVolume(unittest.TestCase):
         stm.englishUnits = True
         pressure, specificVolumeCompare = Data.getOneDimensionalTestData('EnglishUnits_vV_p.npz')
         specificVolume = Data.calculatePropertyFromOneDimension(stm.vV_p, pressure)
-        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=1)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
 
     def test_vV_p_error(self):
         self.assertAlmostEqual(stm.vV_p(-1.0), 2015.0, places=2)
+
+    def test_vL_p(self):
+        pressure, specificVolumeCompare = Data.getOneDimensionalTestData('SIUnits_vL_p.npz')
+        specificVolume = Data.calculatePropertyFromOneDimension(stm.vL_p, pressure)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+
+    def test_vL_p_English(self):
+        stm.englishUnits = True
+        pressure, specificVolumeCompare = Data.getOneDimensionalTestData('EnglishUnits_vL_p.npz')
+        specificVolume = Data.calculatePropertyFromOneDimension(stm.vL_p, pressure)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+
+    def test_vL_p_error(self):
+        self.assertAlmostEqual(stm.vL_p(-1.0), 2015.0, places=2)
 
 if __name__ == '__main__':
     unittest.main()

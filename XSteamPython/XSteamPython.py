@@ -365,19 +365,21 @@ def vV_p(pressure):
         specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
     return specificVolume
 
-#Rem Function vL_p(ByVal p As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem   If p < 16.529 Then
-#Rem    vL_p = fromSIunit_v(v1_pT(p, T4_p(p)))
-#Rem   Else
-#Rem    vL_p = fromSIunit_v(v3_ph(p, h4L_p(p)))
-#Rem   End If
-#Rem  Else
-#Rem    vL_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def vL_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    specificVolume = Constants._errorValue
+    if pressure <= 0.000611657 or pressure >= 22.06395:
+        return Constants._errorValue
+
+    if pressure < 16.529:
+        specificVolume = Region1.v1_pt(pressure, Region4.t4_p(pressure))
+    else:
+        specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, phase='liq'))
+
+    if englishUnits:
+        specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
+    return specificVolume
+
 #Rem Function vV_T(ByVal T As Double) As Double
 #Rem  T = toSIunit_T(T)
 #Rem  If T > 273.15 And T < 647.096 Then
