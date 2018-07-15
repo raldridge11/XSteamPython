@@ -14,7 +14,7 @@ import numpy as np
 import Data
 import XSteamPython as stm
 
-class Test_Pressure(unittest.TestCase):
+class Test_P_hs(unittest.TestCase):
 
     def tearDown(self):
         stm.englishUnits = False
