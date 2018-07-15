@@ -15,7 +15,7 @@ import numpy as np
 import Data
 import XSteamPython as stm
 
-class Test_Enthalpy(unittest.TestCase):
+class Test_hV_p(unittest.TestCase):
 
     def tearDown(self):
         stm.englishUnits = False
@@ -34,6 +34,11 @@ class Test_Enthalpy(unittest.TestCase):
     def test_hV_p_error(self):
         self.assertAlmostEqual(stm.hV_p(-1.0), 2015.0, places=1)
 
+class Test_hL_p(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
     def test_hL_p(self):
         pressure, enthalpyCompare = Data.getOneDimensionalTestData('SIUnits_hL_p.npz')
         enthalpy = Data.calculatePropertyFromOneDimension(stm.hL_p, pressure)
@@ -47,6 +52,11 @@ class Test_Enthalpy(unittest.TestCase):
 
     def test_hL_p_error(self):
         self.assertAlmostEqual(stm.hL_p(-1.0), 2015.0, places=1)
+
+class Test_hV_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
 
     def test_hV_T(self):
         temperature, enthalpyCompare = Data.getOneDimensionalTestData('SIUnits_hV_T.npz')
@@ -62,6 +72,11 @@ class Test_Enthalpy(unittest.TestCase):
     def test_hV_T_error(self):
         self.assertAlmostEqual(stm.hV_T(-1.0), 2015.0, places=1)
 
+class Test_hL_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
     def test_hL_T(self):
         temperature, enthalpyCompare = Data.getOneDimensionalTestData('SIUnits_hL_T.npz')
         enthalpy = Data.calculatePropertyFromOneDimension(stm.hL_T, temperature)
@@ -75,6 +90,11 @@ class Test_Enthalpy(unittest.TestCase):
 
     def test_hL_T_error(self):
         self.assertAlmostEqual(stm.hL_T(-1.0), 2015.0, places=1)
+
+class Test_h_pT(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
 
     def test_h_pT(self):
         temperature, pressure, enthalpyCompare = Data.getTwoDimensionalTestData('SIUnits_h_pT.npz')
@@ -90,6 +110,11 @@ class Test_Enthalpy(unittest.TestCase):
     def test_h_pT_error(self):
         self.assertAlmostEqual(stm.h_pT(1.0, -1.0), 2015.0, places=2)
 
+class Test_h_ps(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
     def test_h_ps(self):
         entropy, pressure, enthalpyCompare = Data.getTwoDimensionalTestData('SIUnits_h_ps.npz')
         enthalpy = Data.calculatePropertyFromTwoDimensions(stm.h_ps, pressure, entropy)
@@ -103,6 +128,11 @@ class Test_Enthalpy(unittest.TestCase):
 
     def test_h_ps_error(self):
         self.assertAlmostEqual(stm.h_ps(1.0, -1.0), 2015.0, places=2)
+
+class Test_h_px(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
 
     def test_h_px(self):
         quality, pressure, enthalpyCompare = Data.getTwoDimensionalTestData('SIUnits_h_px.npz')
@@ -118,6 +148,11 @@ class Test_Enthalpy(unittest.TestCase):
     def test_h_px_error(self):
         self.assertAlmostEqual(stm.h_px(1.0, -1.0), 2015.0, places=2)
 
+class Test_h_Tx(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
     def test_h_Tx(self):
         quality, temperature, enthalpyCompare = Data.getTwoDimensionalTestData('SIUnits_h_Tx.npz')
         enthalpy = Data.calculatePropertyFromTwoDimensions(stm.h_Tx, temperature, quality)
@@ -131,8 +166,6 @@ class Test_Enthalpy(unittest.TestCase):
 
     def test_h_Tx_error(self):
         self.assertAlmostEqual(stm.h_Tx(1.0, -1.0), 2015.0, places=2)
-
-
 
 if __name__ == '__main__':
     unittest.main()
