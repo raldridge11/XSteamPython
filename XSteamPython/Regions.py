@@ -7,6 +7,7 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
+import Constants
 import Region1
 import Region2
 import Region3
@@ -63,10 +64,12 @@ def region_ph(pressure, enthalpy):
         elif enthalpy < Region2.h2_pt(pressure, tsatt):
 
             return 4
+        elif enthalpy < 4000:
+            return 2
         elif enthalpy <= Region2.h2_pt(pressure, 1073.15):
 
             return 2
-        elif enthalpy < Region5.h5_pt(pressure, 2273.15):
+        elif enthalpy < Region5.h5_pt(pressure, 2273.15) and pressure <= 10.0:
 
             return 5
     else:

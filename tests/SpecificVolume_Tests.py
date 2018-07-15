@@ -90,5 +90,19 @@ class Test_SpecificVolume(unittest.TestCase):
     def test_v_pT_error(self):
         self.assertAlmostEqual(stm.v_pT(-1.0, -1.0), 2015.0, places=2)
 
+    def test_v_ph(self):
+        pressure, enthalpy, specificVolumeCompare = Data.getTwoDimensionalTestData('SIUnits_v_ph.npz')
+        specificVolume = Data.calculatePropertyFromTwoDimensions(stm.v_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+
+    def test_v_ph_English(self):
+        stm.englishUnits = True
+        pressure, enthalpy, specificVolumeCompare = Data.getTwoDimensionalTestData('EnglishUnits_v_ph.npz')
+        specificVolume = Data.calculatePropertyFromTwoDimensions(stm.v_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+
+    def test_v_ph_error(self):
+        self.assertAlmostEqual(stm.v_ph(-1.0, -1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()

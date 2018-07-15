@@ -8,6 +8,7 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 import math
+import Constants
 
 import numpy as np
 import scipy
@@ -80,7 +81,7 @@ def h4_s(entropy):
 
 def h4_p(pressure, phase):
     pressureMin, pressureMax = 0.000611657, 22.06395
-    enthalpy = 0.0
+    enthalpy = Constants._errorValue
     if phase not in ['liq', 'vap']:
         raise AttributeError('phase argument needs to be \'liq\' or \'vap\'')
 

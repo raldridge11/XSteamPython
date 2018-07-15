@@ -296,7 +296,7 @@ def h_px(pressure, quality):
     enthalpy = liquidEnthalpy + quality*(vaporEnthalpy - liquidEnthalpy)
     if enthalpy == 0.0:
         return Constants._errorValue
-    if englishUnits:
+    if englishUnits and enthalpy != Constants._errorValue:
         enthalpy = Convert.fromSIUnit(enthalpy, 'enthalpy')
 
     return enthalpy
@@ -428,36 +428,37 @@ def v_pT(pressure, temperature):
 
     return specificVolume
 
-#Rem Function v_ph(ByVal p As Double, ByVal h As Double) As Double #36
-#Rem  Dim xs As Double
-#Rem  Dim v4V As Double
-#Rem  Dim v4L As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  h = toSIunit_h(h)
-#Rem  Select Case region_ph(p, h)
-#Rem  Case 1
-#Rem    v_ph = fromSIunit_v(v1_pT(p, T1_ph(p, h)))
-#Rem  Case 2
-#Rem    v_ph = fromSIunit_v(v2_pT(p, T2_ph(p, h)))
-#Rem  Case 3
-#Rem    v_ph = fromSIunit_v(v3_ph(p, h))
-#Rem  Case 4
-#Rem    xs = x4_ph(p, h)
-#Rem    If p < 16.529 Then
-#Rem      v4V = v2_pT(p, T4_p(p))
-#Rem      v4L = v1_pT(p, T4_p(p))
-#Rem    Else
-#Rem      v4V = v3_ph(p, h4V_p(p))
-#Rem      v4L = v3_ph(p, h4L_p(p))
-#Rem     End If
-#Rem     v_ph = fromSIunit_v((xs * v4V + (1 - xs) * v4L))
-#Rem  Case 5
-#Rem    v_ph = fromSIunit_v(v5_pT(p, T5_ph(p, h)))
-#Rem  Case Else
-#Rem   v_ph = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def v_ph(pressure, enthalpy):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if englishUnits:
+        enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
+    specificVolume = Constants._errorValue
+    region = Regions.region_ph(pressure, enthalpy)
+
+    if region == 1:
+        specificVolume = Region1.v1_pt(pressure, Region1.t1_ph(pressure, enthalpy))
+    elif region == 2:
+        specificVolume = Region2.v2_pt(pressure, Region2.t2_ph(pressure, enthalpy))
+    elif region == 3:
+        specificVolume = Region3.v3_ph(pressure, enthalpy)
+    elif region == 4:
+        quality = Region4.x4_ph(pressure, enthalpy)
+        vaporSpecificVolume = 0.0
+        liquidSpecificVolume = 0.0
+        if pressure < 16.529:
+            vaporSpecificVolume = Region2.v2_pt(pressure, Region4.t4_p(pressure))
+            liquidSpecificVolume = Region1.v1_pt(pressure, Region4.t4_p(pressure))
+        else:
+            vaporSpecificVolume = Region3.v3_ph(pressure,Region4.h4_p(pressure, phase='vap'))
+            liquidSpecificVolume = Region3.v3_ph(pressure,Region4.h4_p(pressure, phase='liq'))
+        specificVolume = quality*vaporSpecificVolume + (1.0 - quality)*liquidSpecificVolume
+    elif region == 5:
+        specificVolume = Region5.v5_pt(pressure, Region5.t5_ph(pressure, enthalpy))
+
+    if englishUnits and specificVolume != Constants._errorValue:
+        specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
+
+    return specificVolume
 
 #Rem Function v_ps(ByVal p As Double, ByVal s As Double) As Double #37
 #Rem  Dim xs As Double
