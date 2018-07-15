@@ -15,7 +15,7 @@ import numpy as np
 import Data
 import XSteamPython as stm
 
-class Test_SpecificVolume(unittest.TestCase):
+class Test_vV_p(unittest.TestCase):
 
     def tearDown(self):
         stm.englishUnits = False
@@ -34,6 +34,11 @@ class Test_SpecificVolume(unittest.TestCase):
     def test_vV_p_error(self):
         self.assertAlmostEqual(stm.vV_p(-1.0), 2015.0, places=2)
 
+class Test_vL_p(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
     def test_vL_p(self):
         pressure, specificVolumeCompare = Data.getOneDimensionalTestData('SIUnits_vL_p.npz')
         specificVolume = Data.calculatePropertyFromOneDimension(stm.vL_p, pressure)
@@ -47,6 +52,11 @@ class Test_SpecificVolume(unittest.TestCase):
 
     def test_vL_p_error(self):
         self.assertAlmostEqual(stm.vL_p(-1.0), 2015.0, places=2)
+
+class Test_vV_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
 
     def test_vV_T(self):
         temperature, specificVolumeCompare = Data.getOneDimensionalTestData('SIUnits_vV_T.npz')
@@ -62,6 +72,11 @@ class Test_SpecificVolume(unittest.TestCase):
     def test_vV_T_error(self):
         self.assertAlmostEqual(stm.vV_T(-1.0), 2015.0, places=2)
 
+class Test_vL_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
     def test_vL_T(self):
         temperature, specificVolumeCompare = Data.getOneDimensionalTestData('SIUnits_vL_T.npz')
         specificVolume = Data.calculatePropertyFromOneDimension(stm.vL_T, temperature)
@@ -76,6 +91,11 @@ class Test_SpecificVolume(unittest.TestCase):
     def test_vL_T_error(self):
         self.assertAlmostEqual(stm.vL_T(-1.0), 2015.0, places=2)
 
+class Test_v_pT(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
     def test_v_pT(self):
         pressure, temperature, specificVolumeCompare = Data.getTwoDimensionalTestData('SIUnits_v_pT.npz')
         specificVolume = Data.calculatePropertyFromTwoDimensions(stm.v_pT, pressure, temperature)
@@ -89,6 +109,11 @@ class Test_SpecificVolume(unittest.TestCase):
 
     def test_v_pT_error(self):
         self.assertAlmostEqual(stm.v_pT(-1.0, -1.0), 2015.0, places=2)
+
+class Test_v_ph(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
 
     def test_v_ph(self):
         pressure, enthalpy, specificVolumeCompare = Data.getTwoDimensionalTestData('SIUnits_v_ph.npz')
