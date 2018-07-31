@@ -495,14 +495,14 @@ def v_ps(pressure, entropy):
 def rhoV_p(pressure):
     return 1.0/vV_p(pressure)
 
-#Rem Function rhoL_p(ByVal p As Double) As Double #39
-#Rem   rhoL_p = 1 / vL_p(p)
-#Rem End Function
+def rhoL_p(pressure):
+    return 1.0/vL_p(pressure)
 #Rem Function rhoL_T(ByVal T As Double) As Double #40
 #Rem   rhoL_T = 1 / vL_T(T)
 #Rem End Function
-#Rem Function rhoV_T(ByVal T As Double) As Double #41
-#Rem   rhoV_T = 1 / vV_T(T)
+
+def rhoV_T(temperature):
+    return 1.0/vV_T(temperature)
 #Rem End Function
 #Rem Function rho_pT(ByVal p As Double, ByVal T As Double) As Double #42
 #Rem   rho_pT = 1 / v_pT(p, T)
