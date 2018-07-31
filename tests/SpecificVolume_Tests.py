@@ -8,7 +8,6 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 import unittest
-import pprint
 
 import numpy as np
 
@@ -128,6 +127,25 @@ class Test_v_ph(unittest.TestCase):
 
     def test_v_ph_error(self):
         self.assertAlmostEqual(stm.v_ph(-1.0, -1.0), 2015.0, places=2)
+
+class Test_v_ps(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_v_ps(self):
+        pressure, entropy, specificVolumeCompare = Data.getTwoDimensionalTestData('SIUnits_v_ps.npz')
+        specificVolume = Data.calculatePropertyFromTwoDimensions(stm.v_ps, pressure, entropy)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+
+    def test_v_ps_English(self):
+        stm.englishUnits = True
+        pressure, entropy, specificVolumeCompare = Data.getTwoDimensionalTestData('EnglishUnits_v_ps.npz')
+        specificVolume = Data.calculatePropertyFromTwoDimensions(stm.v_ps, pressure, entropy)
+        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+
+    def test_v_ps_error(self):
+        self.assertAlmostEqual(stm.v_ps(-1.0, -1.0), 2015.0, places=2)
 
 if __name__ == '__main__':
     unittest.main()
