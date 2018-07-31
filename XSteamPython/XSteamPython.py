@@ -507,9 +507,8 @@ def rhoV_T(temperature):
 def rho_pT(pressure, temperature):
     return 1.0/v_pT(pressure, temperature)
 
-#Rem Function rho_ph(ByVal p As Double, ByVal h As Double) As Double #43
-#Rem   rho_ph = 1 / v_ph(p, h)
-#Rem End Function
+def rho_ph(pressure, enthalpy):
+    return 1.0/v_ph(pressure, enthalpy)
 #Rem Function rho_ps(ByVal p As Double, ByVal s As Double) As Double #44
 #Rem   rho_ps = 1 / v_ps(p, s)
 #Rem End Function

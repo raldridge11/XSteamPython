@@ -109,24 +109,24 @@ class Test_rho_pT(unittest.TestCase):
     def test_rho_pT_error(self):
         self.assertAlmostEqual(stm.rho_pT(-1.0, -1.0), 1.0/2015.0, places=2)
 
-#class Test_rho_ph(unittest.TestCase):
+class Test_rho_ph(unittest.TestCase):
 
-#    def tearDown(self):
-#        stm.englishUnits = False
+    def tearDown(self):
+        stm.englishUnits = False
 
-#    def test_v_ph(self):
-#        pressure, enthalpy, specificVolumeCompare = Data.getTwoDimensionalTestData('SIUnits_v_ph.npz')
-#        specificVolume = Data.calculatePropertyFromTwoDimensions(stm.v_ph, pressure, enthalpy)
-#        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+    def test_rho_ph(self):
+        pressure, enthalpy, specificVolumeCompare = Data.getTwoDimensionalTestData('SIUnits_v_ph.npz')
+        density = Data.calculatePropertyFromTwoDimensions(stm.rho_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(density, 1.0/specificVolumeCompare, decimal=2)
 
-#    def test_v_ph_English(self):
-#        stm.englishUnits = True
-#        pressure, enthalpy, specificVolumeCompare = Data.getTwoDimensionalTestData('EnglishUnits_v_ph.npz')
-#        specificVolume = Data.calculatePropertyFromTwoDimensions(stm.v_ph, pressure, enthalpy)
-#        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+    def test_rho_ph_English(self):
+        stm.englishUnits = True
+        pressure, enthalpy, specificVolumeCompare = Data.getTwoDimensionalTestData('EnglishUnits_v_ph.npz')
+        density = Data.calculatePropertyFromTwoDimensions(stm.rho_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(density, 1.0/specificVolumeCompare, decimal=2)
 
-#    def test_v_ph_error(self):
-#        self.assertAlmostEqual(stm.v_ph(-1.0, -1.0), 2015.0, places=2)
+    def test_rho_ph_error(self):
+        self.assertAlmostEqual(stm.rho_ph(-1.0, -1.0), 1.0/2015.0, places=2)
 
 #class Test_rho_ps(unittest.TestCase):
 
