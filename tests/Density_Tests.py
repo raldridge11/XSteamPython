@@ -71,24 +71,24 @@ class Test_rhoV_T(unittest.TestCase):
     def test_rhoV_T_error(self):
         self.assertAlmostEqual(stm.rhoV_T(-1.0), 1.0/2015.0, places=2)
 
-#class Test_rhoL_T(unittest.TestCase):
+class Test_rhoL_T(unittest.TestCase):
 
-#    def tearDown(self):
-#        stm.englishUnits = False
+    def tearDown(self):
+        stm.englishUnits = False
 
-#    def test_vL_T(self):
-#        temperature, specificVolumeCompare = Data.getOneDimensionalTestData('SIUnits_vL_T.npz')
-#        specificVolume = Data.calculatePropertyFromOneDimension(stm.vL_T, temperature)
-#        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+    def test_rhoL_T(self):
+        temperature, specificVolumeCompare = Data.getOneDimensionalTestData('SIUnits_vL_T.npz')
+        density = Data.calculatePropertyFromOneDimension(stm.rhoL_T, temperature)
+        np.testing.assert_array_almost_equal(density, 1.0/specificVolumeCompare, decimal=2)
 
-#    def test_vL_T_English(self):
-#        stm.englishUnits = True
-#        temperature, specificVolumeCompare = Data.getOneDimensionalTestData('EnglishUnits_vL_T.npz')
-#        specificVolume = Data.calculatePropertyFromOneDimension(stm.vL_T, temperature)
-#        np.testing.assert_array_almost_equal(specificVolume, specificVolumeCompare, decimal=2)
+    def test_rhoL_T_English(self):
+        stm.englishUnits = True
+        temperature, specificVolumeCompare = Data.getOneDimensionalTestData('EnglishUnits_vL_T.npz')
+        density = Data.calculatePropertyFromOneDimension(stm.rhoL_T, temperature)
+        np.testing.assert_array_almost_equal(density, 1.0/specificVolumeCompare, decimal=2)
 
-#    def test_vL_T_error(self):
-#        self.assertAlmostEqual(stm.vL_T(-1.0), 2015.0, places=2)
+    def test_rhoL_T_error(self):
+        self.assertAlmostEqual(stm.rhoL_T(-1.0), 1.0/2015.0, places=2)
 
 #class Test_rho_pT(unittest.TestCase):
 

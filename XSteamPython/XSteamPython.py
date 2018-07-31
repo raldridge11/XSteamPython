@@ -497,9 +497,9 @@ def rhoV_p(pressure):
 
 def rhoL_p(pressure):
     return 1.0/vL_p(pressure)
-#Rem Function rhoL_T(ByVal T As Double) As Double #40
-#Rem   rhoL_T = 1 / vL_T(T)
-#Rem End Function
+
+def rhoL_T(temperature):
+    return 1.0/vL_T(temperature)
 
 def rhoV_T(temperature):
     return 1.0/vV_T(temperature)
