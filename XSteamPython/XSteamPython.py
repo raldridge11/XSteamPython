@@ -491,13 +491,10 @@ def v_ps(pressure, entropy):
         specificVolume = Convert.fromSIUnit(specificVolume, 'specific volume')
 
     return specificVolume
-#Rem
-#Rem '***********************************************************************************************************
-#Rem '*1.6 Density (rho)
-#Rem ' Density is calculated as 1/v
-#Rem Function rhoV_p(ByVal p As Double) As Double #38
-#Rem   rhoV_p = 1 / vV_p(p)
-#Rem End Function
+
+def rhoV_p(pressure):
+    return 1.0/vV_p(pressure)
+
 #Rem Function rhoL_p(ByVal p As Double) As Double #39
 #Rem   rhoL_p = 1 / vL_p(p)
 #Rem End Function
