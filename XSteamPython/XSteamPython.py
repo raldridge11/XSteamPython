@@ -530,19 +530,22 @@ def sV_p(pressure):
     else:
         return Constants._errorValue
 
-#Rem Function sL_p(ByVal p As Double) As Double #46
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem   If p < 16.529 Then
-#Rem    sL_p = fromSIunit_s(s1_pT(p, T4_p(p)))
-#Rem   Else
-#Rem    sL_p = fromSIunit_s(s3_rhoT(1 / (v3_ph(p, h4L_p(p))), T4_p(p)))
-#Rem   End If
-#Rem  Else
-#Rem    sL_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def sL_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    entropy = Constants._errorValue
+
+    if pressure > 0.000611657 and pressure < 22.06395:
+        if pressure < 16.529:
+            entropy = Region1.s1_pt(pressure, Region4.t4_p(pressure))
+        else:
+            specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'liq'))
+            tsatt = Region4.t4_p(pressure)
+            entropy = Region3.s3_rhot(1.0/specificVolume, tsatt)
+        if englishUnits:
+            entropy = Convert.fromSIUnit(entropy, 'entropy')
+        return entropy
+    else:
+        return Constants._errorValue
 
 #Rem Function sV_T(ByVal T As Double) As Double #47
 #Rem  T = toSIunit_T(T)
