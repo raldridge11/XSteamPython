@@ -583,25 +583,28 @@ def sL_T(temperature):
     else:
         return Constants._errorValue
 
-#Rem Function s_pT(ByVal p As Double, ByVal T As Double) As Double #49
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  T = toSIunit_T(T)
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 1
-#Rem    s_pT = fromSIunit_s(s1_pT(p, T))
-#Rem  Case 2
-#Rem    s_pT = fromSIunit_s(s2_pT(p, T))
-#Rem  Case 3
-#Rem    s_pT = fromSIunit_s(s3_rhoT(1 / v3_ph(p, h3_pT(p, T)), T))
-#Rem  Case 4
-#Rem    s_pT = CVErr(xlErrValue)
-#Rem  Case 5
-#Rem    s_pT = fromSIunit_s(s5_pT(p, T))
-#Rem  Case Else
-#Rem   s_pT = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def s_pT(pressure, temperature):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    region = Regions.region_pt(pressure, temperature)
+    if region is None or region == 4:
+        return Constants._errorValue
+
+    entropy = Constants._errorValue
+    if region == 1:
+        entropy = Region1.s1_pt(pressure, temperature)
+    elif region == 2:
+        entropy = Region2.s2_pt(pressure, temperature)
+    elif region == 3:
+        specificVolume = Region3.v3_ph(pressure, Region3.h3_pt(pressure, temperature))
+        entropy = Region3.s3_rhot(1.0/specificVolume, temperature)
+    elif region == 5:
+        entropy = Region5.s5_pt(pressure, temperature)
+
+    if englishUnits:
+        entropy = Convert.fromSIUnit(entropy, 'entropy')
+    return entropy
 
 #Rem Function s_ph(ByVal p As Double, ByVal h As Double) As Double #50
 #Rem  Dim Ts As Double
