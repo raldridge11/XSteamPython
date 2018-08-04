@@ -71,5 +71,24 @@ class Test_uV_T(unittest.TestCase):
     def test_uV_T_error(self):
         self.assertAlmostEqual(stm.uV_T(-1.0), 2015.0, places=1)
 
+class Test_uL_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_uL_T(self):
+        temperature, energyCompare = Data.getOneDimensionalTestData('SIUnits_uL_T.npz')
+        energy = Data.calculatePropertyFromOneDimension(stm.uL_T, temperature)
+        np.testing.assert_array_almost_equal(energy, energyCompare, decimal=2)
+
+    def test_uL_T_English(self):
+        stm.englishUnits = True
+        temperature, energyCompare = Data.getOneDimensionalTestData('EnglishUnits_uL_T.npz')
+        energy = Data.calculatePropertyFromOneDimension(stm.uL_T, temperature)
+        np.testing.assert_array_almost_equal(energy, energyCompare, decimal=2)
+
+    def test_uL_T_error(self):
+        self.assertAlmostEqual(stm.uL_T(-1.0), 2015.0, places=1)
+
 if __name__ == '__main__':
     unittest.main()

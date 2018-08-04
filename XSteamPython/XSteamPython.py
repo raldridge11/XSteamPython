@@ -706,18 +706,23 @@ def uV_T(temperature):
     else:
         return Constants._errorValue
 
-#Rem Function uL_T(ByVal T As Double) As Double
-#Rem  T = toSIunit_T(T)
-#Rem  If T > 273.15 And T < 647.096 Then
-#Rem   If T <= 623.15 Then
-#Rem    uL_T = fromSIunit_u(u1_pT(p4_T(T), T))
-#Rem   Else
-#Rem    uL_T = fromSIunit_u(u3_rhoT(1 / (v3_ph(p4_T(T), h4L_p(p4_T(T)))), T))
-#Rem   End If
-#Rem  Else
-#Rem    uL_T = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def uL_T(temperature):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    if temperature > 273.15 and temperature < 647.096:
+        internalEnergy = Constants._errorValue
+        psatt = Region4.p4_t(temperature)
+        if temperature <= 623.15:
+            internalEnergy = Region1.u1_pt(psatt, temperature)
+        else:
+            specificVolume = Region3.v3_ph(psatt, Region4.h4_p(psatt, 'liq'))
+            internalEnergy = Region3.u3_rhot(1.0/specificVolume, temperature)
+        if englishUnits:
+            internalEnergy = Convert.fromSIUnit(internalEnergy, 'enthalpy')
+        return internalEnergy
+    else:
+        return Constants._errorValue
+
 #Rem Function u_pT(ByVal p As Double, ByVal T As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
