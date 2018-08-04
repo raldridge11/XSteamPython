@@ -71,5 +71,24 @@ class Test_sV_T(unittest.TestCase):
     def test_sV_T_error(self):
         self.assertAlmostEqual(stm.sV_T(-1.0), 2015.0, places=1)
 
+class Test_sL_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_sL_T(self):
+        pressure, entropyCompare = Data.getOneDimensionalTestData('SIUnits_sL_T.npz')
+        entropy = Data.calculatePropertyFromOneDimension(stm.sL_T, pressure)
+        np.testing.assert_array_almost_equal(entropy, entropyCompare, decimal=2)
+
+    def test_sL_T_English(self):
+        stm.englishUnits = True
+        pressure, entropyCompare = Data.getOneDimensionalTestData('EnglishUnits_sL_T.npz')
+        entropy = Data.calculatePropertyFromOneDimension(stm.sL_T, pressure)
+        np.testing.assert_array_almost_equal(entropy, entropyCompare, decimal=2)
+
+    def test_sL_T_error(self):
+        self.assertAlmostEqual(stm.sL_T(-1.0), 2015.0, places=1)
+
 if __name__ == '__main__':
     unittest.main()
