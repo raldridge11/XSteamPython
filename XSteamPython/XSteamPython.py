@@ -655,21 +655,23 @@ def s_ph(pressure, enthalpy):
 #Rem 's_Tv = s_pv(p, v)
 #Rem 'End Function
 
-#Rem '***********************************************************************************************************
-#Rem '*1.8 Specific internal energy (u)
-#Rem Function uV_p(ByVal p As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem   If p < 16.529 Then
-#Rem    uV_p = fromSIunit_u(u2_pT(p, T4_p(p)))
-#Rem   Else
-#Rem    uV_p = fromSIunit_u(u3_rhoT(1 / (v3_ph(p, h4V_p(p))), T4_p(p)))
-#Rem   End If
-#Rem  Else
-#Rem    uV_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def uV_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+
+    if pressure > 0.000611657 and pressure < 22.06395:
+        internalEnergy = Constants._errorValue
+        tsatt = Region4.t4_p(pressure)
+        if pressure < 16.529:
+            internalEnergy = Region2.u2_pt(pressure, tsatt)
+        else:
+            specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'vap'))
+            internalEnergy = Region3.u3_rhot(1.0/specificVolume, tsatt)
+        if englishUnits:
+            internalEnergy = Convert.fromSIUnit(internalEnergy, 'enthalpy')
+        return internalEnergy
+    else:
+        return Constants._errorValue
+
 #Rem Function uL_p(ByVal p As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)

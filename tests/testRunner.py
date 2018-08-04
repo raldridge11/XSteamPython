@@ -23,6 +23,7 @@ import Enthalpy_Tests
 import Entropy_Tests
 import Pressure_Tests
 import Psat_Tests
+import SpecificEnergy_Tests
 import SpecificVolume_Tests
 import Tsat_Tests
 import Temperature_Tests
@@ -52,6 +53,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(SpecificVolume_Tests))
     suite.addTest(loader.loadTestsFromModule(Density_Tests))
     suite.addTest(loader.loadTestsFromModule(Entropy_Tests))
+    suite.addTest(loader.loadTestsFromModule(SpecificEnergy_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)
