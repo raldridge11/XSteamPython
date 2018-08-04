@@ -90,5 +90,24 @@ class Test_uL_T(unittest.TestCase):
     def test_uL_T_error(self):
         self.assertAlmostEqual(stm.uL_T(-1.0), 2015.0, places=1)
 
+class Test_u_pT(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_u_pT(self):
+        pressure, temperature, energyCompare = Data.getTwoDimensionalTestData('SIUnits_u_pT.npz')
+        energy = Data.calculatePropertyFromTwoDimensions(stm.u_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(energy, energyCompare, decimal=2)
+
+    def test_u_pT_English(self):
+        stm.englishUnits = True
+        pressure, temperature, energyCompare = Data.getTwoDimensionalTestData('EnglishUnits_u_pT.npz')
+        energy = Data.calculatePropertyFromTwoDimensions(stm.u_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(energy, energyCompare, decimal=2)
+
+    def test_u_pT_error(self):
+        self.assertAlmostEqual(stm.u_pT(1.0, -1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()

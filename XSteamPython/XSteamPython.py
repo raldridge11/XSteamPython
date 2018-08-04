@@ -723,25 +723,30 @@ def uL_T(temperature):
     else:
         return Constants._errorValue
 
-#Rem Function u_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  T = toSIunit_T(T)
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 1
-#Rem    u_pT = fromSIunit_u(u1_pT(p, T))
-#Rem  Case 2
-#Rem    u_pT = fromSIunit_u(u2_pT(p, T))
-#Rem  Case 3
-#Rem    u_pT = fromSIunit_u(u3_rhoT(1 / v3_ph(p, h3_pT(p, T)), T))
-#Rem  Case 4
-#Rem    u_pT = CVErr(xlErrValue)
-#Rem  Case 5
-#Rem    u_pT = fromSIunit_u(u5_pT(p, T))
-#Rem  Case Else
-#Rem   u_pT = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def u_pT(pressure, temperature):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    region = Regions.region_pt(pressure, temperature)
+    if region is None or region == 4: return Constants._errorValue
+
+    internalEnergy = Constants._errorValue
+
+    if region == 1:
+        internalEnergy = Region1.u1_pt(pressure, temperature)
+    elif region == 2:
+        internalEnergy = Region2.u2_pt(pressure, temperature)
+    elif region == 3:
+        specificVolume = Region3.v3_ph(pressure, Region3.h3_pt(pressure, temperature))
+        internalEnergy = Region3.u3_rhot(1.0/specificVolume, temperature)
+    elif region == 5:
+        internalEnergy = Region5.u5_pt(pressure, temperature)
+
+    if englishUnits:
+        internalEnergy = Convert.fromSIUnit(internalEnergy, 'enthalpy')
+
+    return internalEnergy
+
 #Rem Function u_ph(ByVal p As Double, ByVal h As Double) As Double
 #Rem  Dim Ts As Double
 #Rem  Dim xs As Double
