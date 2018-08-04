@@ -20,6 +20,7 @@ import Regions_Tests
 
 import Density_Tests
 import Enthalpy_Tests
+import Entropy_Tests
 import Pressure_Tests
 import Psat_Tests
 import SpecificVolume_Tests
@@ -50,6 +51,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(Enthalpy_Tests))
     suite.addTest(loader.loadTestsFromModule(SpecificVolume_Tests))
     suite.addTest(loader.loadTestsFromModule(Density_Tests))
+    suite.addTest(loader.loadTestsFromModule(Entropy_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)
