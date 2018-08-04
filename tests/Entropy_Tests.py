@@ -109,5 +109,24 @@ class Test_s_pT(unittest.TestCase):
     def test_s_pT_error(self):
         self.assertAlmostEqual(stm.s_pT(1.0, -1.0), 2015.0, places=2)
 
+class Test_s_ph(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_s_ph(self):
+        pressure, enthalpy, entropyCompare = Data.getTwoDimensionalTestData('SIUnits_s_ph.npz')
+        entropy = Data.calculatePropertyFromTwoDimensions(stm.s_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(entropy, entropyCompare, decimal=2)
+
+    def test_s_ph_English(self):
+        stm.englishUnits = True
+        pressure, enthalpy, entropyCompare = Data.getTwoDimensionalTestData('EnglishUnits_s_ph.npz')
+        entropy = Data.calculatePropertyFromTwoDimensions(stm.s_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(entropy, entropyCompare, decimal=2)
+
+    def test_s_ph_error(self):
+        self.assertAlmostEqual(stm.s_ph(1.0, -1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()
