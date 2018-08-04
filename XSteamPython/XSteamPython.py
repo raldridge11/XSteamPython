@@ -547,18 +547,23 @@ def sL_p(pressure):
     else:
         return Constants._errorValue
 
-#Rem Function sV_T(ByVal T As Double) As Double #47
-#Rem  T = toSIunit_T(T)
-#Rem  If T > 273.15 And T < 647.096 Then
-#Rem   If T <= 623.15 Then
-#Rem    sV_T = fromSIunit_s(s2_pT(p4_T(T), T))
-#Rem   Else
-#Rem    sV_T = fromSIunit_s(s3_rhoT(1 / (v3_ph(p4_T(T), h4V_p(p4_T(T)))), T))
-#Rem   End If
-#Rem  Else
-#Rem    sV_T = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def sV_T(temperature):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    entropy = Constants._errorValue
+
+    if temperature > 273.15 and temperature < 647.096:
+        if temperature <= 623.15:
+            entropy = Region2.s2_pt(Region4.p4_t(temperature), temperature)
+        else:
+            psatt = Region4.p4_t(temperature)
+            specificVolume = Region3.v3_ph(psatt, Region4.h4_p(psatt, 'vap'))
+            entropy = Region3.s3_rhot(1.0/specificVolume, temperature)
+
+        if englishUnits:
+            entropy = Convert.fromSIUnit(entropy, 'entropy')
+        return entropy
+    else:
+        return Constants._errorValue
 
 #Rem Function sL_T(ByVal T As Double) As Double #48
 #Rem  T = toSIunit_T(T)
