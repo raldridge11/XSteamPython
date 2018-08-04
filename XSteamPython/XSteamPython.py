@@ -784,35 +784,43 @@ def u_ph(pressure, enthalpy):
         internalEnergy = Convert.fromSIUnit(internalEnergy, 'enthalpy')
     return internalEnergy
 
-#Rem Function u_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem  Dim x As Double
-#Rem  Dim u4v, uLp, uVp, u4L As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  s = toSIunit_s(s)
-#Rem  Select Case region_ps(p, s)
-#Rem  Case 1
-#Rem    u_ps = fromSIunit_u(u1_pT(p, T1_ps(p, s)))
-#Rem  Case 2
-#Rem    u_ps = fromSIunit_u(u2_pT(p, T2_ps(p, s)))
-#Rem  Case 3
-#Rem    u_ps = fromSIunit_u(u3_rhoT(1 / v3_ps(p, s), T3_ps(p, s)))
-#Rem  Case 4
-#Rem    If p < 16.529 Then
-#Rem      uLp = u1_pT(p, T4_p(p))
-#Rem      uVp = u2_pT(p, T4_p(p))
-#Rem    Else
-#Rem      uLp = u3_rhoT(1 / (v3_ph(p, h4L_p(p))), T4_p(p))
-#Rem      uVp = u3_rhoT(1 / (v3_ph(p, h4V_p(p))), T4_p(p))
-#Rem    End If
-#Rem    x = x4_ps(p, s)
-#Rem    u_ps = fromSIunit_u((x * uVp + (1 - x) * uLp))
-#Rem  Case 5
-#Rem    u_ps = fromSIunit_u(u5_pT(p, T5_ps(p, s)))
-#Rem  Case Else
-#Rem   u_ps = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def u_ps(pressure, entropy):
+    pressure, entropy = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits), float(entropy)
+    if englishUnits:
+        entropy = Convert.toSIUnit(entropy, 'entropy')
+
+    region = Regions.region_ps(pressure, entropy)
+    if region is None: return Constants._errorValue
+
+    internalEnergy = Constants._errorValue
+    if region == 1:
+        t = Region1.t1_ps(pressure, entropy)
+        internalEnergy = Region1.u1_pt(pressure, Region1.t1_ps(pressure, entropy))
+    elif region == 2:
+        internalEnergy = Region2.u2_pt(pressure, Region2.t2_ps(pressure, entropy))
+    elif region == 3:
+        specificVolume = Region3.v3_ps(pressure, entropy)
+        internalEnergy = Region3.u3_rhot(1.0/specificVolume, Region3.t3_ps(pressure, entropy))
+    elif region == 4:
+        tsatt = Region4.t4_p(pressure)
+        quality = Region4.x4_ps(pressure, entropy)
+        vaporEnergy, liquidEnergy = 0.0, 0.0
+        if pressure < 16.529:
+            liquidEnergy = Region1.u1_pt(pressure, tsatt)
+            vaporEnergy = Region2.u2_pt(pressure, tsatt)
+        else:
+            vaporSpecificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'vap'))
+            vaporEnergy = Region3.u3_rhot(1.0/vaporSpecificVolume, tsatt)
+            liquidSpecificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'liq'))
+            liquidEnergy = Region3.u3_rhot(1.0/liquidSpecificVolume, tsatt)
+        internalEnergy = quality*vaporEnergy + (1.0 - quality)*liquidEnergy
+    elif region == 5:
+        internalEnergy = Region5.u5_pt(pressure, Region5.t5_ps(pressure, entropy))
+
+    if englishUnits:
+        internalEnergy = Convert.fromSIUnit(internalEnergy, 'enthalpy')
+    return internalEnergy
+
 #Rem Function u_pv(ByVal p As Double, ByVal v As Double) As Double
 #Rem Dim rho As Double
 #Rem Dim h As Double
