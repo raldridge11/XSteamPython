@@ -5,7 +5,7 @@
     <ProjectGuid>ff53f884-2c28-4870-97bd-71501084c41c</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>testRunner.py</StartupFile>
+    <StartupFile>SpecificHeat_Tests.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -73,6 +73,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SpecificEnergy_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SpecificHeat_Tests.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SpecificVolume_Tests.py">

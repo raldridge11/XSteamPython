@@ -12,3 +12,4 @@ _tc = 647.096 # K
 _pc = 22.064 # MPa
 _rhoc = 322.0 # kg/m**3
 _errorValue = 2015.0
+_pressureMin, _pressureMax, _pressureSubDomain = 0.000611657, 22.06395, 16.529

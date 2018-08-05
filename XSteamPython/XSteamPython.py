@@ -827,6 +827,7 @@ def u_ps(pressure, entropy):
 #Rem h = h_prho(p, rho)
 #Rem u_pv = u_ph(p, h)
 #Rem End Function
+
 #Rem 'Function u_Tv(ByVal T As Double, ByVal v As Double) As Double
 #Rem 'Dim p As Double
 #Rem 'p = p_Tv(T, v)
@@ -847,6 +848,24 @@ def u_ps(pressure, entropy):
 #Rem    CpV_p = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
+
+def cpV_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
+        specificHeat = Constants._errorValue
+        tsatt = Region4.t4_p(pressure)
+        if pressure < Constants._pressureSubDomain:
+            specificHeat = Region2.cp2_pt(pressure, tsatt)
+        else:
+            specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'vap'))
+            specificHeat = Region3.cp3_rhot(1.0/specificVolume, tsatt)
+        if englishUnits:
+            specificHeat = Convert.fromSIUnit(specificHeat, 'entropy')
+        return specificHeat
+    else:
+        return Constants._errorValue
+
 #Rem Function CpL_p(ByVal p As Double) As Double
 #Rem  Dim T, h, v As Double
 #Rem  p = p / 100
