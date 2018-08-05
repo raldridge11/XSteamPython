@@ -58,14 +58,14 @@ class Test_cpV_T(unittest.TestCase):
         stm.englishUnits = False
 
     def test_cpV_T(self):
-        pressure, specificHeatCompare = Data.getOneDimensionalTestData('SIUnits_cpV_T.npz')
-        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpV_T, pressure)
+        temperature, specificHeatCompare = Data.getOneDimensionalTestData('SIUnits_cpV_T.npz')
+        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpV_T, temperature)
         np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
 
     def test_cpV_T_English(self):
         stm.englishUnits = True
-        pressure, specificHeatCompare = Data.getOneDimensionalTestData('EnglishUnits_cpV_T.npz')
-        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpV_T, pressure)
+        temperature, specificHeatCompare = Data.getOneDimensionalTestData('EnglishUnits_cpV_T.npz')
+        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpV_T, temperature)
         np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
 
     def test_cpV_T_error(self):
@@ -77,14 +77,14 @@ class Test_cpL_T(unittest.TestCase):
         stm.englishUnits = False
 
     def test_cpL_T(self):
-        pressure, specificHeatCompare = Data.getOneDimensionalTestData('SIUnits_cpL_T.npz')
-        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpL_T, pressure)
+        temperature, specificHeatCompare = Data.getOneDimensionalTestData('SIUnits_cpL_T.npz')
+        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpL_T, temperature)
         np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
 
     def test_cpL_T_English(self):
         stm.englishUnits = True
-        pressure, specificHeatCompare = Data.getOneDimensionalTestData('EnglishUnits_cpL_T.npz')
-        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpL_T, pressure)
+        temperature, specificHeatCompare = Data.getOneDimensionalTestData('EnglishUnits_cpL_T.npz')
+        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpL_T, temperature)
         np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
 
     def test_cpL_T_error(self):
@@ -108,6 +108,25 @@ class Test_cp_pT(unittest.TestCase):
 
     def test_cp_pT_error(self):
         self.assertAlmostEqual(stm.cp_pT(1.0, -1.0), 2015.0, places=2)
+
+class Test_cp_ph(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_cp_ph(self):
+        pressure, enthalpy, specificHeatCompare = Data.getTwoDimensionalTestData('SIUnits_cp_ph.npz')
+        specificHeat = Data.calculatePropertyFromTwoDimensions(stm.cp_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cp_ph_English(self):
+        stm.englishUnits = True
+        pressure, enthalpy, specificHeatCompare = Data.getTwoDimensionalTestData('EnglishUnits_cp_ph.npz')
+        specificHeat = Data.calculatePropertyFromTwoDimensions(stm.cp_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cp_ph_error(self):
+        self.assertAlmostEqual(stm.cp_ph(1.0, -1.0), 2015.0, places=2)
 
 if __name__ == '__main__':
     unittest.main()
