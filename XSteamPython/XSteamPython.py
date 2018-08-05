@@ -945,25 +945,29 @@ def cp_ph(pressure, enthalpy):
         specificHeat = Convert.fromSIUnit(specificHeat, 'entropy')
     return specificHeat
 
-#Rem Function Cp_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  s = toSIunit_s(s)
-#Rem  Select Case region_ps(p, s)
-#Rem  Case 1
-#Rem    Cp_ps = fromSIunit_Cp(Cp1_pT(p, T1_ps(p, s)))
-#Rem  Case 2
-#Rem    Cp_ps = fromSIunit_Cp(Cp2_pT(p, T2_ps(p, s)))
-#Rem  Case 3
-#Rem    Cp_ps = fromSIunit_Cp(Cp3_rhoT(1 / v3_ps(p, s), T3_ps(p, s)))
-#Rem  Case 4
-#Rem    Cp_ps = CVErr(xlErrValue) '#Not def. for mixture"
-#Rem  Case 5
-#Rem    Cp_ps = fromSIunit_Cp(Cp5_pT(p, T5_ps(p, s)))
-#Rem  Case Else
-#Rem   Cp_ps = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def cp_ps(pressure, entropy):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if englishUnits:
+        entropy = Convert.toSIUnit(entropy, 'entropy')
+
+    region = Regions.region_ps(pressure, entropy)
+    if region is None or region == 4: return Constants._errorValue
+
+    specificHeat = Constants._errorValue
+    if region == 1:
+        specificHeat = Region1.cp1_pt(pressure, Region1.t1_ps(pressure, entropy))
+    elif region == 2:
+        specificHeat = Region2.cp2_pt(pressure, Region2.t2_ps(pressure, entropy))
+    elif region == 3:
+        specificVolume = Region3.v3_ps(pressure, entropy)
+        specificHeat = Region3.cp3_rhot(1.0/specificVolume, Region3.t3_ps(pressure, entropy))
+    elif region == 5:
+        specificHeat = Region5.cp5_pt(pressure, Region5.t5_ps(pressure, entropy))
+
+    if englishUnits:
+        specificHeat = Convert.fromSIUnit(specificHeat, 'entropy')
+    return specificHeat
+
 #Rem '***********************************************************************************************************
 #Rem '*1.10 Specific isochoric heat capacity (Cv)
 #Rem Function CvV_p(ByVal p As Double) As Double

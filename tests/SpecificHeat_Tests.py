@@ -128,5 +128,24 @@ class Test_cp_ph(unittest.TestCase):
     def test_cp_ph_error(self):
         self.assertAlmostEqual(stm.cp_ph(1.0, -1.0), 2015.0, places=2)
 
+class Test_cp_ps(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_cp_ps(self):
+        pressure, entropy, specificHeatCompare = Data.getTwoDimensionalTestData('SIUnits_cp_ps.npz')
+        specificHeat = Data.calculatePropertyFromTwoDimensions(stm.cp_ps, pressure, entropy)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cp_ps_English(self):
+        stm.englishUnits = True
+        pressure, entropy, specificHeatCompare = Data.getTwoDimensionalTestData('EnglishUnits_cp_ps.npz')
+        specificHeat = Data.calculatePropertyFromTwoDimensions(stm.cp_ps, pressure, entropy)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cp_ps_error(self):
+        self.assertAlmostEqual(stm.cp_ps(1.0, -1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()
