@@ -831,21 +831,6 @@ def u_ps(pressure, entropy):
 #Rem 'p = p_Tv(T, v)
 #Rem 'u_Tv = u_pv(p, v)
 #Rem 'End Function
-#Rem '***********************************************************************************************************
-#Rem '*1.9 Specific isobaric heat capacity (Cp)
-#Rem Function CpV_p(ByVal p As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < Constants._pressureMax Then
-#Rem   If p < 16.529 Then
-#Rem    CpV_p = fromSIunit_Cp(Cp2_pT(p, T4_p(p)))
-#Rem   Else
-#Rem    CpV_p = fromSIunit_Cp(Cp3_rhoT(1 / (v3_ph(p, h4V_p(p))), T4_p(p)))
-#Rem   End If
-#Rem  Else
-#Rem    CpV_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
 
 def cpV_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
@@ -882,6 +867,9 @@ def cpV_p(pressure):
 #Rem    CpL_p = CVErr(xlErrValue)
 #Rem  End If
 #Rem End Function
+
+
+
 #Rem Function CpV_T(ByVal T As Double) As Double
 #Rem  T = toSIunit_T(T)
 #Rem  If T > 273.15 And T < 647.096 Then
