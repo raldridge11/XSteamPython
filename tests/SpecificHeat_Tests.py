@@ -52,5 +52,24 @@ class Test_cpL_p(unittest.TestCase):
     def test_cpL_p_error(self):
         self.assertAlmostEqual(stm.cpL_p(-1.0), 2015.0, places=1)
 
+class Test_cpV_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_cpV_T(self):
+        pressure, specificHeatCompare = Data.getOneDimensionalTestData('SIUnits_cpV_T.npz')
+        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpV_T, pressure)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cpV_T_English(self):
+        stm.englishUnits = True
+        pressure, specificHeatCompare = Data.getOneDimensionalTestData('EnglishUnits_cpV_T.npz')
+        specificHeat = Data.calculatePropertyFromOneDimension(stm.cpV_T, pressure)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cpV_T_error(self):
+        self.assertAlmostEqual(stm.cpV_T(-1.0), 2015.0, places=1)
+
 if __name__ == '__main__':
     unittest.main()
