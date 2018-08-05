@@ -109,7 +109,7 @@ def Psat_T(temperature):
     '''Saturation Pressure as a function of temperature'''
     temperature = Convert.toSIUnit(float(temperature), 'temperature', englishUnits=englishUnits)
     pressure = 0.0
-    if temperature <= 647.096 and temperature > 273.15:
+    if temperature <= Constants._temperatureMax and temperature > Constants._temperatureMin:
         pressure = Convert.fromSIUnit(Region4.p4_t(temperature), 'pressure', englishUnits=englishUnits)
     else:
         pressure = Constants._errorValue
@@ -212,8 +212,7 @@ def hL_p(pressure):
 
 def hV_T(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
-    low, high = 273.15, 647.096
-    if temperature > low and temperature < high:
+    if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
         enthalpy = Region4.h4_p(Region4.p4_t(temperature), 'vap')
         if englishUnits:
             return Convert.fromSIUnit(enthalpy, 'enthalpy')
@@ -223,8 +222,7 @@ def hV_T(temperature):
 
 def hL_T(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
-    low, high = 273.15, 647.096
-    if temperature > low and temperature < high:
+    if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
         enthalpy = Region4.h4_p(Region4.p4_t(temperature), 'liq')
         if englishUnits:
             return Convert.fromSIUnit(enthalpy, 'enthalpy')
@@ -302,7 +300,7 @@ def h_px(pressure, quality):
 def h_Tx(temperature, quality):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
-    if quality > 1.0 or quality < 0.0 or temperature >= 647.096:
+    if quality > 1.0 or quality < 0.0 or temperature >= Constants._temperatureMax:
         return Constants._errorValue
 
     pressure = Convert.fromSIUnit(Region4.p4_t(temperature), 'pressure', englishUnits=englishUnits)
@@ -381,9 +379,9 @@ def vL_p(pressure):
 def vV_T(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
-    if temperature <= 273.15 or temperature >= 647.096:
+    if temperature <= Constants._temperatureMin or temperature >= Constants._temperatureMax:
         return Constants._errorValue
-    if temperature <= 623.15:
+    if temperature <= Constants._temperatureSubDomain:
         specificVolume = Region2.v2_pt(Region4.p4_t(temperature), temperature)
     else:
         specificVolume = Region3.v3_ph(Region4.p4_t(temperature), Region4.h4_p(Region4.p4_t(temperature), phase='vap'))
@@ -394,9 +392,9 @@ def vV_T(temperature):
 def vL_T(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
-    if temperature <= 273.15 or temperature >= 647.096:
+    if temperature <= Constants._temperatureMin or temperature >= Constants._temperatureMax:
         return Constants._errorValue
-    if temperature <= 623.15:
+    if temperature <= Constants._temperatureSubDomain:
         specificVolume = Region1.v1_pt(Region4.p4_t(temperature), temperature)
     else:
         specificVolume = Region3.v3_ph(Region4.p4_t(temperature), Region4.h4_p(Region4.p4_t(temperature), phase='liq'))
@@ -549,8 +547,8 @@ def sV_T(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     entropy = Constants._errorValue
 
-    if temperature > 273.15 and temperature < 647.096:
-        if temperature <= 623.15:
+    if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
+        if temperature <= Constants._temperatureSubDomain:
             entropy = Region2.s2_pt(Region4.p4_t(temperature), temperature)
         else:
             psatt = Region4.p4_t(temperature)
@@ -567,8 +565,8 @@ def sL_T(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     entropy = Constants._errorValue
 
-    if temperature > 273.15 and temperature < 647.096:
-        if temperature <= 623.15:
+    if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
+        if temperature <= Constants._temperatureSubDomain:
             entropy = Region1.s1_pt(Region4.p4_t(temperature), temperature)
         else:
             psatt = Region4.p4_t(temperature)
@@ -690,10 +688,10 @@ def uL_p(pressure):
 def uV_T(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
-    if temperature > 273.15 and temperature < 647.096:
+    if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
         internalEnergy = Constants._errorValue
         psatt = Region4.p4_t(temperature)
-        if temperature <= 623.15:
+        if temperature <= Constants._temperatureSubDomain:
             internalEnergy = Region2.u2_pt(psatt, temperature)
         else:
             specificVolume = Region3.v3_ph(psatt, Region4.h4_p(psatt, 'vap'))
@@ -707,10 +705,10 @@ def uV_T(temperature):
 def uL_T(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
-    if temperature > 273.15 and temperature < 647.096:
+    if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
         internalEnergy = Constants._errorValue
         psatt = Region4.p4_t(temperature)
-        if temperature <= 623.15:
+        if temperature <= Constants._temperatureSubDomain:
             internalEnergy = Region1.u1_pt(psatt, temperature)
         else:
             specificVolume = Region3.v3_ph(psatt, Region4.h4_p(psatt, 'liq'))
