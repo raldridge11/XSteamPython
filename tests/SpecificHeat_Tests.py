@@ -226,5 +226,24 @@ class Test_cvL_T(unittest.TestCase):
     def test_cvL_T_error(self):
         self.assertAlmostEqual(stm.cvL_T(-1.0), 2015.0, places=1)
 
+class Test_cv_pT(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_cv_pT(self):
+        pressure, temperature, specificHeatCompare = Data.getTwoDimensionalTestData('SIUnits_cv_pT.npz')
+        specificHeat = Data.calculatePropertyFromTwoDimensions(stm.cv_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cv_pT_English(self):
+        stm.englishUnits = True
+        pressure, temperature, specificHeatCompare = Data.getTwoDimensionalTestData('EnglishUnits_cv_pT.npz')
+        specificHeat = Data.calculatePropertyFromTwoDimensions(stm.cv_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cv_pT_error(self):
+        self.assertAlmostEqual(stm.cv_pT(1.0, -1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()

@@ -1038,25 +1038,28 @@ def cvL_T(temperature):
     else:
         return Constants._errorValue
 
-#Rem Function Cv_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  T = toSIunit_T(T)
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 1
-#Rem    Cv_pT = fromSIunit_Cv(Cv1_pT(p, T))
-#Rem  Case 2
-#Rem    Cv_pT = fromSIunit_Cv(Cv2_pT(p, T))
-#Rem  Case 3
-#Rem    Cv_pT = fromSIunit_Cv(Cv3_rhoT(1 / v3_ph(p, h3_pT(p, T)), T))
-#Rem  Case 4
-#Rem    Cv_pT = CVErr(xlErrValue)
-#Rem  Case 5
-#Rem    Cv_pT = fromSIunit_Cv(Cv5_pT(p, T))
-#Rem  Case Else
-#Rem   Cv_pT = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def cv_pT(pressure, temperature):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    region = Regions.region_pt(pressure, temperature)
+    if region is None or region == 4: return Constants._errorValue
+
+    specificHeat = Constants._errorValue
+    if region == 1:
+        specificHeat = Region1.cv1_pt(pressure, temperature)
+    elif region == 2:
+        specificHeat = Region2.cv2_pt(pressure, temperature)
+    elif region == 3:
+        specificVolume = Region3.v3_ph(pressure, Region3.h3_pt(pressure, temperature))
+        specificHeat = Region3.cv3_rhot(1.0/specificVolume, temperature)
+    elif region == 5:
+        specificHeat = Region5.cv5_pt(pressure, temperature)
+
+    if englishUnits:
+        specificHeat = Convert.fromSIUnit(specificHeat, 'entropy')
+    return specificHeat
+
 #Rem Function Cv_ph(ByVal p, ByVal h) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
