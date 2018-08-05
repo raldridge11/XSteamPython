@@ -849,26 +849,22 @@ def cpV_p(pressure):
     else:
         return Constants._errorValue
 
-#Rem Function CpL_p(ByVal p As Double) As Double
-#Rem  Dim T, h, v As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem   If p < 16.529 Then
-#Rem    CpL_p = fromSIunit_Cp(Cp1_pT(p, T4_p(p)))
-#Rem   Else
-#Rem   T = T4_p(p)
-#Rem   h = h4L_p(p)
-#Rem   v = v3_ph(p, h4L_p(p))
-#Rem
-#Rem    CpL_p = fromSIunit_Cp(Cp3_rhoT(1 / (v3_ph(p, h4L_p(p))), T4_p(p)))
-#Rem   End If
-#Rem  Else
-#Rem    CpL_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def cpL_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
-
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
+        specificHeat = Constants._errorValue
+        tsatt = Region4.t4_p(pressure)
+        if pressure < Constants._pressureSubDomain:
+            specificHeat = Region1.cp1_pt(pressure, tsatt)
+        else:
+            specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'liq'))
+            specificHeat = Region3.cp3_rhot(1.0/specificVolume, tsatt)
+        if englishUnits:
+            specificHeat = Convert.fromSIUnit(specificHeat, 'entropy')
+        return specificHeat
+    else:
+        return Constants._errorValue
 
 #Rem Function CpV_T(ByVal T As Double) As Double
 #Rem  T = toSIunit_T(T)
