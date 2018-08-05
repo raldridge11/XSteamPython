@@ -794,7 +794,6 @@ def u_ps(pressure, entropy):
 
     internalEnergy = Constants._errorValue
     if region == 1:
-        t = Region1.t1_ps(pressure, entropy)
         internalEnergy = Region1.u1_pt(pressure, Region1.t1_ps(pressure, entropy))
     elif region == 2:
         internalEnergy = Region2.u2_pt(pressure, Region2.t2_ps(pressure, entropy))
