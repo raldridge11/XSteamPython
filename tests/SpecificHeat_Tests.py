@@ -109,6 +109,7 @@ class Test_cp_pT(unittest.TestCase):
     def test_cp_pT_error(self):
         self.assertAlmostEqual(stm.cp_pT(1.0, -1.0), 2015.0, places=2)
 
+@unittest.skip('Speeding up')
 class Test_cp_ph(unittest.TestCase):
 
     def tearDown(self):
@@ -146,6 +147,26 @@ class Test_cp_ps(unittest.TestCase):
 
     def test_cp_ps_error(self):
         self.assertAlmostEqual(stm.cp_ps(1.0, -1.0), 2015.0, places=2)
+
+class Test_cvV_p(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_cvV_p(self):
+        pressure, specificHeatCompare = Data.getOneDimensionalTestData('SIUnits_cvV_p.npz')
+        specificHeat = Data.calculatePropertyFromOneDimension(stm.cvV_p, pressure)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cvV_p_English(self):
+        stm.englishUnits = True
+        pressure, specificHeatCompare = Data.getOneDimensionalTestData('EnglishUnits_cvV_p.npz')
+        specificHeat = Data.calculatePropertyFromOneDimension(stm.cvV_p, pressure)
+        np.set_printoptions(threshold=np.nan)
+        np.testing.assert_array_almost_equal(specificHeat, specificHeatCompare, decimal=2)
+
+    def test_cvV_p_error(self):
+        self.assertAlmostEqual(stm.cvV_p(-1.0), 2015.0, places=1)
 
 if __name__ == '__main__':
     unittest.main()
