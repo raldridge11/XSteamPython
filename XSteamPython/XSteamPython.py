@@ -20,7 +20,7 @@ englishUnits = False
 
 def Tsat_p(pressure):
     '''Returns saturation temperature as a function of pressure'''
-    pressureMin, pressureMax = 0.000611657, 22.06395 + 0.001
+    pressureMin, pressureMax = Constants._pressureMin, Constants._pressureMax + 0.001
     pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
 
     if pressure >= pressureMin and pressure <= pressureMax:
@@ -190,8 +190,7 @@ def P_hs(enthalpy, entropy):
 
 def hV_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
-    low, high = 0.000611657, 22.06395
-    if pressure > low and pressure < high:
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
         enthalpy = Region4.h4_p(pressure, 'vap')
         if englishUnits:
             return Convert.fromSIUnit(enthalpy, 'enthalpy')
@@ -202,8 +201,7 @@ def hV_p(pressure):
 
 def hL_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
-    low, high = 0.000611657, 22.06395
-    if pressure > low and pressure < high:
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
         enthalpy = Region4.h4_p(pressure, 'liq')
         if englishUnits:
             return Convert.fromSIUnit(enthalpy, 'enthalpy')
@@ -355,9 +353,9 @@ def h_Tx(temperature, quality):
 def vV_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
-    if pressure <= 0.000611657 or pressure >= 22.06395:
+    if pressure <= Constants._pressureMin or pressure >= Constants._pressureMax:
         return Constants._errorValue
-    if pressure < 16.529:
+    if pressure < Constants._pressureSubDomain:
         specificVolume = Region2.v2_pt(pressure, Region4.t4_p(pressure))
     else:
         specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, phase='vap'))
@@ -368,10 +366,10 @@ def vV_p(pressure):
 def vL_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
-    if pressure <= 0.000611657 or pressure >= 22.06395:
+    if pressure <= Constants._pressureMin or pressure >= Constants._pressureMax:
         return Constants._errorValue
 
-    if pressure < 16.529:
+    if pressure < Constants._pressureSubDomain:
         specificVolume = Region1.v1_pt(pressure, Region4.t4_p(pressure))
     else:
         specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, phase='liq'))
@@ -445,7 +443,7 @@ def v_ph(pressure, enthalpy):
         quality = Region4.x4_ph(pressure, enthalpy)
         vaporSpecificVolume = 0.0
         liquidSpecificVolume = 0.0
-        if pressure < 16.529:
+        if pressure < Constants._pressureSubDomain:
             vaporSpecificVolume = Region2.v2_pt(pressure, Region4.t4_p(pressure))
             liquidSpecificVolume = Region1.v1_pt(pressure, Region4.t4_p(pressure))
         else:
@@ -477,7 +475,7 @@ def v_ps(pressure, entropy):
         quality = Region4.x4_ps(pressure, entropy)
         vaporSpecificVolume = 0.0
         liquidSpecificVolume = 0.0
-        if pressure < 16.529:
+        if pressure < Constants._pressureSubDomain:
             vaporSpecificVolume = Region2.v2_pt(pressure, Region4.t4_p(pressure))
             liquidSpecificVolume = Region1.v1_pt(pressure, Region4.t4_p(pressure))
         else:
@@ -517,8 +515,8 @@ def sV_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     entropy = Constants._errorValue
 
-    if pressure > 0.000611657 and pressure < 22.06395:
-        if pressure < 16.529:
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
+        if pressure < Constants._pressureSubDomain:
             entropy = Region2.s2_pt(pressure, Region4.t4_p(pressure))
         else:
             specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'vap'))
@@ -534,8 +532,8 @@ def sL_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     entropy = Constants._errorValue
 
-    if pressure > 0.000611657 and pressure < 22.06395:
-        if pressure < 16.529:
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
+        if pressure < Constants._pressureSubDomain:
             entropy = Region1.s1_pt(pressure, Region4.t4_p(pressure))
         else:
             specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'liq'))
@@ -625,7 +623,7 @@ def s_ph(pressure, enthalpy):
         tsatt = Region4.t4_p(pressure)
         quality = Region4.x4_ph(pressure, enthalpy)
         entropyVapor, entropyLiquid = 0.0, 0.0
-        if pressure < 16.529:
+        if pressure < Constants._pressureSubDomain:
             entropyVapor = Region2.s2_pt(pressure, tsatt)
             entropyLiquid = Region1.s1_pt(pressure, tsatt)
         else:
@@ -658,10 +656,10 @@ def s_ph(pressure, enthalpy):
 def uV_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
-    if pressure > 0.000611657 and pressure < 22.06395:
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
         internalEnergy = Constants._errorValue
         tsatt = Region4.t4_p(pressure)
-        if pressure < 16.529:
+        if pressure < Constants._pressureSubDomain:
             internalEnergy = Region2.u2_pt(pressure, tsatt)
         else:
             specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'vap'))
@@ -675,10 +673,10 @@ def uV_p(pressure):
 def uL_p(pressure):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
-    if pressure > 0.000611657 and pressure < 22.06395:
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
         internalEnergy = Constants._errorValue
         tsatt = Region4.t4_p(pressure)
-        if pressure < 16.529:
+        if pressure < Constants._pressureSubDomain:
             internalEnergy = Region1.u1_pt(pressure, tsatt)
         else:
             specificVolume = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'liq'))
@@ -767,7 +765,7 @@ def u_ph(pressure, enthalpy):
         tsatt = Region4.t4_p(pressure)
         quality = Region4.x4_ph(pressure, enthalpy)
         vaporEnergy, liquidEnergy = 0.0, 0.0
-        if pressure < 16.529:
+        if pressure < Constants._pressureSubDomain:
             vaporEnergy = Region2.u2_pt(pressure, tsatt)
             liquidEnergy = Region1.u1_pt(pressure, tsatt)
         else:
@@ -804,7 +802,7 @@ def u_ps(pressure, entropy):
         tsatt = Region4.t4_p(pressure)
         quality = Region4.x4_ps(pressure, entropy)
         vaporEnergy, liquidEnergy = 0.0, 0.0
-        if pressure < 16.529:
+        if pressure < Constants._pressureSubDomain:
             liquidEnergy = Region1.u1_pt(pressure, tsatt)
             vaporEnergy = Region2.u2_pt(pressure, tsatt)
         else:
@@ -838,7 +836,7 @@ def u_ps(pressure, entropy):
 #Rem Function CpV_p(ByVal p As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
+#Rem  If p > 0.000611657 And p < Constants._pressureMax Then
 #Rem   If p < 16.529 Then
 #Rem    CpV_p = fromSIunit_Cp(Cp2_pT(p, T4_p(p)))
 #Rem   Else
