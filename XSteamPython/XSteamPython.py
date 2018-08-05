@@ -1002,18 +1002,24 @@ def cvL_p(pressure):
     else:
         return Constants._errorValue
 
-#Rem Function CvV_T(ByVal T As Double) As Double
-#Rem  T = toSIunit_T(T)
-#Rem  If T > 273.15 And T < 647.096 Then
-#Rem   If T <= 623.15 Then
-#Rem    CvV_T = fromSIunit_Cv(Cv2_pT(p4_T(T), T))
-#Rem   Else
-#Rem    CvV_T = fromSIunit_Cv(Cv3_rhoT(1 / (v3_ph(p4_T(T), h4V_p(p4_T(T)))), T))
-#Rem   End If
-#Rem  Else
-#Rem    CvV_T = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def cvV_T(temperature):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
+        specificHeat = Constants._errorValue
+        psatt = Region4.p4_t(temperature)
+        if temperature <= Constants._temperatureSubDomain:
+            specificHeat = Region2.cv2_pt(psatt, temperature)
+        else:
+            specificVolume = Region3.v3_ph(psatt, Region4.h4_p(psatt, 'vap'))
+            specificHeat = Region3.cv3_rhot(1.0/specificVolume, temperature)
+
+        if englishUnits:
+            specificHeat = Convert.fromSIUnit(specificHeat, 'entropy')
+        return specificHeat
+    else:
+        return Constants._errorValue
+
 #Rem Function CvL_T(ByVal T As Double) As Double
 #Rem  T = toSIunit_T(T)
 #Rem  If T > 273.15 And T < 647.096 Then
