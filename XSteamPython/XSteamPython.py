@@ -882,18 +882,24 @@ def cpV_T(temperature):
     else:
         return Constants._errorValue
 
-#Rem Function CpL_T(ByVal T As Double) As Double
-#Rem  T = toSIunit_T(T)
-#Rem  If T > 273.15 And T < 647.096 Then
-#Rem   If T <= 623.15 Then
-#Rem    CpL_T = fromSIunit_Cp(Cp1_pT(p4_T(T), T))
-#Rem   Else
-#Rem    CpL_T = fromSIunit_Cp(Cp3_rhoT(1 / (v3_ph(p4_T(T), h4L_p(p4_T(T)))), T))
-#Rem   End If
-#Rem  Else
-#Rem    CpL_T = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def cpL_T(temperature):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
+        specificHeat = Constants._errorValue
+        psatt = Region4.p4_t(temperature)
+        if temperature <= Constants._temperatureSubDomain:
+            specificHeat = Region1.cp1_pt(psatt, temperature)
+        else:
+            specificVolume = Region3.v3_ph(psatt, Region4.h4_p(psatt, 'liq'))
+            specificHeat = Region3.cp3_rhot(1.0/specificVolume, temperature)
+
+        if englishUnits:
+            specificHeat = Convert.fromSIUnit(specificHeat, 'entropy')
+        return specificHeat
+    else:
+        return Constants._errorValue
+
 #Rem Function Cp_pT(ByVal p As Double, ByVal T As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
