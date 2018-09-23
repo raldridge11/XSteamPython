@@ -33,5 +33,24 @@ class Test_wV_p(unittest.TestCase):
     def test_wV_p_error(self):
         self.assertAlmostEqual(stm.wV_p(-1.0), 2015.0, places=2)
 
+class Test_wL_p(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_wL_p(self):
+        pressure, speedOfSoundCompare = Data.getOneDimensionalTestData('SIUnits_wL_p.npz')
+        speedOfSound = Data.calculatePropertyFromOneDimension(stm.wL_p, pressure)
+        np.testing.assert_array_almost_equal(speedOfSound, speedOfSoundCompare, decimal=2)
+
+    def test_wL_p_English(self):
+        stm.englishUnits = True
+        pressure, speedOfSoundCompare = Data.getOneDimensionalTestData('EnglishUnits_wL_p.npz')
+        speedOfSound = Data.calculatePropertyFromOneDimension(stm.wL_p, pressure)
+        np.testing.assert_array_almost_equal(speedOfSound, speedOfSoundCompare, decimal=2)
+
+    def test_wL_p_error(self):
+        self.assertAlmostEqual(stm.wL_p(-1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()

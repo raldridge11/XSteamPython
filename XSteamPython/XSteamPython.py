@@ -1121,19 +1121,20 @@ def wV_p(pressure):
     else:
         return Constants._errorValue
 
-#Rem Function wL_p(ByVal p As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem   If p < 16.529 Then
-#Rem    wL_p = fromSIunit_w(w1_pT(p, T4_p(p)))
-#Rem   Else
-#Rem    wL_p = fromSIunit_w(w3_rhoT(1 / (v3_ph(p, h4L_p(p))), T4_p(p)))
-#Rem   End If
-#Rem  Else
-#Rem    wL_p = CVErr(xlErrValue)
-#Rem  End If
-#Rem End Function
+def wL_p(pressure):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
+        if pressure < Constants._pressureSubDomain:
+            speedOfSound = Region1.w1_pt(pressure, Region4.t4_p(pressure))
+        else:
+            density = 1.0/Region3.v3_ph(pressure, Region4.h4_p(pressure, 'liq'))
+            speedOfSound = Region3.w3_rhot(density, Region4.t4_p(pressure))
+        if englishUnits:
+            speedOfSound = Convert.fromSIUnit(speedOfSound, 'velocity')
+        return speedOfSound
+    else:
+        return Constants._errorValue
+
 #Rem Function wV_T(ByVal T As Double) As Double
 #Rem  T = toSIunit_T(T)
 #Rem  If T > 273.15 And T < 647.096 Then
