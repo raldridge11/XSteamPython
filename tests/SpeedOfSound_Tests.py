@@ -71,5 +71,24 @@ class Test_wV_T(unittest.TestCase):
     def test_wV_T_error(self):
         self.assertAlmostEqual(stm.wV_T(-1.0), 2015.0, places=2)
 
+class Test_wL_T(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_wL_T(self):
+        temperature, speedOfSoundCompare = Data.getOneDimensionalTestData('SIUnits_wL_T.npz')
+        speedOfSound = Data.calculatePropertyFromOneDimension(stm.wL_T, temperature)
+        np.testing.assert_array_almost_equal(speedOfSound, speedOfSoundCompare, decimal=2)
+
+    def test_wL_T_English(self):
+        stm.englishUnits = True
+        temperature, speedOfSoundCompare = Data.getOneDimensionalTestData('EnglishUnits_wL_T.npz')
+        speedOfSound = Data.calculatePropertyFromOneDimension(stm.wL_T, temperature)
+        np.testing.assert_array_almost_equal(speedOfSound, speedOfSoundCompare, decimal=2)
+
+    def test_wL_T_error(self):
+        self.assertAlmostEqual(stm.wL_T(-1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()
