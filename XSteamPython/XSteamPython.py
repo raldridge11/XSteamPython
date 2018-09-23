@@ -1165,25 +1165,27 @@ def wL_T(temperature):
     else:
         return Constants._errorValue
 
-#Rem Function w_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  T = toSIunit_T(T)
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 1
-#Rem    w_pT = fromSIunit_w(w1_pT(p, T))
-#Rem  Case 2
-#Rem    w_pT = fromSIunit_w(w2_pT(p, T))
-#Rem  Case 3
-#Rem    w_pT = fromSIunit_w(w3_rhoT(1 / v3_ph(p, h3_pT(p, T)), T))
-#Rem  Case 4
-#Rem    w_pT = CVErr(xlErrValue)
-#Rem  Case 5
-#Rem    w_pT = fromSIunit_w(w5_pT(p, T))
-#Rem  Case Else
-#Rem   w_pT = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def w_pT(pressure, temperature):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    region = Regions.region_pt(pressure, temperature)
+    if region is None or region == 4: return Constants._errorValue
+
+    if region == 1:
+        speedOfSound = Region1.w1_pt(pressure, temperature)
+    elif region == 2:
+        speedOfSound = Region2.w2_pt(pressure, temperature)
+    elif region == 3:
+        density = 1.0/Region3.v3_ph(pressure, Region3.h3_pt(pressure, temperature))
+        speedOfSound = Region3.w3_rhot(density, temperature)
+    elif region == 5:
+        speedOfSound = Region5.w5_pt(pressure, temperature)
+
+    if englishUnits:
+        speedOfSound = Convert.fromSIUnit(speedOfSound, 'velocity')
+    return speedOfSound
+
 #Rem
 #Rem Function w_ph(ByVal p As Double, ByVal h As Double) As Double
 #Rem  p = p / 100
