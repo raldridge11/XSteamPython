@@ -109,6 +109,25 @@ class Test_w_pT(unittest.TestCase):
     def test_w_pT_error(self):
         self.assertAlmostEqual(stm.w_pT(1.0, -1.0), 2015.0, places=2)
 
+class Test_w_ph(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_w_ph(self):
+        pressure, enthalpy, speedOfSoundCompare = Data.getTwoDimensionalTestData('SIUnits_w_ph.npz')
+        speedOfSound = Data.calculatePropertyFromTwoDimensions(stm.w_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(speedOfSound, speedOfSoundCompare, decimal=0)
+
+    def test_w_ph_English(self):
+        stm.englishUnits = True
+        pressure, enthalpy, speedOfSoundCompare = Data.getTwoDimensionalTestData('EnglishUnits_w_ph.npz')
+        speedOfSound = Data.calculatePropertyFromTwoDimensions(stm.w_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(speedOfSound, speedOfSoundCompare, decimal=2)
+
+    def test_w_ph_error(self):
+        self.assertAlmostEqual(stm.w_ph(1.0, -1.0), 2015.0, places=2)
+
 class Test_w_ps(unittest.TestCase):
 
     def tearDown(self):
@@ -117,7 +136,6 @@ class Test_w_ps(unittest.TestCase):
     def test_w_ps(self):
         pressure, entropy, speedOfSoundCompare = Data.getTwoDimensionalTestData('SIUnits_w_ps.npz')
         speedOfSound = Data.calculatePropertyFromTwoDimensions(stm.w_ps, pressure, entropy)
-        np.savetxt('error.csv', speedOfSound-speedOfSoundCompare, delimiter=',')
         np.testing.assert_array_almost_equal(speedOfSound, speedOfSoundCompare, decimal=0)
 
     def test_w_ps_English(self):

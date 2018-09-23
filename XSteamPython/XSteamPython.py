@@ -1186,26 +1186,27 @@ def w_pT(pressure, temperature):
         speedOfSound = Convert.fromSIUnit(speedOfSound, 'velocity')
     return speedOfSound
 
-#Rem
-#Rem Function w_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  h = toSIunit_h(h)
-#Rem  Select Case region_ph(p, h)
-#Rem  Case 1
-#Rem    w_ph = fromSIunit_w(w1_pT(p, T1_ph(p, h)))
-#Rem  Case 2
-#Rem    w_ph = fromSIunit_w(w2_pT(p, T2_ph(p, h)))
-#Rem  Case 3
-#Rem    w_ph = fromSIunit_w(w3_rhoT(1 / v3_ph(p, h), T3_ph(p, h)))
-#Rem  Case 4
-#Rem    w_ph = CVErr(xlErrValue) '#Not def. for mixture
-#Rem  Case 5
-#Rem    w_ph = fromSIunit_w(w5_pT(p, T5_ph(p, h)))
-#Rem  Case Else
-#Rem   w_ph = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def w_ph(pressure, enthalpy):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if englishUnits:
+        enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
+
+    region = Regions.region_ph(pressure, enthalpy)
+    if region is None or region == 4: return Constants._errorValue
+
+    if region == 1:
+        speedOfSound = Region1.w1_pt(pressure, Region1.t1_ph(pressure, enthalpy))
+    elif region == 2:
+        speedOfSound = Region2.w2_pt(pressure, Region2.t2_ph(pressure, enthalpy))
+    elif region == 3:
+        density = 1.0/Region3.v3_ph(pressure, enthalpy)
+        speedOfSound = Region3.w3_rhot(density, Region3.t3_ph(pressure, enthalpy))
+    elif region == 5:
+        speedOfSound = Region5.w5_pt(pressure, Region5.t5_ph(pressure, enthalpy))
+
+    if englishUnits:
+        speedOfSound = Convert.fromSIUnit(speedOfSound, 'velocity')
+    return speedOfSound
 
 def w_ps(pressure, entropy):
     pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
