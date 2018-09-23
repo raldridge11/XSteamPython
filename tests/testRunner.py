@@ -26,6 +26,7 @@ import Psat_Tests
 import SpecificEnergy_Tests
 import SpecificHeat_Tests
 import SpecificVolume_Tests
+import SpeedOfSound_Tests
 import Tsat_Tests
 import Temperature_Tests
 import TransportProperties_Tests
@@ -56,6 +57,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(Entropy_Tests))
     suite.addTest(loader.loadTestsFromModule(SpecificEnergy_Tests))
     suite.addTest(loader.loadTestsFromModule(SpecificHeat_Tests))
+    suite.addTest(loader.loadTestsFromModule(SpeedOfSound_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)
