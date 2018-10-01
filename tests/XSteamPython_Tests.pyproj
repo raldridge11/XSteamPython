@@ -5,7 +5,7 @@
     <ProjectGuid>ff53f884-2c28-4870-97bd-71501084c41c</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>VaporFraction_Tests.py</StartupFile>
+    <StartupFile>testRunner.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

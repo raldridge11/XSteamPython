@@ -1405,30 +1405,22 @@ def x_ps(pressure, entropy):
     else:
         return Constants._errorValue
 
-
-#Rem '***********************************************************************************************************
-#Rem '*1.18 Vapour Volume Fraction
-#Rem Function vx_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem  Dim vL As Double
-#Rem  Dim vV As Double
-#Rem  Dim xs As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  h = toSIunit_h(h)
-#Rem  If p > 0.000611657 And p < 22.06395 Then
-#Rem     If p < 16.529 Then
-#Rem       vL = v1_pT(p, T4_p(p))
-#Rem       vV = v2_pT(p, T4_p(p))
-#Rem     Else
-#Rem       vL = v3_ph(p, h4L_p(p))
-#Rem       vV = v3_ph(p, h4V_p(p))
-#Rem     End If
-#Rem     xs = x4_ph(p, h)
-#Rem     vx_ph = fromSIunit_vx((xs * vV / (xs * vV + (1 - xs) * vL)))
-#Rem   Else
-#Rem     vx_ph = CVErr(xlErrValue)
-#Rem   End If
-#Rem End Function
+def vx_ph(pressure, enthalpy):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if englishUnits:
+        enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
+        quality = Region4.x4_ph(pressure, enthalpy)
+        if pressure < Constants._pressureSubDomain:
+            tsatt = Region4.t4_p(pressure)
+            specificVolumeLiquid = Region1.v1_pt(pressure, tsatt)
+            specificVolumeVapor = Region2.v2_pt(pressure, tsatt)
+        else:
+            specificVolumeLiquid = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'liq'))
+            specificVolumeVapor = Region3.v3_ph(pressure, Region4.h4_p(pressure, 'vap'))
+        return quality*specificVolumeVapor/(quality*specificVolumeVapor + (1.0 - quality)*specificVolumeLiquid)
+    else:
+        return Constants._errorValue
 
 def vx_ps(pressure, entropy):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
