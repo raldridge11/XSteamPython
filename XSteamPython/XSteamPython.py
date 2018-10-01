@@ -1408,6 +1408,16 @@ def w_ps(pressure, entropy):
 #Rem     x_ps = CVErr(xlErrValue)
 #Rem   End If
 #Rem End Function
+def x_ps(pressure, entropy):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if englishUnits:
+        entropy = Convert.toSIUnit(entropy, 'entropy')
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
+        return Region4.x4_ps(pressure, entropy)
+    else:
+        return Constants._errorValue
+
+
 #Rem '***********************************************************************************************************
 #Rem '*1.18 Vapour Volume Fraction
 #Rem Function vx_ph(ByVal p As Double, ByVal h As Double) As Double
