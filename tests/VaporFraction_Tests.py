@@ -52,5 +52,24 @@ class Test_vx_ps(unittest.TestCase):
     def test_vx_ps_error(self):
         self.assertAlmostEqual(stm.vx_ps(-1.0, -1.0), 2015.0, places=2)
 
+class Test_x_ph(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_x_ph(self):
+        pressure, entropy, qualityCompare = Data.getTwoDimensionalTestData('SIUnits_x_ph.npz')
+        quality = Data.calculatePropertyFromTwoDimensions(stm.x_ph, pressure, entropy)
+        np.testing.assert_array_almost_equal(quality, qualityCompare, decimal=2)
+
+    def test_x_ph_English(self):
+        stm.englishUnits = True
+        pressure, entropy, qualityCompare = Data.getTwoDimensionalTestData('EnglishUnits_x_ph.npz')
+        quality = Data.calculatePropertyFromTwoDimensions(stm.x_ph, pressure, entropy)
+        np.testing.assert_array_almost_equal(quality, qualityCompare, decimal=2)
+
+    def test_x_ph_error(self):
+        self.assertAlmostEqual(stm.x_ph(-1.0, -1.0), 2015.0, places=2)
+
 if __name__ == '__main__':
     unittest.main()

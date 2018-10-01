@@ -1386,18 +1386,15 @@ def w_ps(pressure, entropy):
 #Rem   v = toSIunit_v(v)
 #Rem   tc_hs = fromSIunit_tc(tc_ptrho(p, T, 1 / v))
 #Rem End Function
-#Rem '***********************************************************************************************************
-#Rem '*1.17 Vapour fraction
-#Rem Function x_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  h = toSIunit_h(h)
-#Rem   If p > 0.000611657 And p < 22.06395 Then
-#Rem     x_ph = fromSIunit_x(x4_ph(p, h))
-#Rem   Else
-#Rem     x_ph = CVErr(xlErrValue)
-#Rem   End If
-#Rem End Function
+
+def x_ph(pressure, enthalpy):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if englishUnits:
+        enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
+    if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
+        return Region4.x4_ph(pressure, enthalpy)
+    else:
+        return Constants._errorValue
 
 def x_ps(pressure, entropy):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
