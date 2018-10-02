@@ -1303,6 +1303,15 @@ def w_ps(pressure, entropy):
 #Rem   st_t = fromSIunit_st(Surface_Tension_T(T))
 #Rem End Function
 
+def st_t(temperature):
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    surfaceTension = surfaceTension_T(temperature)
+    if surfaceTension == Constants._errorValue:
+        return Constants._errorValue
+    if englishUnits:
+        surfaceTension = Convert.fromSIUnit(surfaceTension, 'surface tension')
+    return surfaceTension
+
 def st_p(pressure):
     temperature = Tsat_p(pressure)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
