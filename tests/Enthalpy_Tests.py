@@ -8,7 +8,6 @@
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
 import unittest
-import pprint
 
 import numpy as np
 

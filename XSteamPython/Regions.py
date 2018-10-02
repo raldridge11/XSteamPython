@@ -7,7 +7,6 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
-import Constants
 import Region1
 import Region2
 import Region3

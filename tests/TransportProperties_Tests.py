@@ -9,9 +9,6 @@
 '''
 import unittest
 
-import numpy as np
-
-import Data
 import XSteamPython as stm
 
 class Test_Transport_Properties(unittest.TestCase):
