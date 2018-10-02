@@ -1285,14 +1285,11 @@ def kappa_pT(pressure, temperature):
     cp = cp_pT(pressure, temperature)
     cv = cv_pT(pressure, temperature)
     return cp/cv
-#Rem Private Function Kappa_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem   Dim Cp As Double
-#Rem   Dim Cv As Double
-#Rem   Cv = Cv_ph(p, h)
-#Rem   Cp = Cp_ph(p, h)
-#Rem   Kappa_ph = Cp / Cv
-#Rem End Function
-#Rem '***********************************************************************************************************
+
+def kappa_ph(pressure, enthalpy):
+    cp = cp_ph(pressure, enthalpy)
+    cv = cv_ph(pressure, enthalpy)
+    return cp/cv
 
 def st_t(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
