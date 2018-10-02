@@ -1297,11 +1297,6 @@ def w_ps(pressure, entropy):
 #Rem   Kappa_ph = Cp / Cv
 #Rem End Function
 #Rem '***********************************************************************************************************
-#Rem '*1.15 Surface tension
-#Rem Function st_t(ByVal T As Double) As Double
-#Rem   T = toSIunit_T(T)
-#Rem   st_t = fromSIunit_st(Surface_Tension_T(T))
-#Rem End Function
 
 def st_t(temperature):
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
