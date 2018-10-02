@@ -27,6 +27,7 @@ import SpecificEnergy_Tests
 import SpecificHeat_Tests
 import SpecificVolume_Tests
 import SpeedOfSound_Tests
+import SurfaceTension_Tests
 import Tsat_Tests
 import Temperature_Tests
 import TransportProperties_Tests
@@ -60,6 +61,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(SpecificHeat_Tests))
     suite.addTest(loader.loadTestsFromModule(SpeedOfSound_Tests))
     suite.addTest(loader.loadTestsFromModule(VaporFraction_Tests))
+    suite.addTest(loader.loadTestsFromModule(SurfaceTension_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)

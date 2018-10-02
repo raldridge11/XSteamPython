@@ -20,10 +20,9 @@ englishUnits = False
 
 def Tsat_p(pressure):
     '''Returns saturation temperature as a function of pressure'''
-    pressureMin, pressureMax = Constants._pressureMin, Constants._pressureMax + 0.001
     pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
 
-    if pressure >= pressureMin and pressure <= pressureMax:
+    if pressure >= Constants._pressureMin and pressure <= Constants._pressureMax + 0.001:
         return Convert.fromSIUnit(Region4.t4_p(pressure), 'temperature', englishUnits=englishUnits)
     else:
         return Constants._errorValue
@@ -1303,12 +1302,22 @@ def w_ps(pressure, entropy):
 #Rem   T = toSIunit_T(T)
 #Rem   st_t = fromSIunit_st(Surface_Tension_T(T))
 #Rem End Function
-#Rem Function st_p(ByVal p As Double) As Double
-#Rem    Dim T As Double
-#Rem    T = Tsat_p(p)
-#Rem    T = toSIunit_T(T)
-#Rem    st_p = fromSIunit_st(Surface_Tension_T(T))
-#Rem End Function
+
+def st_p(pressure):
+    temperature = Tsat_p(pressure)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    if temperature == Constants._errorValue:
+        return Constants._errorValue
+
+    surfaceTension = surfaceTension_T(temperature)
+
+    if surfaceTension == Constants._errorValue:
+        return Constants._errorValue
+
+    if englishUnits:
+        surfaceTension = Convert.fromSIUnit(surfaceTension, 'surface tension')
+    return surfaceTension
+
 #Rem '***********************************************************************************************************
 #Rem '*1.16 Thermal conductivity
 #Rem Function tcL_p(ByVal p As Double) As Double
@@ -1577,6 +1586,6 @@ def vx_ps(pressure, entropy):
 def surfaceTension_T(temperature):
     '''IAPWS Release on Surface Tension of Ordinary Water Substance, September 1994'''
     if temperature < 0.01 or temperature > Constants._tc:
-        raise ArithmeticError('Temperature must be between {} and {}'.format(0.01, Constants._tc))
+        return Constants._errorValue
     tau = 1.0 - temperature/Constants._tc
     return 0.2358*tau**1.256*(1.0 - 0.625*tau)
