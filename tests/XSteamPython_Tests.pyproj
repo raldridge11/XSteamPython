@@ -5,7 +5,7 @@
     <ProjectGuid>ff53f884-2c28-4870-97bd-71501084c41c</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>testRunner.py</StartupFile>
+    <StartupFile>Kappa_Tests.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -88,6 +88,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Temperature_Tests.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Kappa_Tests.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="testRunner.py">

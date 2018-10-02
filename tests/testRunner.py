@@ -21,6 +21,7 @@ import Regions_Tests
 import Density_Tests
 import Enthalpy_Tests
 import Entropy_Tests
+import Kappa_Tests
 import Pressure_Tests
 import Psat_Tests
 import SpecificEnergy_Tests
@@ -62,6 +63,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(SpeedOfSound_Tests))
     suite.addTest(loader.loadTestsFromModule(VaporFraction_Tests))
     suite.addTest(loader.loadTestsFromModule(SurfaceTension_Tests))
+    suite.addTest(loader.loadTestsFromModule(Kappa_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)

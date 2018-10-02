@@ -1280,15 +1280,11 @@ def w_ps(pressure, entropy):
 #Rem   tc = toSIunit_tc(tc_ph(p, h))
 #Rem   Pr_ph = Cp * 1000 * my / tc
 #Rem End Function
-#Rem '***********************************************************************************************************
-#Rem '*1.14 Kappa
-#Rem Private Function Kappa_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem   Dim Cp As Double
-#Rem   Dim Cv As Double
-#Rem   Cp = Cp_pT(p, T)
-#Rem   Cv = Cv_pT(p, T)
-#Rem   Kappa_pT = Cp / Cv
-#Rem End Function
+
+def kappa_pT(pressure, temperature):
+    cp = cp_pT(pressure, temperature)
+    cv = cv_pT(pressure, temperature)
+    return cp/cv
 #Rem Private Function Kappa_ph(ByVal p As Double, ByVal h As Double) As Double
 #Rem   Dim Cp As Double
 #Rem   Dim Cv As Double
