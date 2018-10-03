@@ -7,6 +7,8 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
+import math
+
 import Constants
 import Convert
 import Region1
@@ -1554,31 +1556,30 @@ def vx_ps(pressure, entropy):
 #Rem   my1 = Exp(rhos * sum)
 #Rem   my_AllRegions_ph = my0 * my1 * 0.000055071
 #Rem End Function
-#Rem '***********************************************************************************************************
-#Rem '*5.2 Thermal Conductivity (IAPWS formulation 1985)
-#Rem Function tc_ptrho(ByVal p As Double, ByVal T As Double, ByVal rho As Double) As Double
-#Rem 'Revised release on the IAPS Formulation 1985 for the Thermal Conductivity of ordinary water
-#Rem 'IAPWS September 1998
-#Rem 'Page 8
-#Rem  Dim tc0, tc1, dT, Q, s, tc2 As Double
-#Rem  If T < 0 Or p < 0.000611657 Or T > 800 Or p > 400 Or Not ((p <= 100 And T <= 100 + 273.15) Or (p <= 150 And T <= 400 + 273.15) Or (p <= 200 And T <= 250 + 273.15) Or (p <= 400 And T <= 125 + 273.15)) Then
-#Rem    tc_ptrho = "Out of valid region"
-#Rem    Exit Function
-#Rem  End If
-#Rem   T = T / 647.26
-#Rem   rho = rho / 317.7
-#Rem   tc0 = T ^ 0.5 * (0.0102811 + 0.0299621 * T + 0.0156146 * T ^ 2 - 0.00422464 * T ^ 3)
-#Rem   tc1 = -0.39707 + 0.400302 * rho + 1.06 * Exp(-0.171587 * (rho + 2.39219) ^ 2)
-#Rem   dT = Abs(T - 1) + 0.00308976
-#Rem   Q = 2 + 0.0822994 / dT ^ (3 / 5)
-#Rem   If T >= 1 Then
-#Rem    s = 1 / dT
-#Rem   Else
-#Rem    s = 10.0932 / dT ^ (3 / 5)
-#Rem   End If
-#Rem   tc2 = (0.0701309 / T ^ 10 + 0.011852) * rho ^ (9 / 5) * Exp(0.642857 * (1 - rho ^ (14 / 5))) + 0.00169937 * s * rho ^ Q * Exp((Q / (1 + Q)) * (1 - rho ^ (1 + Q))) - 1.02 * Exp(-4.11717 * T ^ (3 / 2) - 6.17937 / rho ^ 5)
-#Rem   tc_ptrho = tc0 + tc1 + tc2
-#Rem End Function
+
+def tc_pTrho(pressure, temperature, density):
+    '''Revised release on the IAPS Formulation 1985 for the Thermal Conductivity of ordinary water IAPWS September 1998 Page 8'''
+    if temperature < 0.0 or pressure < Constants._pressureMin \
+        or temperature > 800.0 or pressure > 400.0 \
+        or not((pressure <= 100.0 and temperature <= 373.15) \
+        or (pressure <= 150.0 and T <= 673.15) \
+        or (pressure <= 200.0 and temperature <= 523.15) \
+        or (pressure <= 400.0 and temperature <= 398.15)):
+        return Constants._errorValue
+    tPrime = temperature/Constants._tp
+    rhoPrime = density/Constants._rhop
+    tc0 = tPrime**0.5 * (0.0102811 + 0.0299621*tPrime + 0.0156146*tPrime**2 - 0.00422464*tPrime**3)
+    tc1 = -0.39707 + 0.400302*rhoPrime + 1.06 * math.exp(-0.171587*(rhoPrime + 2.39219)**2)
+    dT = abs(tPrime - 1.0) + 0.00308976
+    Q = 2.0 + 0.0822994/dT**(3.0/5.0)
+    if tPrime >= 1.0:
+        s = 1.0/tPrime
+    else:
+        s = 10.0932/dT**(3.0/5.0)
+    tc2 = (0.0701309/tPrime**10 + 0.011852)*rhoPrime**(9.0/5.0)*math.exp(0.642857*(1.0-rhoPrime**(14.0/5.0)))\
+       + 0.00169937*s*rhoPrime**Q*math.exp((Q/(1.0 + Q))*(1 - rhoPrime**(1.0 + Q)))\
+      - 1.02*math.exp(-4.11717*tPrime**(3.0/2.0) - 6.17937/rhoPrime**5)
+    return tc0 + tc1 + tc2
 
 def surfaceTension_T(temperature):
     '''IAPWS Release on Surface Tension of Ordinary Water Substance, September 1994'''
