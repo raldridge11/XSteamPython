@@ -1339,28 +1339,50 @@ def tcL_p(pressure):
 
     return thermalConductivity
 
+def tcV_p(pressure):
+    tsatt = Tsat_p(pressure)
+    specificVolume = vV_p(pressure)
 
-#Rem Function tcV_p(ByVal p As Double) As Double
-#Rem   Dim T As Double
-#Rem   Dim v As Double
-#Rem   T = Tsat_p(p)
-#Rem   v = vV_p(p)
-#Rem   p = p / 100
-#Rem   p = toSIunit_p(p)
-#Rem   T = toSIunit_T(T)
-#Rem   v = toSIunit_v(v)
-#Rem   tcV_p = fromSIunit_tc(tc_ptrho(p, T, 1 / v))
-#Rem End Function
-#Rem Function tcL_T(ByVal T As Double) As Double
-#Rem   Dim p, v As Double
-#Rem   p = psat_T(T)
-#Rem   v = vL_T(T)
-#Rem   p = p / 100
-#Rem   p = toSIunit_p(p)
-#Rem   T = toSIunit_T(T)
-#Rem   v = toSIunit_v(v)
-#Rem   tcL_T = fromSIunit_tc(tc_ptrho(p, T, 1 / v))
-#Rem End Function
+    if Constants._errorValue in (tsatt, specificVolume):
+        return Constants._errorValue
+
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    tsatt = Convert.toSIUnit(tsatt, 'temperature', englishUnits=englishUnits)
+    if englishUnits:
+        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
+
+    thermalConductivity = tc_pTrho(pressure, tsatt, 1.0/specificVolume)
+
+    if thermalConductivity == Constants._errorValue:
+        return Constants._errorValue
+
+    if englishUnits:
+        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
+
+    return thermalConductivity
+
+def tcL_T(temperature):
+    psatt = Psat_T(temperature)
+    specificVolume = vL_T(temperature)
+
+    if Constants._errorValue in (psatt, specificVolume):
+        return Constants._errorValue
+
+    psatt = Convert.toSIUnit(psatt, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    if englishUnits:
+        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
+
+    thermalConductivity = tc_pTrho(psatt, temperature, 1.0/specificVolume)
+
+    if thermalConductivity == Constants._errorValue:
+        return Constants._errorValue
+
+    if englishUnits:
+        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
+
+    return thermalConductivity
+
 #Rem Function tcV_T(ByVal T As Double) As Double
 #Rem   Dim p, v As Double
 #Rem   p = psat_T(T)
