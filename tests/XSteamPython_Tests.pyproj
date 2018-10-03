@@ -5,7 +5,7 @@
     <ProjectGuid>ff53f884-2c28-4870-97bd-71501084c41c</ProjectGuid>
     <ProjectHome>
     </ProjectHome>
-    <StartupFile>TransportProperties_Tests.py</StartupFile>
+    <StartupFile>ThermalConductivity_Tests.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -96,6 +96,7 @@
     <Compile Include="testRunner.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ThermalConductivity_Tests.py" />
     <Compile Include="Tsat_Tests.py">
       <SubType>Code</SubType>
     </Compile>

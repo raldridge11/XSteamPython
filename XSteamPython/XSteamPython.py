@@ -1317,19 +1317,29 @@ def st_p(pressure):
         surfaceTension = Convert.fromSIUnit(surfaceTension, 'surface tension')
     return surfaceTension
 
-#Rem '***********************************************************************************************************
-#Rem '*1.16 Thermal conductivity
-#Rem Function tcL_p(ByVal p As Double) As Double
-#Rem   Dim T As Double
-#Rem   Dim v As Double
-#Rem   T = Tsat_p(p)
-#Rem   v = vL_p(p)
-#Rem   p = p / 100
-#Rem   p = toSIunit_p(p)
-#Rem   T = toSIunit_T(T)
-#Rem   v = toSIunit_v(v)
-#Rem   tcL_p = fromSIunit_tc(tc_ptrho(p, T, 1 / v))
-#Rem End Function
+def tcL_p(pressure):
+    tsatt = Tsat_p(pressure)
+    specificVolume = vL_p(pressure)
+
+    if Constants._errorValue in (tsatt, specificVolume):
+        return Constants._errorValue
+
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    tsatt = Convert.toSIUnit(tsatt, 'temperature', englishUnits=englishUnits)
+    if englishUnits:
+        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
+
+    thermalConductivity = tc_pTrho(pressure, tsatt, 1.0/specificVolume)
+
+    if thermalConductivity == Constants._errorValue:
+        return Constants._errorValue
+
+    if englishUnits:
+        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
+
+    return thermalConductivity
+
+
 #Rem Function tcV_p(ByVal p As Double) As Double
 #Rem   Dim T As Double
 #Rem   Dim v As Double
@@ -1562,7 +1572,7 @@ def tc_pTrho(pressure, temperature, density):
     if temperature < 0.0 or pressure < Constants._pressureMin \
         or temperature > 800.0 or pressure > 400.0 \
         or not((pressure <= 100.0 and temperature <= 373.15) \
-        or (pressure <= 150.0 and T <= 673.15) \
+        or (pressure <= 150.0 and temperature <= 673.15) \
         or (pressure <= 200.0 and temperature <= 523.15) \
         or (pressure <= 400.0 and temperature <= 398.15)):
         return Constants._errorValue
