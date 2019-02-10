@@ -7,7 +7,15 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
+import os
+import sys
 import unittest
+
+file_directory = os.path.dirname(__file__)
+src_path = os.path.join(os.path.abspath(file_directory), "XSteamPython")
+test_path = os.path.join(os.path.abspath(file_directory), "tests")
+sys.path.append(src_path)
+sys.path.append(test_path)
 
 import Boundaries_Tests
 import Convert_Tests

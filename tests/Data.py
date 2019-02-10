@@ -15,8 +15,8 @@ def loadnpz(npzfile):
 
     if os.path.isfile(npzfile):
         return np.load(npzfile)
-    elif os.path.isfile('tests/{}'.format(npzfile)):
-        return np.load('tests/{}'.format(npzfile))
+    elif os.path.isfile(os.path.join('tests', 'TestData', npzfile)):
+        return np.load(os.path.join('tests', 'TestData', npzfile))
     else:
         raise Exception('npz file not found')
 

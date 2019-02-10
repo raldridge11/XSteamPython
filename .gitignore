@@ -291,3 +291,4 @@ __pycache__/
 /XSteamPython/coverage.xml
 /coverage.xml
 /XSteamPython/XSteamPython.egg-info
+.vscode
