@@ -4,11 +4,10 @@ python:
   - "3.6"
 # command to install dependencies
 install:
-  - pip install -r XSteamPython/requirements.txt
-  - pip install -e XSteamPython
+  - pip install -r requirements.txt
 # command to run tests
 script:
-  - "coverage run --branch --include=XSteamPython/*.py,tests/*.py tests/testRunner.py"
+  - "coverage run --branch --include=XSteamPython/*.py run_tests.py"
 # run coverage to generate coverage report
 after_success:
   - coverage report
