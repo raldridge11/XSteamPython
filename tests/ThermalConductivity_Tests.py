@@ -11,9 +11,6 @@ import os
 import sys
 import unittest
 
-file_directory = os.path.dirname(__file__)
-src_path = os.path.join(os.path.abspath(file_directory), "..", "XSteamPython")
-sys.path.append(src_path)
 import numpy as np
 
 import Data

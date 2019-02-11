@@ -1324,20 +1324,7 @@ def tcL_p(pressure):
     if Constants._errorValue in (tsatt, specificVolume):
         return Constants._errorValue
 
-    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
-    tsatt = Convert.toSIUnit(tsatt, 'temperature', englishUnits=englishUnits)
-    if englishUnits:
-        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
-
-    thermalConductivity = tc_pTrho(pressure, tsatt, 1.0/specificVolume)
-
-    if thermalConductivity == Constants._errorValue:
-        return Constants._errorValue
-
-    if englishUnits:
-        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
-
-    return thermalConductivity
+    return _tc_pTrho_wrapper(pressure, tsatt, specificVolume)
 
 def tcV_p(pressure):
     tsatt = Tsat_p(pressure)
@@ -1346,20 +1333,7 @@ def tcV_p(pressure):
     if Constants._errorValue in (tsatt, specificVolume):
         return Constants._errorValue
 
-    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
-    tsatt = Convert.toSIUnit(tsatt, 'temperature', englishUnits=englishUnits)
-    if englishUnits:
-        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
-
-    thermalConductivity = tc_pTrho(pressure, tsatt, 1.0/specificVolume)
-
-    if thermalConductivity == Constants._errorValue:
-        return Constants._errorValue
-
-    if englishUnits:
-        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
-
-    return thermalConductivity
+    return _tc_pTrho_wrapper(pressure, tsatt, specificVolume)
 
 def tcL_T(temperature):
     psatt = Psat_T(temperature)
@@ -1368,20 +1342,7 @@ def tcL_T(temperature):
     if Constants._errorValue in (psatt, specificVolume):
         return Constants._errorValue
 
-    psatt = Convert.toSIUnit(psatt, 'pressure', englishUnits=englishUnits)
-    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
-    if englishUnits:
-        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
-
-    thermalConductivity = tc_pTrho(psatt, temperature, 1.0/specificVolume)
-
-    if thermalConductivity == Constants._errorValue:
-        return Constants._errorValue
-
-    if englishUnits:
-        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
-
-    return thermalConductivity
+    return _tc_pTrho_wrapper(psatt, temperature, specificVolume)
 
 def tcV_T(temperature):
     psatt = Psat_T(temperature)
@@ -1390,57 +1351,16 @@ def tcV_T(temperature):
     if Constants._errorValue in (psatt, specificVolume):
         return Constants._errorValue
 
-    psatt = Convert.toSIUnit(psatt, 'pressure', englishUnits=englishUnits)
-    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
-    if englishUnits:
-        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
-
-    thermalConductivity = tc_pTrho(psatt, temperature, 1.0/specificVolume)
-
-    if thermalConductivity == Constants._errorValue:
-        return Constants._errorValue
-
-    if englishUnits:
-        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
-
-    return thermalConductivity
+    return _tc_pTrho_wrapper(psatt, temperature, specificVolume)
 
 def tc_pT(pressure, temperature):
     specificVolume = v_pT(pressure, temperature)
-
-    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
-    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
-    if englishUnits:
-        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
-
-    thermalConductivity = tc_pTrho(pressure, temperature, 1.0/specificVolume)
-
-    if thermalConductivity == Constants._errorValue:
-        return Constants._errorValue
-
-    if englishUnits:
-        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
-
-    return thermalConductivity
+    return _tc_pTrho_wrapper(pressure, temperature, specificVolume)
 
 def tc_ph(pressure, enthalpy):
     specificVolume = v_ph(pressure, enthalpy)
     temperature = T_ph(pressure, enthalpy)
-
-    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
-    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
-    if englishUnits:
-        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
-
-    thermalConductivity = tc_pTrho(pressure, temperature, 1.0/specificVolume)
-
-    if thermalConductivity == Constants._errorValue:
-        return Constants._errorValue
-
-    if englishUnits:
-        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
-
-    return thermalConductivity
+    return _tc_pTrho_wrapper(pressure, temperature, specificVolume)
 
 def tc_hs(enthalpy, entropy):
     enthalpy, entropy = float(enthalpy), float(entropy)
@@ -1451,6 +1371,9 @@ def tc_hs(enthalpy, entropy):
     if Constants._errorValue in (pressure, temperature, specificVolume):
         return Constants._errorValue
 
+    return _tc_pTrho_wrapper(pressure, temperature, specificVolume)
+
+def _tc_pTrho_wrapper(pressure, temperature, specificVolume):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     if englishUnits:
