@@ -1466,7 +1466,6 @@ def tc_hs(enthalpy, entropy):
 
     return thermalConductivity
 
-
 def x_ph(pressure, enthalpy):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
