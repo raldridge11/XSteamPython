@@ -1463,7 +1463,7 @@ def tc_hs(enthalpy, entropy):
 
     if englishUnits:
         thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
-    
+
     return thermalConductivity
 
 
