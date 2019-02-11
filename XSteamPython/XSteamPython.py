@@ -1386,7 +1386,7 @@ def tcL_T(temperature):
 def tcV_T(temperature):
     psatt = Psat_T(temperature)
     specificVolume = vV_T(temperature)
-    
+
     if Constants._errorValue in (psatt, specificVolume):
         return Constants._errorValue
 
@@ -1434,6 +1434,26 @@ def tc_pT(pressure, temperature):
 #Rem   v = toSIunit_v(v)
 #Rem   tc_ph = fromSIunit_tc(tc_ptrho(p, T, 1 / v))
 #Rem End Function
+
+def tc_ph(pressure, enthalpy):
+    specificVolume = v_ph(pressure, enthalpy)
+    temperature = T_ph(pressure, enthalpy)
+
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    if englishUnits:
+        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
+
+    thermalConductivity = tc_pTrho(pressure, temperature, 1.0/specificVolume)
+
+    if thermalConductivity == Constants._errorValue:
+        return Constants._errorValue
+
+    if englishUnits:
+        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
+    
+    return thermalConductivity
+
 #Rem Function tc_hs(ByVal h As Double, ByVal s As Double) As Double
 #Rem   Dim p As Double
 #Rem   Dim v As Double

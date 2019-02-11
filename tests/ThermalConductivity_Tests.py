@@ -10,7 +10,7 @@
 import os
 import sys
 import unittest
-import pprint
+
 file_directory = os.path.dirname(__file__)
 src_path = os.path.join(os.path.abspath(file_directory), "..", "XSteamPython")
 sys.path.append(src_path)
@@ -95,6 +95,25 @@ class Test_tc_pT(unittest.TestCase):
 
     def test_tc_pT_error(self):
         self.assertAlmostEqual(stm.tc_pT(-1.0, -1.0), 2015.0, places=2)
+
+class Test_tc_ph(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_tc_ph(self):
+        pressure, enthalpy, conductivityCompare = Data.getTwoDimensionalTestData('SIUnits_tc_ph.npz')
+        conductivity = Data.calculatePropertyFromTwoDimensions(stm.tc_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(conductivity, conductivityCompare, decimal=1)
+
+    def test_tc_ph_English(self):
+        stm.englishUnits = True
+        pressure, enthalpy,  conductivityCompare = Data.getTwoDimensionalTestData('EnglishUnits_tc_ph.npz')
+        conductivity = Data.calculatePropertyFromTwoDimensions(stm.tc_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(conductivity, conductivityCompare, decimal=1)
+
+    def test_tc_ph_error(self):
+        self.assertAlmostEqual(stm.tc_ph(-1.0, -1.0), 2015.0, places=2)
 
 if __name__ == '__main__':
     unittest.main()
