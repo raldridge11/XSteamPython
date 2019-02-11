@@ -7,16 +7,17 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
+import os
+import sys
 import unittest
-
+import pprint
+file_directory = os.path.dirname(__file__)
+src_path = os.path.join(os.path.abspath(file_directory), "..", "XSteamPython")
+sys.path.append(src_path)
 import numpy as np
 
 import Data
 import XSteamPython as stm
-
-#np.set_printoptions(threshold=np.nan)
-#import pprint
-#pprint.pprint(conductivity-conductivityCompare)
 
 class Test_tcL_p(unittest.TestCase):
 
@@ -75,6 +76,25 @@ class Test_tcL_T(unittest.TestCase):
 
     def test_tcL_T_error(self):
         self.assertAlmostEqual(stm.tcL_T(-1.0), 2015.0, places=1)
+
+class Test_tc_pT(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_tc_pT(self):
+        pressure, temperature, conductivityCompare = Data.getTwoDimensionalTestData('SIUnits_tc_pT.npz')
+        conductivity = Data.calculatePropertyFromTwoDimensions(stm.tc_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(conductivity, conductivityCompare, decimal=2)
+
+    def test_tc_pT_English(self):
+        stm.englishUnits = True
+        pressure, temperature,  conductivityCompare = Data.getTwoDimensionalTestData('EnglishUnits_tc_pT.npz')
+        conductivity = Data.calculatePropertyFromTwoDimensions(stm.tc_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(conductivity, conductivityCompare, decimal=2)
+
+    def test_tc_pT_error(self):
+        self.assertAlmostEqual(stm.tc_pT(-1.0, -1.0), 2015.0, places=2)
 
 if __name__ == '__main__':
     unittest.main()

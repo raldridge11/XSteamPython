@@ -13,8 +13,8 @@ import numpy as np
 
 def loadnpz(npzfile):
 
-    if os.path.isfile(npzfile):
-        return np.load(npzfile)
+    if os.path.isfile(os.path.join('TestData', npzfile)):
+        return np.load(os.path.join('TestData', npzfile))
     elif os.path.isfile(os.path.join('tests', 'TestData', npzfile)):
         return np.load(os.path.join('tests', 'TestData', npzfile))
     else:
