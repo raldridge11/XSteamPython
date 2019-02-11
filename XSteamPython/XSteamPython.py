@@ -1420,7 +1420,7 @@ def tc_pT(pressure, temperature):
 
     if englishUnits:
         thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
-    
+
     return thermalConductivity
 
 def tc_ph(pressure, enthalpy):
