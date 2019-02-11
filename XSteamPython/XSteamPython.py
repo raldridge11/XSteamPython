@@ -1423,18 +1423,6 @@ def tc_pT(pressure, temperature):
     
     return thermalConductivity
 
-#Rem Function tc_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem   Dim v As Double
-#Rem   Dim T As Double
-#Rem   v = v_ph(p, h)
-#Rem   T = T_ph(p, h)
-#Rem   p = p / 100
-#Rem   p = toSIunit_p(p)
-#Rem   T = toSIunit_T(T)
-#Rem   v = toSIunit_v(v)
-#Rem   tc_ph = fromSIunit_tc(tc_ptrho(p, T, 1 / v))
-#Rem End Function
-
 def tc_ph(pressure, enthalpy):
     specificVolume = v_ph(pressure, enthalpy)
     temperature = T_ph(pressure, enthalpy)
@@ -1451,22 +1439,33 @@ def tc_ph(pressure, enthalpy):
 
     if englishUnits:
         thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
+
+    return thermalConductivity
+
+def tc_hs(enthalpy, entropy):
+    enthalpy, entropy = float(enthalpy), float(entropy)
+    pressure = P_hs(enthalpy, entropy)
+    specificVolume = v_ph(pressure, enthalpy)
+    temperature = T_ph(pressure, enthalpy)
+
+    if Constants._errorValue in (pressure, temperature, specificVolume):
+        return Constants._errorValue
+
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+    if englishUnits:
+        specificVolume = Convert.toSIUnit(specificVolume, 'specific volume')
+
+    thermalConductivity = tc_pTrho(pressure, temperature, 1.0/specificVolume)
+
+    if thermalConductivity == Constants._errorValue:
+        return Constants._errorValue
+
+    if englishUnits:
+        thermalConductivity = Convert.fromSIUnit(thermalConductivity, 'thermal conductivity')
     
     return thermalConductivity
 
-#Rem Function tc_hs(ByVal h As Double, ByVal s As Double) As Double
-#Rem   Dim p As Double
-#Rem   Dim v As Double
-#Rem   Dim T As Double
-#Rem   p = p_hs(h, s)
-#Rem   v = v_ph(p, h)
-#Rem   T = T_ph(p, h)
-#Rem   p = p / 100
-#Rem   p = toSIunit_p(p)
-#Rem   T = toSIunit_T(T)
-#Rem   v = toSIunit_v(v)
-#Rem   tc_hs = fromSIunit_tc(tc_ptrho(p, T, 1 / v))
-#Rem End Function
 
 def x_ph(pressure, enthalpy):
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
