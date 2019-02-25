@@ -17,6 +17,7 @@ import Region3
 import Region4
 import Region5
 import Regions
+import Viscosity
 
 englishUnits = False
 
@@ -1231,37 +1232,36 @@ def w_ps(pressure, entropy):
         speedOfSound = Convert.fromSIUnit(speedOfSound, 'velocity')
     return speedOfSound
 
-#Rem '***********************************************************************************************************
-#Rem '*1.12 Viscosity
-#Rem Function my_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  T = toSIunit_T(T)
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 4
-#Rem    my_pT = CVErr(xlErrValue)
-#Rem  Case 1, 2, 3, 5
-#Rem    my_pT = fromSIunit_my(my_AllRegions_pT(p, T))
-#Rem  Case Else
-#Rem    my_pT = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
-#Rem Function my_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  h = toSIunit_h(h)
-#Rem  Select Case region_ph(p, h)
-#Rem  Case 1, 2, 3, 5
-#Rem    my_ph = fromSIunit_my(my_AllRegions_ph(p, h))
-#Rem  Case 4
-#Rem   my_ph = CVErr(xlErrValue)
-#Rem  Case Else
-#Rem   my_ph = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
-#Rem Function my_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem  my_ps = my_ph(p, h_ps(p, s))
-#Rem End Function
+def my_pT(pressure, temperature):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    region = Regions.region_pt(pressure, temperature)
+    if region is None or region == 4: return Constants._errorValue
+
+    viscosity = Viscosity.my_allregions_pT(pressure, temperature)
+
+    if englishUnits:
+        return Convert.fromSIUnit(viscosity, 'viscosity')
+    return viscosity
+
+def my_ph(pressure, enthalpy):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    if englishUnits:
+        enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
+
+    region = Regions.region_ph(pressure, enthalpy)
+    if region is None or region == 4: return Constants._errorValue
+
+    viscosity = Viscosity.my_allregions_ph(pressure, enthalpy)
+
+    if englishUnits:
+        return Convert.fromSIUnit(viscosity, 'viscosity')
+    return viscosity
+
+def my_ps(pressure, entropy):
+    return my_ph(pressure, h_ps(pressure, entropy))
+
 #Rem '***********************************************************************************************************
 #Rem '*1.13 Prandtl
 #Rem Function Pr_pT(ByVal p As Double, ByVal T As Double) As Double
@@ -1440,116 +1440,6 @@ def vx_ps(pressure, entropy):
         return quality*specificVolumeVapor/(quality*specificVolumeVapor + (1.0 - quality)*specificVolumeLiquid)
     else:
         return Constants._errorValue
-
-#'***********************************************************************************************************
-#Rem '*5 Transport properties
-#Rem '***********************************************************************************************************
-#Rem '*5.1 Viscosity (IAPWS formulation 1985, Revised 2003)
-#Rem '***********************************************************************************************************
-#Rem Private Function my_AllRegions_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem Dim h0, h1, h2, h3, h4, h5, h6 As Variant, rho, Ts, ps, my0, sum, my1, rhos As Double, i As Integer
-#Rem   h0 = Array(0.5132047, 0.3205656, 0, 0, -0.7782567, 0.1885447)
-#Rem   h1 = Array(0.2151778, 0.7317883, 1.241044, 1.476783, 0, 0)
-#Rem   h2 = Array(-0.2818107, -1.070786, -1.263184, 0, 0, 0)
-#Rem   h3 = Array(0.1778064, 0.460504, 0.2340379, -0.4924179, 0, 0)
-#Rem   h4 = Array(-0.0417661, 0, 0, 0.1600435, 0, 0)
-#Rem   h5 = Array(0, -0.01578386, 0, 0, 0, 0)
-#Rem   h6 = Array(0, 0, 0, -0.003629481, 0, 0)
-#Rem
-#Rem   'Calcualte density.
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 1
-#Rem    rho = 1 / v1_pT(p, T)
-#Rem  Case 2
-#Rem    rho = 1 / v2_pT(p, T)
-#Rem  Case 3
-#Rem    rho = 1 / v3_ph(p, h3_pT(p, T))
-#Rem  Case 4
-#Rem    rho = CVErr(xlErrValue)
-#Rem  Case 5
-#Rem    rho = 1 / v5_pT(p, T)
-#Rem  Case Else
-#Rem   my_AllRegions_pT = CVErr(xlErrValue)
-#Rem   Exit Function
-#Rem  End Select
-#Rem
-#Rem   rhos = rho / 317.763
-#Rem   Ts = T / 647.226
-#Rem   ps = p / 22.115
-#Rem
-#Rem   'Check valid area
-#Rem   If T > 900 + 273.15 Or (T > 600 + 273.15 And p > 300) Or (T > 150 + 273.15 And p > 350) Or p > 500 Then
-#Rem     my_AllRegions_pT = CVErr(xlErrValue)
-#Rem     Exit Function
-#Rem   End If
-#Rem   my0 = Ts ^ 0.5 / (1 + 0.978197 / Ts + 0.579829 / (Ts ^ 2) - 0.202354 / (Ts ^ 3))
-#Rem   sum = 0
-#Rem   For i = 0 To 5
-#Rem       sum = sum + h0(i) * (1 / Ts - 1) ^ i + h1(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 1 + h2(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 2 + h3(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 3 + h4(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 4 + h5(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 5 + h6(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 6
-#Rem   Next i
-#Rem   my1 = Exp(rhos * sum)
-#Rem   my_AllRegions_pT = my0 * my1 * 0.000055071
-#Rem End Function
-#Rem
-#Rem Private Function my_AllRegions_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem   Dim h0, h1, h2, h3, h4, h5, h6 As Variant, rho, T, Ts, ps, my0, sum, my1, rhos, v4V, v4L, xs As Double, i As Integer
-#Rem   h0 = Array(0.5132047, 0.3205656, 0, 0, -0.7782567, 0.1885447)
-#Rem   h1 = Array(0.2151778, 0.7317883, 1.241044, 1.476783, 0, 0)
-#Rem   h2 = Array(-0.2818107, -1.070786, -1.263184, 0, 0, 0)
-#Rem   h3 = Array(0.1778064, 0.460504, 0.2340379, -0.4924179, 0, 0)
-#Rem   h4 = Array(-0.0417661, 0, 0, 0.1600435, 0, 0)
-#Rem   h5 = Array(0, -0.01578386, 0, 0, 0, 0)
-#Rem   h6 = Array(0, 0, 0, -0.003629481, 0, 0)
-#Rem
-#Rem   'Calcualte density.
-#Rem  Select Case region_ph(p, h)
-#Rem  Case 1
-#Rem    Ts = T1_ph(p, h)
-#Rem    T = Ts
-#Rem    rho = 1 / v1_pT(p, Ts)
-#Rem  Case 2
-#Rem    Ts = T2_ph(p, h)
-#Rem    T = Ts
-#Rem    rho = 1 / v2_pT(p, Ts)
-#Rem  Case 3
-#Rem    rho = 1 / v3_ph(p, h)
-#Rem    T = T3_ph(p, h)
-#Rem  Case 4
-#Rem    xs = x4_ph(p, h)
-#Rem    If p < 16.529 Then
-#Rem      v4V = v2_pT(p, T4_p(p))
-#Rem      v4L = v1_pT(p, T4_p(p))
-#Rem    Else
-#Rem      v4V = v3_ph(p, h4V_p(p))
-#Rem      v4L = v3_ph(p, h4L_p(p))
-#Rem     End If
-#Rem     rho = 1 / (xs * v4V + (1 - xs) * v4L)
-#Rem     T = T4_p(p)
-#Rem  Case 5
-#Rem    Ts = T5_ph(p, h)
-#Rem    T = Ts
-#Rem    rho = 1 / v5_pT(p, Ts)
-#Rem  Case Else
-#Rem   my_AllRegions_ph = CVErr(xlErrValue)
-#Rem   Exit Function
-#Rem  End Select
-#Rem   rhos = rho / 317.763
-#Rem   Ts = T / 647.226
-#Rem   ps = p / 22.115
-#Rem   'Check valid area
-#Rem   If T > 900 + 273.15 Or (T > 600 + 273.15 And p > 300) Or (T > 150 + 273.15 And p > 350) Or p > 500 Then
-#Rem     my_AllRegions_ph = CVErr(xlErrValue)
-#Rem     Exit Function
-#Rem   End If
-#Rem   my0 = Ts ^ 0.5 / (1 + 0.978197 / Ts + 0.579829 / (Ts ^ 2) - 0.202354 / (Ts ^ 3))
-#Rem
-#Rem   sum = 0
-#Rem   For i = 0 To 5
-#Rem       sum = sum + h0(i) * (1 / Ts - 1) ^ i + h1(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 1 + h2(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 2 + h3(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 3 + h4(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 4 + h5(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 5 + h6(i) * (1 / Ts - 1) ^ i * (rhos - 1) ^ 6
-#Rem   Next i
-#Rem   my1 = Exp(rhos * sum)
-#Rem   my_AllRegions_ph = my0 * my1 * 0.000055071
-#Rem End Function
 
 def tc_pTrho(pressure, temperature, density):
     '''Revised release on the IAPS Formulation 1985 for the Thermal Conductivity of ordinary water IAPWS September 1998 Page 8'''
