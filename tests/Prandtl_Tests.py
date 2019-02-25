@@ -7,15 +7,10 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
-import os
-import sys
 import unittest
 
 import numpy as np
 
-file_directory = os.path.dirname(__file__)
-src_path = os.path.join(os.path.abspath(file_directory), "..", "XSteamPython")
-sys.path.append(src_path)
 import Data
 import XSteamPython as stm
 
@@ -37,6 +32,25 @@ class Test_Pr_pT(unittest.TestCase):
 
     def test_Pr_pT_error(self):
         self.assertAlmostEqual(stm.Pr_pT(-1.0, -1.0), 2015.0, places=2)
+
+class Test_Pr_ph(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_Pr_ph(self):
+        pressure, enthalpy, prandtlCompare = Data.getTwoDimensionalTestData('SIUnits_Pr_ph.npz')
+        prandtl = Data.calculatePropertyFromTwoDimensions(stm.Pr_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(prandtl, prandtlCompare, decimal=0)
+
+    def test_Pr_ph_English(self):
+        stm.englishUnits = True
+        pressure, enthalpy, prandtlCompare = Data.getTwoDimensionalTestData('EnglishUnits_Pr_ph.npz')
+        prandtl = Data.calculatePropertyFromTwoDimensions(stm.Pr_ph, pressure, enthalpy)
+        np.testing.assert_array_almost_equal(prandtl, prandtlCompare, decimal=0)
+
+    def test_Pr_ph_error(self):
+        self.assertAlmostEqual(stm.Pr_ph(-1.0, -1.0), 2015.0, places=2)
 
 if __name__ == '__main__':
     unittest.main()

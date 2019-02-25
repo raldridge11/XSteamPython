@@ -1262,17 +1262,6 @@ def my_ph(pressure, enthalpy):
 def my_ps(pressure, entropy):
     return my_ph(pressure, h_ps(pressure, entropy))
 
-#Rem '***********************************************************************************************************
-#Rem '*1.13 Prandtl
-#Rem Function Pr_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem   Dim Cp As Double
-#Rem   Dim my As Double
-#Rem   Dim tc As Double
-#Rem   Cp = toSIunit_Cp(Cp_pT(p, T))
-#Rem   my = toSIunit_my(my_pT(p, T))
-#Rem   tc = toSIunit_tc(tc_pT(p, T))
-#Rem   Pr_pT = Cp * 1000 * my / tc
-#Rem End Function
 def Pr_pT(pressure, temperature):
     heatCapacity = cp_pT(pressure, temperature)
     viscosity = my_pT(pressure, temperature)
@@ -1289,16 +1278,20 @@ def Pr_pT(pressure, temperature):
     
     return heatCapacity*1000.0*viscosity/thermalConductivity
 
+def Pr_ph(pressure, enthalpy):
+    heatCapacity = cp_ph(pressure, enthalpy)
+    viscosity = my_ph(pressure, enthalpy)
+    thermalConductivity = tc_ph(pressure, enthalpy)
 
-#Rem Function Pr_ph(ByVal p As Double, ByVal h As Double) As Double
-#Rem   Dim Cp As Double
-#Rem   Dim my As Double
-#Rem   Dim tc As Double
-#Rem   Cp = toSIunit_Cp(Cp_ph(p, h))
-#Rem   my = toSIunit_my(my_ph(p, h))
-#Rem   tc = toSIunit_tc(tc_ph(p, h))
-#Rem   Pr_ph = Cp * 1000 * my / tc
-#Rem End Function
+    if Constants._errorValue in (heatCapacity, viscosity, thermalConductivity):
+        return Constants._errorValue
+
+    if englishUnits:
+        heatCapacity = Convert.toSIUnit(heatCapacity, 'entropy')
+        viscosity = Convert.toSIUnit(viscosity, 'viscosity')
+        thermalConductivity = Convert.toSIUnit(thermalConductivity, 'thermal conductivity')
+
+    return heatCapacity*1000.0*viscosity/thermalConductivity
 
 def kappa_pT(pressure, temperature):
     cp = cp_pT(pressure, temperature)
