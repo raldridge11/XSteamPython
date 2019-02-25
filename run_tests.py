@@ -30,6 +30,7 @@ import Density_Tests
 import Enthalpy_Tests
 import Entropy_Tests
 import Kappa_Tests
+import Prandtl_Tests
 import Pressure_Tests
 import Psat_Tests
 import SpecificEnergy_Tests
@@ -76,6 +77,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(Kappa_Tests))
     suite.addTest(loader.loadTestsFromModule(ThermalConductivity_Tests))
     suite.addTest(loader.loadTestsFromModule(Viscosity_Tests))
+    suite.addTest(loader.loadTestsFromModule(Prandtl_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)
