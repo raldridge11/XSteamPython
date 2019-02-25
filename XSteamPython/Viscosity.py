@@ -28,7 +28,7 @@ def my_allregions_pT(pressure, temperature):
 
     region = Regions.region_pt(pressure, temperature)
     if region is None: return Constants._errorValue
-    
+
     density = Constants._errorValue
     if region == 1:
         density = 1.0/Region1.v1_pt(pressure, temperature)
