@@ -1261,9 +1261,9 @@ def my_ph(pressure, enthalpy):
         return Convert.fromSIUnit(viscosity, 'viscosity')
     return viscosity
 
-#Rem Function my_ps(ByVal p As Double, ByVal s As Double) As Double
-#Rem  my_ps = my_ph(p, h_ps(p, s))
-#Rem End Function
+def my_ps(pressure, entropy):
+    return my_ph(pressure, h_ps(pressure, entropy))
+
 #Rem '***********************************************************************************************************
 #Rem '*1.13 Prandtl
 #Rem Function Pr_pT(ByVal p As Double, ByVal T As Double) As Double
