@@ -42,6 +42,7 @@ import Temperature_Tests
 import ThermalConductivity_Tests
 import TransportProperties_Tests
 import VaporFraction_Tests
+import Viscosity_Tests
 
 
 def main():
@@ -74,6 +75,7 @@ def main():
     suite.addTest(loader.loadTestsFromModule(SurfaceTension_Tests))
     suite.addTest(loader.loadTestsFromModule(Kappa_Tests))
     suite.addTest(loader.loadTestsFromModule(ThermalConductivity_Tests))
+    suite.addTest(loader.loadTestsFromModule(Viscosity_Tests))
 
     runner = unittest.TextTestRunner()
     runner.run(suite)

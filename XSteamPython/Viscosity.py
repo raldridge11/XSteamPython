@@ -47,7 +47,7 @@ def my_allregions_ph(pressure, enthalpy):
     '''Viscosity (IAPWS formulation 1985, Revised 2003)'''
     region = Regions.region_ph(pressure, enthalpy)
     if region is None: return Constants._errorValue
-    
+
     temperature = Constants._errorValue
     density = Constants._errorValue
 

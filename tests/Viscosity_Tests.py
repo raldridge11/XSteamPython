@@ -45,7 +45,7 @@ class Test_my_AllRegions_ph(unittest.TestCase):
 
     def test_my_allregions_ph_region2(self):
         self.assertAlmostEqual(Viscosity.my_allregions_ph(1.0, 4000.0), 3.79e-5, places=7)
- 
+
     def test_my_allregions_ph_region3(self):
         self.assertAlmostEqual(Viscosity.my_allregions_ph(19.0, 2500.0), 2.58e-5, places=7)
 
