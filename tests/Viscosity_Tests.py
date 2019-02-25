@@ -7,13 +7,8 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
-import os
-import sys
 import unittest
 
-file_directory = os.path.dirname(__file__)
-src_path = os.path.join(os.path.abspath(file_directory), "..", "XSteamPython")
-sys.path.append(src_path)
 import Viscosity
 
 class Test_my_AllRegions_pT(unittest.TestCase):
@@ -61,6 +56,22 @@ class Test_my_AllRegions_ph(unittest.TestCase):
         self.assertEqual(Viscosity.my_allregions_ph(350.0, 3490.0), 2015.0)
         self.assertEqual(Viscosity.my_allregions_ph(400.0, 990.0), 2015.0)
         self.assertEqual(Viscosity.my_allregions_ph(600.0, 170.0), 2015.0)
+
+class Test_Check_Valid_Area(unittest.TestCase):
+
+    def test_Invalid_Value_Returns_False(self):
+        self.assertFalse(Viscosity.check_valid_area(9.0, 2000.0))
+        self.assertFalse(Viscosity.check_valid_area(350.0, 900.0))
+        self.assertFalse(Viscosity.check_valid_area(400.0, 500.0))
+        self.assertFalse(Viscosity.check_valid_area(600.0, 300.0))
+
+    def test_Valid_Value_Returns_True(self):
+        self.assertTrue(Viscosity.check_valid_area(1.0, 100.0))
+
+class Test_my_rhot(unittest.TestCase):
+
+    def test_my_rhot(self):
+        self.assertAlmostEqual(Viscosity.my_rhot(997.793, 300.0),0.000853, places=6)
 
 if __name__ == '__main__':
     unittest.main()
