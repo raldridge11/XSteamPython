@@ -7,15 +7,10 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
-import os
-import sys
 import unittest
 
 import numpy as np
 
-file_directory = os.path.dirname(__file__)
-src_path = os.path.join(os.path.abspath(file_directory), "..", "XSteamPython")
-sys.path.append(src_path)
 import Data
 import Viscosity
 import XSteamPython as stm
@@ -50,10 +45,10 @@ class Test_my_AllRegions_ph(unittest.TestCase):
 
     def test_my_allregions_ph_region2(self):
         self.assertAlmostEqual(Viscosity.my_allregions_ph(1.0, 4000.0), 3.79e-5, places=7)
-    
+ 
     def test_my_allregions_ph_region3(self):
         self.assertAlmostEqual(Viscosity.my_allregions_ph(19.0, 2500.0), 2.58e-5, places=7)
-    
+
     def test_my_allregions_ph_region4(self):
         self.assertAlmostEqual(Viscosity.my_allregions_ph(1.0, 1000.0), 1.33e-5, places=7)
 

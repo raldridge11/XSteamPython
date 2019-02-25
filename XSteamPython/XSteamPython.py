@@ -9,8 +9,6 @@
 '''
 import math
 
-import numpy as np
-
 import Constants
 import Convert
 import Region1
@@ -1240,7 +1238,7 @@ def my_pT(pressure, temperature):
 
     region = Regions.region_pt(pressure, temperature)
     if region is None or region == 4: return Constants._errorValue
-    
+
     viscosity = Viscosity.my_allregions_pT(pressure, temperature)
 
     if englishUnits:

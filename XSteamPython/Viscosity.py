@@ -100,7 +100,7 @@ def my_rhot(density, temperature):
     h4 = np.array([-0.0417661, 0.0, 0.0, 0.1600435, 0.0, 0.0])
     h5 = np.array([0.0, -0.01578386, 0.0, 0.0, 0.0, 0.0])
     h6 = np.array([0.0, 0.0, 0.0, -0.003629481, 0.0, 0.0])
-    
+
     rhos = density/317.63
     ts = temperature/647.226
 
