@@ -1275,7 +1275,6 @@ def Pr_pT(pressure, temperature):
         viscosity = Convert.toSIUnit(viscosity, 'viscosity')
         thermalConductivity = Convert.toSIUnit(thermalConductivity, 'thermal conductivity')
 
-    
     return heatCapacity*1000.0*viscosity/thermalConductivity
 
 def Pr_ph(pressure, enthalpy):
