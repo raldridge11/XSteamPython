@@ -7,9 +7,18 @@
 * You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
 * Please notify me at magnus@x-eng.com if the code is used in commercial applications
 '''
+import os
+import sys
 import unittest
 
+import numpy as np
+
+file_directory = os.path.dirname(__file__)
+src_path = os.path.join(os.path.abspath(file_directory), "..", "XSteamPython")
+sys.path.append(src_path)
+import Data
 import Viscosity
+import XSteamPython as stm
 
 class Test_my_AllRegions_pT(unittest.TestCase):
 
@@ -72,6 +81,25 @@ class Test_my_rhot(unittest.TestCase):
 
     def test_my_rhot(self):
         self.assertAlmostEqual(Viscosity.my_rhot(997.793, 300.0),0.000853, places=6)
+
+class Test_my_pT(unittest.TestCase):
+
+    def tearDown(self):
+        stm.englishUnits = False
+
+    def test_my_pT(self):
+        pressure, temperature, viscosityCompare = Data.getTwoDimensionalTestData('SIUnits_my_pT.npz')
+        viscosity = Data.calculatePropertyFromTwoDimensions(stm.my_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(viscosity, viscosityCompare, decimal=2)
+
+    def test_my_pT_English(self):
+        stm.englishUnits = True
+        pressure, temperature, viscosityCompare = Data.getTwoDimensionalTestData('EnglishUnits_my_pT.npz')
+        viscosity = Data.calculatePropertyFromTwoDimensions(stm.my_pT, pressure, temperature)
+        np.testing.assert_array_almost_equal(viscosity, viscosityCompare, decimal=2)
+
+    def test_my_pT_error(self):
+        self.assertAlmostEqual(stm.my_pT(-1.0, -1.0), 2015.0, places=2)
 
 if __name__ == '__main__':
     unittest.main()

@@ -19,6 +19,7 @@ import Region3
 import Region4
 import Region5
 import Regions
+import Viscosity
 
 englishUnits = False
 
@@ -1233,21 +1234,20 @@ def w_ps(pressure, entropy):
         speedOfSound = Convert.fromSIUnit(speedOfSound, 'velocity')
     return speedOfSound
 
-#Rem '***********************************************************************************************************
-#Rem '*1.12 Viscosity
-#Rem Function my_pT(ByVal p As Double, ByVal T As Double) As Double
-#Rem  p = p / 100
-#Rem  p = toSIunit_p(p)
-#Rem  T = toSIunit_T(T)
-#Rem  Select Case region_pT(p, T)
-#Rem  Case 4
-#Rem    my_pT = CVErr(xlErrValue)
-#Rem  Case 1, 2, 3, 5
-#Rem    my_pT = fromSIunit_my(my_AllRegions_pT(p, T))
-#Rem  Case Else
-#Rem    my_pT = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
+def my_pT(pressure, temperature):
+    pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
+    temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
+
+    region = Regions.region_pt(pressure, temperature)
+    if region is None or region == 4: return Constants._errorValue
+    
+    viscosity = Viscosity.my_allregions_pT(pressure, temperature)
+
+    if englishUnits:
+        return Convert.fromSIUnit(viscosity, 'viscosity')
+
+    return viscosity
+
 #Rem Function my_ph(ByVal p As Double, ByVal h As Double) As Double
 #Rem  p = p / 100
 #Rem  p = toSIunit_p(p)
