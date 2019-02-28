@@ -2,12 +2,20 @@
 '''
 Region determinations
 '''
-import Region1
-import Region2
-import Region3
-import Region4
-import Region5
-import Boundaries
+try:
+    import Region1
+    import Region2
+    import Region3
+    import Region4
+    import Region5
+    import Boundaries
+except ImportError:
+    from . import Region1
+    from . import Region2
+    from . import Region3
+    from . import Region4
+    from . import Region5
+    from . import Boundaries
 
 def region_pt(pressure, temperature):
     ''' Regions as a function of pressure and temperature '''

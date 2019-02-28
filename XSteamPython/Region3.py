@@ -8,10 +8,16 @@ import numpy as np
 import scipy
 from scipy import optimize
 
-import Boundaries
-import Constants
-import Region1
-import Region2
+try:
+    import Boundaries
+    import Constants
+    import Region1
+    import Region2
+except ImportError:
+    from . import Boundaries
+    from . import Constants
+    from . import Region1
+    from . import Region2
 
 i = np.array([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 8, 9, 9, 10, 10, 11])
 j = np.array([0, 0, 1, 2, 7, 10, 12, 23, 2, 6, 15, 17, 0, 2, 6, 7, 22, 26, 0, 2, 4, 16, 26, 0, 2, 4, 26, 1, 3, 26, 0, 2, 26, 2, 26, 2, 26, 0, 1, 26])

@@ -5,17 +5,34 @@ Steam tables in python
 '''
 import math
 
-import Constants
-import Convert
-import Region1
-import Region2
-import Region3
-import Region4
-import Region5
-import Regions
-import Viscosity
+try:
+    import Constants
+    import Convert
+    import Region1
+    import Region2
+    import Region3
+    import Region4
+    import Region5
+    import Regions
+    import Viscosity
+except ImportError:
+    from . import Constants
+    from . import Convert
+    from . import Region1
+    from . import Region2
+    from . import Region3
+    from . import Region4
+    from . import Region5
+    from . import Regions
+    from . import Viscosity
 
 englishUnits = False
+
+def switchUnits():
+    '''Function to switch between unit systems'''
+    global englishUnits
+    englishUnits = not englishUnits
+    print("Using English units") if englishUnits else print("Using SI Units")
 
 def Tsat_p(pressure):
     '''

@@ -31,15 +31,16 @@ For development, all dependencies are contained in `requirements.txt`.
 >>> enthalpy=stm.h_pT(101.0, 300.0)
 >>> print(enthalpy)
 3074.515918340631
->>> stm.englishUnits=True
+>>> stm.switchUnits()
+Using English units
 >>> enthalpy=stm.h_pT(14.7, 70.0)
 >>> print(enthalpy)
 38.11798524502647
 >>> dir(stm)
-['Constants', 'Convert', 'P_hs', 'Pr_pT', 'Pr_ph', 'Psat_T', 'Psat_s', 'Region1', 'Region2', 'Region3', 'Region4', 'Region5', 'Regions', 'T_hs', 'T_ph', 'T_ps', 'Tsat_p', 'Tsat_s', 'Viscosity', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', '_tc_pTrho_wrapper', 'cpL_T', 'cpL_p', 'cpV_T', 'cpV_p', 'cp_pT', 'cp_ph', 'cp_ps', 'cvL_T', 'cvL_p', 'cvV_T', 'cvV_p', 'cv_pT', 'cv_ph', 'cv_ps', 'englishUnits', 'hL_T', 'hL_p', 'hV_T', 'hV_p', 'h_Tx', 'h_pT', 'h_ps', 'h_px', 'kappa_pT', 'kappa_ph', 'math', 'my_pT', 'my_ph', 'my_ps', 'rhoL_T', 'rhoL_p', 'rhoV_T', 'rhoV_p', 'rho_pT', 'rho_ph', 'rho_ps', 'sL_T', 'sL_p', 'sV_T', 'sV_p', 's_pT', 's_ph', 'st_p', 'st_t', 'surfaceTension_T', 'tcL_T', 'tcL_p', 'tcV_T', 'tcV_p', 'tc_hs', 'tc_pT', 'tc_pTrho', 'tc_ph', 'uL_T', 'uL_p', 'uV_T', 'uV_p', 'u_pT', 'u_ph', 'u_ps', 'vL_T', 'vL_p', 'vV_T', 'vV_p', 'v_pT', 'v_ph', 'v_ps', 'vx_ph', 'vx_ps', 'wL_T', 'wL_p', 'wV_T', 'wV_p', 'w_pT', 'w_ph', 'w_ps', 'x_ph', 'x_ps']
+['Boundaries', 'Constants', 'Convert', 'P_hs', 'Pr_pT', 'Pr_ph', 'Psat_T', 'Psat_s', 'Region1', 'Region2', 'Region3', 'Region4', 'Region5', 'Regions', 'T_hs', 'T_ph', 'T_ps', 'Tsat_p', 'Tsat_s', 'Viscosity', 'XSteamPython', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', 'cpL_T', 'cpL_p', 'cpV_T', 'cpV_p', 'cp_pT', 'cp_ph', 'cp_ps', 'cvL_T', 'cvL_p', 'cvV_T', 'cvV_p', 'cv_pT', 'cv_ph', 'cv_ps', 'englishUnits', 'hL_T', 'hL_p', 'hV_T', 'hV_p', 'h_Tx', 'h_pT', 'h_ps', 'h_px', 'kappa_pT', 'kappa_ph', 'math', 'my_pT', 'my_ph', 'my_ps', 'rhoL_T', 'rhoL_p', 'rhoV_T', 'rhoV_p', 'rho_pT', 'rho_ph', 'rho_ps', 'sL_T', 'sL_p', 'sV_T', 'sV_p', 's_pT', 's_ph', 'st_p', 'st_t', 'surfaceTension_T', 'switchUnits', 'tcL_T', 'tcL_p', 'tcV_T', 'tcV_p', 'tc_hs', 'tc_pT', 'tc_pTrho', 'tc_ph', 'uL_T', 'uL_p', 'uV_T', 'uV_p', 'u_pT', 'u_ph', 'u_ps', 'vL_T', 'vL_p', 'vV_T', 'vV_p', 'v_pT', 'v_ph', 'v_ps', 'vx_ph', 'vx_ps', 'wL_T', 'wL_p', 'wV_T', 'wV_p', 'w_pT', 'w_ph', 'w_ps', 'x_ph', 'x_ps']
 ```
 
-Note that setting `stm.englishUnits` to `True` changes from SI to English units. Default is SI units.
+Note that calling `stm.switchUnits()` changes from SI to English units and vice versa. Default is SI units.
 
 ## Syntax
 

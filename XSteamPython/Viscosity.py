@@ -6,13 +6,22 @@ import math
 
 import numpy as np
 
-import Constants
-import Regions
-import Region1
-import Region2
-import Region3
-import Region4
-import Region5
+try:
+    import Constants
+    import Regions
+    import Region1
+    import Region2
+    import Region3
+    import Region4
+    import Region5
+except ImportError:
+    from . import Constants
+    from . import Regions
+    from . import Region1
+    from . import Region2
+    from . import Region3
+    from . import Region4
+    from . import Region5
 
 def my_allregions_pT(pressure, temperature):
     '''Viscosity (IAPWS formulation 1985, Revised 2003)'''

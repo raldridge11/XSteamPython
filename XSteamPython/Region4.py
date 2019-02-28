@@ -3,15 +3,21 @@
 Region 4 functions
 '''
 import math
-import Constants
 
 import numpy as np
 import scipy
 from scipy import optimize
 
-import Region1
-import Region2
-import Region3
+try:
+    import Constants
+    import Region1
+    import Region2
+    import Region3
+except ImportError:
+    from . import Constants
+    from . import Region1
+    from . import Region2
+    from . import Region3
 
 def p4_t(temperature):
     '''Release on the IAPWS Industrial Formulation 1997 for the Thermodynamic Properties of Water and Steam, September 1997

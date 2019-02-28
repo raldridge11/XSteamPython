@@ -8,8 +8,12 @@ import numpy as np
 import scipy
 from scipy import optimize
 
-import Constants
-import Region2
+try:
+    import Constants
+    import Region2
+except ImportError:
+    from . import Constants
+    from . import Region2
 
 j0 = np.array([0, 1, -3, -2, -1, 2])
 n0 = np.array([-13.179983674201, 6.8540841634434, -0.024805148933466, 0.36901534980333, -3.1161318213925, -0.32961626538917])
