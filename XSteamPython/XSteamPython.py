@@ -32,7 +32,10 @@ def switchUnits():
     '''Function to switch between unit systems'''
     global englishUnits
     englishUnits = not englishUnits
-    _ = print("Using English units") if englishUnits else print("Using SI Units")
+    if englishUnits:
+        print("Using English units")
+    else:
+        print("Using SI Units")
 
 def Tsat_p(pressure):
     '''
