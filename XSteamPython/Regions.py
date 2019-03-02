@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
 '''
-* Water and steam properties according to IAPWS IF-97
-* By Magnus Holmgren, www.x-eng.com
-* The steam tables are free and provided as is.
-* We take no responsibilities for any errors in the code or damage thereby.
-* You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
-* Please notify me at magnus@x-eng.com if the code is used in commercial applications
+Region determinations
 '''
-import Region1
-import Region2
-import Region3
-import Region4
-import Region5
-import Boundaries
+try:
+    import Region1
+    import Region2
+    import Region3
+    import Region4
+    import Region5
+    import Boundaries
+except ImportError:
+    from . import Region1
+    from . import Region2
+    from . import Region3
+    from . import Region4
+    from . import Region5
+    from . import Boundaries
 
 def region_pt(pressure, temperature):
     ''' Regions as a function of pressure and temperature '''

@@ -1,28 +1,52 @@
 # -*- coding: utf-8 -*-
 '''
-* Water and steam properties according to IAPWS IF-97
-* By Magnus Holmgren, www.x-eng.com
-* The steam tables are free and provided as is.
-* We take no responsibilities for any errors in the code or damage thereby.
-* You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
-* Please notify me at magnus@x-eng.com if the code is used in commercial applications
+XSteamPython
+Steam tables in python
 '''
 import math
 
-import Constants
-import Convert
-import Region1
-import Region2
-import Region3
-import Region4
-import Region5
-import Regions
-import Viscosity
+try:
+    import Constants
+    import Convert
+    import Region1
+    import Region2
+    import Region3
+    import Region4
+    import Region5
+    import Regions
+    import Viscosity
+except ImportError:
+    from . import Constants
+    from . import Convert
+    from . import Region1
+    from . import Region2
+    from . import Region3
+    from . import Region4
+    from . import Region5
+    from . import Regions
+    from . import Viscosity
 
 englishUnits = False
 
+def switchUnits():
+    '''Function to switch between unit systems'''
+    global englishUnits
+    englishUnits = not englishUnits
+    if englishUnits:
+        print("Using English units")
+    else:
+        print("Using SI Units")
+
 def Tsat_p(pressure):
-    '''Returns saturation temperature as a function of pressure'''
+    '''
+    Saturation temperature given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: Saturation temperature in °C or °F
+    '''
     pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
 
     if pressure >= Constants._pressureMin and pressure <= Constants._pressureMax + 0.001:
@@ -31,7 +55,15 @@ def Tsat_p(pressure):
         return Constants._errorValue
 
 def Tsat_s(entropy):
-    '''Returns saturation temperature as a function of entropy'''
+    '''
+    Saturation temperature given entropy
+
+    Args:
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: Saturation temperature in °C or °F
+    '''
     if englishUnits: entropy = Convert.toSIUnit(float(entropy), 'entropy')
     entropyMin, entropyMax = -0.0001545495919, 9.155759395
 
@@ -41,7 +73,16 @@ def Tsat_s(entropy):
         return Constants._errorValue
 
 def T_ph(pressure, enthalpy):
-    '''Returns temperature as a function of pressure and enthalpy'''
+    '''
+    Temperature given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: Temperature in °C or °F
+    '''
     pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
     enthalpy = float(enthalpy)
     if englishUnits: enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -64,7 +105,16 @@ def T_ph(pressure, enthalpy):
     return Convert.fromSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
 def T_ps(pressure, entropy):
-    '''Returns temperature as a function of pressure and entropy'''
+    '''
+    Temperature given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: Temperature in °C or °F
+    '''
     pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
     entropy = float(entropy)
     if englishUnits: entropy = Convert.toSIUnit(entropy, 'entropy')
@@ -87,6 +137,16 @@ def T_ps(pressure, entropy):
     return Convert.fromSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
 def T_hs(enthalpy, entropy):
+    '''
+    Temperature given enthalpy and entropy
+
+    Args:
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: Temperature in °C or °F
+    '''
     enthalpy, entropy = float(enthalpy), float(entropy)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -108,7 +168,16 @@ def T_hs(enthalpy, entropy):
     return Convert.fromSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
 def Psat_T(temperature):
-    '''Saturation Pressure as a function of temperature'''
+    '''
+    Saturation Pressure given temperature
+
+    Args:
+        temperature (float): temperature in °C or °F
+
+    Returns:
+        float: pressure in kPa or psi
+
+    '''
     temperature = Convert.toSIUnit(float(temperature), 'temperature', englishUnits=englishUnits)
     pressure = 0.0
     if temperature <= Constants._temperatureMax and temperature > Constants._temperatureMin:
@@ -118,6 +187,15 @@ def Psat_T(temperature):
     return pressure
 
 def Psat_s(entropy):
+    '''
+    Saturation pressure given entropy
+
+    Args:
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: pressure in kPa or psi
+    '''
     entropy = float(entropy)
 
     if englishUnits:
@@ -129,6 +207,16 @@ def Psat_s(entropy):
         return Constants._errorValue
 
 def P_hs(enthalpy, entropy):
+    '''
+    Pressure given enthalpy and entropy
+
+    Args:
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: pressure in kPa or psi
+    '''
     enthalpy, entropy = float(enthalpy), float(entropy)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -149,48 +237,16 @@ def P_hs(enthalpy, entropy):
 
     return Convert.fromSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
-#Rem Function p_hrho(ByVal h As Double, ByVal rho As Double) As Double #7 and #18
-#Rem   Dim rhos As Double
-#Rem   High_Bound = fromSIunit_p(5000)
-#Rem   Low_Bound = fromSIunit_p(0.000611657)
-#Rem   p = fromSIunit_p(10)
-#Rem   rhos = 1 / v_ph(p, h)
-#Rem   Do While Abs(rho - rhos) > 0.0000001
-#Rem     rhos = 1 / v_ph(p, h)
-#Rem     If rhos >= rho Then
-#Rem       High_Bound = p
-#Rem     Else
-#Rem       Low_Bound = p
-#Rem     End If
-#Rem     p = (Low_Bound + High_Bound) / 2
-#Rem     ' MsgBox "low=" + CStr(Low_Bound) + " high=" + CStr(High_Bound)
-#Rem
-#Rem     Loop
-#Rem     p_hrho = p    ' should be kPa
-#Rem End Function
-
-#Rem 'Function p_Tv(ByVal T As Double, ByVal v As Double) As Double #19
-#Rem 'Dim p_max As Double
-#Rem 'Dim p_min As Double
-#Rem 'Dim p_mid As Double
-#Rem 'Dim T_search As Double
-#Rem 'p_max = 30000
-#Rem 'p_min = 0
-#Rem 'T_search = 0
-#Rem 'Do While (T - T_search) > 0.00001
-#Rem ' p_mid = (p_max + p_min) / 2
-#Rem ' T_search = T_pv(p_mid, v)
-#Rem ' If T_search < T Then
-#Rem '  p_min = p_mid
-#Rem ' End If
-#Rem ' If T_search > T Then
-#Rem '  p_max = p_mid
-#Rem ' End If
-#Rem 'Loop
-#Rem 'p_Tv = p_mid * 100
-#Rem 'End Function
-
 def hV_p(pressure):
+    '''
+    Vapor enthalpy given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: enthalpy in kJ/kg or Btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
         enthalpy = Region4.h4_p(pressure, 'vap')
@@ -202,6 +258,15 @@ def hV_p(pressure):
         return Constants._errorValue
 
 def hL_p(pressure):
+    '''
+    Liquid enthalpy given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: enthalpy in kJ/kg or Btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
         enthalpy = Region4.h4_p(pressure, 'liq')
@@ -213,6 +278,15 @@ def hL_p(pressure):
         return Constants._errorValue
 
 def hV_T(temperature):
+    '''
+    Vapor enthalpy given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: enthalpy in kJ/kg or Btu/lb
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
         enthalpy = Region4.h4_p(Region4.p4_t(temperature), 'vap')
@@ -223,6 +297,15 @@ def hV_T(temperature):
         return Constants._errorValue
 
 def hL_T(temperature):
+    '''
+    Liquid enthalpy given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: enthalpy in kJ/kg or Btu/lb
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
         enthalpy = Region4.h4_p(Region4.p4_t(temperature), 'liq')
@@ -233,6 +316,16 @@ def hL_T(temperature):
         return Constants._errorValue
 
 def h_pT(pressure, temperature):
+    '''
+    Enthalpy given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: enthalpy in kJ/kg or Btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     region = Regions.region_pt(pressure, temperature)
@@ -255,6 +348,16 @@ def h_pT(pressure, temperature):
         return enthalpy
 
 def h_ps(pressure, entropy):
+    '''
+    Enthalpy given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: enthalpy in kJ/kg or Btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         entropy = Convert.toSIUnit(entropy, 'entropy')
@@ -283,6 +386,16 @@ def h_ps(pressure, entropy):
         return enthalpy
 
 def h_px(pressure, quality):
+    '''
+    Enthalpy given pressure and static quality
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        quality (float): static quality (between 0 and 1)
+
+    Returns:
+        float: enthalpy in kJ/kg or Btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
     if quality > 1.0 or quality < 0.0 or pressure >= 22.064:
@@ -300,6 +413,16 @@ def h_px(pressure, quality):
     return enthalpy
 
 def h_Tx(temperature, quality):
+    '''
+    Enthalpy given pressure and static quality
+
+    Args:
+        temperature (float): Temperature in °C or °F
+        quality (float): static quality (between 0 and 1)
+
+    Returns:
+        float: enthalpy in kJ/kg or Btu/lb
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
     if quality > 1.0 or quality < 0.0 or temperature >= Constants._temperatureMax:
@@ -309,48 +432,16 @@ def h_Tx(temperature, quality):
 
     return h_px(pressure, quality)
 
-#Rem Function h_prho(ByVal p As Double, ByVal rho As Double) As Double
-#Rem   Dim hL, hV, vL, vV, x As Double
-#Rem   p = p / 100
-#Rem   p = toSIunit_p(p)
-#Rem   rho = 1 / toSIunit_v(1 / rho)
-#Rem   Select Case Region_prho(p, rho)
-#Rem   Case 1
-#Rem     h_prho = fromSIunit_h(h1_pT(p, T1_prho(p, rho)))
-#Rem   Case 2
-#Rem     h_prho = fromSIunit_h(h2_pT(p, T2_prho(p, rho)))
-#Rem   Case 3
-#Rem     h_prho = fromSIunit_h(h3_rhoT(rho, T3_prho(p, rho)))
-#Rem   Case 4
-#Rem    If p < 16.529 Then
-#Rem      vV = v2_pT(p, T4_p(p))
-#Rem      vL = v1_pT(p, T4_p(p))
-#Rem    Else
-#Rem      vV = v3_ph(p, h4V_p(p))
-#Rem      vL = v3_ph(p, h4L_p(p))
-#Rem     End If
-#Rem     hV = h4V_p(p)
-#Rem     hL = h4L_p(p)
-#Rem   x = (1 / rho - vL) / (vV - vL)
-#Rem   h_prho = fromSIunit_h((1 - x) * hL + x * hV)
-#Rem  Case 5
-#Rem    h_prho = fromSIunit_h(h5_pT(p, T5_prho(p, rho)))
-#Rem  Case Else
-#Rem    h_prho = CVErr(xlErrValue)
-#Rem  End Select
-#Rem End Function
-#Rem Function h_pv(ByVal p As Double, ByVal v As Double) As Double
-#Rem  Dim rho As Double
-#Rem  rho = 1 / v
-#Rem  h_pv = h_prho(p, rho)
-#Rem End Function
-#Rem 'Function h_Tv(ByVal T As Double, ByVal v As Double) As Double
-#Rem 'Dim p As Double
-#Rem 'p = p_Tv(T, v)
-#Rem 'h_Tv = h_pv(p, v)
-#Rem 'End Function
-
 def vV_p(pressure):
+    '''
+    Vapor specific volume given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: specific volume in m**3/kg or ft**3/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
     if pressure <= Constants._pressureMin or pressure >= Constants._pressureMax:
@@ -364,6 +455,15 @@ def vV_p(pressure):
     return specificVolume
 
 def vL_p(pressure):
+    '''
+    Liquid specific volume given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: specific volume in m**3/kg or ft**3/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
     if pressure <= Constants._pressureMin or pressure >= Constants._pressureMax:
@@ -379,6 +479,15 @@ def vL_p(pressure):
     return specificVolume
 
 def vV_T(temperature):
+    '''
+    Vapor specific volume given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: specific volume in m**3/kg or ft**3/lb
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
     if temperature <= Constants._temperatureMin or temperature >= Constants._temperatureMax:
@@ -392,6 +501,15 @@ def vV_T(temperature):
     return specificVolume
 
 def vL_T(temperature):
+    '''
+    Liquid specific volume given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: specific volume in m**3/kg or ft**3/lb
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
     if temperature <= Constants._temperatureMin or temperature >= Constants._temperatureMax:
@@ -405,6 +523,16 @@ def vL_T(temperature):
     return specificVolume
 
 def v_pT(pressure, temperature):
+    '''
+    Specific volume given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: specific volume in m**3/kg or ft**3/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     specificVolume = Constants._errorValue
@@ -427,6 +555,16 @@ def v_pT(pressure, temperature):
     return specificVolume
 
 def v_ph(pressure, enthalpy):
+    '''
+    Specific volume given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: specific volume in m**3/kg or ft**3/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -459,6 +597,16 @@ def v_ph(pressure, enthalpy):
     return specificVolume
 
 def v_ps(pressure, entropy):
+    '''
+    Specific volume given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: specific volume in m**3/kg or ft**3/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         entropy = Convert.toSIUnit(entropy, 'entropy')
@@ -491,27 +639,102 @@ def v_ps(pressure, entropy):
     return specificVolume
 
 def rhoV_p(pressure):
+    '''
+    Vapor density given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: density in kg/m**3 or lb/ft**3
+    '''
     return 1.0/vV_p(pressure)
 
 def rhoL_p(pressure):
+    '''
+    Liquid density given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: density in kg/m**3 or lb/ft**3
+    '''
     return 1.0/vL_p(pressure)
 
 def rhoL_T(temperature):
+    '''
+    Liquid density given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: density in kg/m**3 or lb/ft**3
+    '''
     return 1.0/vL_T(temperature)
 
 def rhoV_T(temperature):
+    '''
+    Vapor density given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: density in kg/m**3 or lb/ft**3
+    '''
     return 1.0/vV_T(temperature)
 
 def rho_pT(pressure, temperature):
+    '''
+    Density given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: density in kg/m**3 or lb/ft**3
+    '''
     return 1.0/v_pT(pressure, temperature)
 
 def rho_ph(pressure, enthalpy):
+    '''
+    Density given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: density in kg/m**3 or lb/ft**3
+    '''
     return 1.0/v_ph(pressure, enthalpy)
 
 def rho_ps(pressure, entropy):
+    '''
+    Density given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: density in kg/m**3 or lb/ft**3
+    '''
     return 1.0/v_ps(pressure, entropy)
 
 def sV_p(pressure):
+    '''
+    Vapor entropy given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: entropy in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     entropy = Constants._errorValue
 
@@ -529,6 +752,15 @@ def sV_p(pressure):
         return Constants._errorValue
 
 def sL_p(pressure):
+    '''
+    Liquid entropy given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: entropy in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     entropy = Constants._errorValue
 
@@ -546,6 +778,15 @@ def sL_p(pressure):
         return Constants._errorValue
 
 def sV_T(temperature):
+    '''
+    Vapor entropy given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: entropy in kJ/(kg*K) or btu/(lb*°F)
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     entropy = Constants._errorValue
 
@@ -564,6 +805,15 @@ def sV_T(temperature):
         return Constants._errorValue
 
 def sL_T(temperature):
+    '''
+    Liquid entropy given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: entropy in kJ/(kg*K) or btu/(lb*°F)
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     entropy = Constants._errorValue
 
@@ -582,6 +832,16 @@ def sL_T(temperature):
         return Constants._errorValue
 
 def s_pT(pressure, temperature):
+    '''
+    Vapor entropy given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: entropy in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
@@ -605,6 +865,16 @@ def s_pT(pressure, temperature):
     return entropy
 
 def s_ph(pressure, enthalpy):
+    '''
+    Vapor entropy given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: entropy in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -639,21 +909,16 @@ def s_ph(pressure, enthalpy):
         entropy = Convert.fromSIUnit(entropy, 'entropy')
     return entropy
 
-#Rem Function s_pv(ByVal p As Double, ByVal v As Double) As Double #51
-#Rem Dim rho As Double
-#Rem Dim h As Double
-#Rem rho = 1 / v
-#Rem h = h_prho(p, rho)
-#Rem s_pv = s_ph(p, h)
-#Rem End Function
-
-#Rem 'Function s_Tv(ByVal T As Double, ByVal v As Double) As Double #52
-#Rem 'Dim p As Double
-#Rem 'p = p_Tv(T, v)
-#Rem 's_Tv = s_pv(p, v)
-#Rem 'End Function
-
 def uV_p(pressure):
+    '''
+    Vapor internal energy given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: internal energy in kJ/kg or btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
@@ -671,6 +936,15 @@ def uV_p(pressure):
         return Constants._errorValue
 
 def uL_p(pressure):
+    '''
+    Liquid internal energy given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: internal energy in kJ/kg or btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
@@ -688,6 +962,15 @@ def uL_p(pressure):
         return Constants._errorValue
 
 def uV_T(temperature):
+    '''
+    Vapor internal energy given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: internal energy in kJ/kg or btu/lb
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
@@ -705,6 +988,15 @@ def uV_T(temperature):
         return Constants._errorValue
 
 def uL_T(temperature):
+    '''
+    Liquid internal energy given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: internal energy in kJ/kg or btu/lb
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
@@ -722,6 +1014,16 @@ def uL_T(temperature):
         return Constants._errorValue
 
 def u_pT(pressure, temperature):
+    '''
+    Internal energy given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: internal energy in kJ/kg or btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
@@ -746,6 +1048,16 @@ def u_pT(pressure, temperature):
     return internalEnergy
 
 def u_ph(pressure, enthalpy):
+    '''
+    Internal energy given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: internal energy in kJ/kg or btu/lb
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -783,6 +1095,16 @@ def u_ph(pressure, enthalpy):
     return internalEnergy
 
 def u_ps(pressure, entropy):
+    '''
+    Internal energy given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: internal energy in kJ/kg or btu/lb
+    '''
     pressure, entropy = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits), float(entropy)
     if englishUnits:
         entropy = Convert.toSIUnit(entropy, 'entropy')
@@ -818,21 +1140,16 @@ def u_ps(pressure, entropy):
         internalEnergy = Convert.fromSIUnit(internalEnergy, 'enthalpy')
     return internalEnergy
 
-#Rem Function u_pv(ByVal p As Double, ByVal v As Double) As Double
-#Rem Dim rho As Double
-#Rem Dim h As Double
-#Rem rho = 1 / v
-#Rem h = h_prho(p, rho)
-#Rem u_pv = u_ph(p, h)
-#Rem End Function
-
-#Rem 'Function u_Tv(ByVal T As Double, ByVal v As Double) As Double
-#Rem 'Dim p As Double
-#Rem 'p = p_Tv(T, v)
-#Rem 'u_Tv = u_pv(p, v)
-#Rem 'End Function
-
 def cpV_p(pressure):
+    '''
+    Vapor heat capacity at constant pressure given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
@@ -850,6 +1167,15 @@ def cpV_p(pressure):
         return Constants._errorValue
 
 def cpL_p(pressure):
+    '''
+    Liquid heat capacity at constant pressure given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
@@ -867,6 +1193,15 @@ def cpL_p(pressure):
         return Constants._errorValue
 
 def cpV_T(temperature):
+    '''
+    Vapor heat capacity at constant pressure given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
@@ -885,6 +1220,15 @@ def cpV_T(temperature):
         return Constants._errorValue
 
 def cpL_T(temperature):
+    '''
+    Liquid heat capacity at constant pressure given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
@@ -903,6 +1247,16 @@ def cpL_T(temperature):
         return Constants._errorValue
 
 def cp_pT(pressure, temperature):
+    '''
+    Heat capacity at constant pressure given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
@@ -925,6 +1279,16 @@ def cp_pT(pressure, temperature):
     return specificHeat
 
 def cp_ph(pressure, enthalpy):
+    '''
+    Heat capacity at constant pressure given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -948,6 +1312,16 @@ def cp_ph(pressure, enthalpy):
     return specificHeat
 
 def cp_ps(pressure, entropy):
+    '''
+    Heat capacity at constant pressure given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         entropy = Convert.toSIUnit(entropy, 'entropy')
@@ -971,6 +1345,15 @@ def cp_ps(pressure, entropy):
     return specificHeat
 
 def cvV_p(pressure):
+    '''
+    Vapor heat capacity at constant volume given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
@@ -988,6 +1371,15 @@ def cvV_p(pressure):
         return Constants._errorValue
 
 def cvL_p(pressure):
+    '''
+    Liquid heat capacity at constant volume given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
@@ -1005,6 +1397,15 @@ def cvL_p(pressure):
         return Constants._errorValue
 
 def cvV_T(temperature):
+    '''
+    Vapor heat capacity at constant volume given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
@@ -1023,6 +1424,15 @@ def cvV_T(temperature):
         return Constants._errorValue
 
 def cvL_T(temperature):
+    '''
+    Liquid heat capacity at constant volume given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
@@ -1041,6 +1451,16 @@ def cvL_T(temperature):
         return Constants._errorValue
 
 def cv_pT(pressure, temperature):
+    '''
+    Heat capacity at constant volume given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
@@ -1063,6 +1483,16 @@ def cv_pT(pressure, temperature):
     return specificHeat
 
 def cv_ph(pressure, enthalpy):
+    '''
+    Heat capacity at constant volume given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -1086,6 +1516,16 @@ def cv_ph(pressure, enthalpy):
     return specificHeat
 
 def cv_ps(pressure, entropy):
+    '''
+    Heat capacity at constant volume given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: heat capacity in kJ/(kg*K) or btu/(lb*°F)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         entropy = Convert.toSIUnit(entropy, 'entropy')
@@ -1109,6 +1549,15 @@ def cv_ps(pressure, entropy):
     return specificHeat
 
 def wV_p(pressure):
+    '''
+    Vapor speed of sound given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: speed of sound in m/s or ft/s
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
 
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
@@ -1124,6 +1573,15 @@ def wV_p(pressure):
         return Constants._errorValue
 
 def wL_p(pressure):
+    '''
+    Liquid speed of sound given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: speed of sound in m/s or ft/s
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if pressure > Constants._pressureMin and pressure < Constants._pressureMax:
         if pressure < Constants._pressureSubDomain:
@@ -1138,6 +1596,15 @@ def wL_p(pressure):
         return Constants._errorValue
 
 def wV_T(temperature):
+    '''
+    Vapor speed of sound given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: speed of sound in m/s or ft/s
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
         if temperature < Constants._temperatureSubDomain:
@@ -1153,6 +1620,15 @@ def wV_T(temperature):
         return Constants._errorValue
 
 def wL_T(temperature):
+    '''
+    Liquid speed of sound given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: speed of sound in m/s or ft/s
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     if temperature > Constants._temperatureMin and temperature < Constants._temperatureMax:
         if temperature < Constants._temperatureSubDomain:
@@ -1168,6 +1644,16 @@ def wL_T(temperature):
         return Constants._errorValue
 
 def w_pT(pressure, temperature):
+    '''
+    Speed of sound given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: speed of sound in m/s or ft/s
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
@@ -1189,6 +1675,16 @@ def w_pT(pressure, temperature):
     return speedOfSound
 
 def w_ph(pressure, enthalpy):
+    '''
+    Speed of sound given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: speed of sound in m/s or ft/s
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -1211,6 +1707,16 @@ def w_ph(pressure, enthalpy):
     return speedOfSound
 
 def w_ps(pressure, entropy):
+    '''
+    Speed of sound given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: speed of sound in m/s or ft/s
+    '''
     pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
     if englishUnits:
         entropy = Convert.toSIUnit(float(entropy), 'entropy')
@@ -1233,6 +1739,16 @@ def w_ps(pressure, entropy):
     return speedOfSound
 
 def my_pT(pressure, temperature):
+    '''
+    Viscosity given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: viscosity in Pa*s or lb/(ft*hr)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
 
@@ -1246,6 +1762,16 @@ def my_pT(pressure, temperature):
     return viscosity
 
 def my_ph(pressure, enthalpy):
+    '''
+    Viscosity given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: viscosity in Pa*s or lb/(ft*hr)
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -1260,9 +1786,29 @@ def my_ph(pressure, enthalpy):
     return viscosity
 
 def my_ps(pressure, entropy):
+    '''
+    Viscosity given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: viscosity in Pa*s or lb/(ft*hr)
+    '''
     return my_ph(pressure, h_ps(pressure, entropy))
 
 def Pr_pT(pressure, temperature):
+    '''
+    Prandtl number given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: Prandtl number
+    '''
     heatCapacity = cp_pT(pressure, temperature)
     viscosity = my_pT(pressure, temperature)
     thermalConductivity = tc_pT(pressure, temperature)
@@ -1278,6 +1824,16 @@ def Pr_pT(pressure, temperature):
     return heatCapacity*1000.0*viscosity/thermalConductivity
 
 def Pr_ph(pressure, enthalpy):
+    '''
+    Prandtl number given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: Prandtl number
+    '''
     heatCapacity = cp_ph(pressure, enthalpy)
     viscosity = my_ph(pressure, enthalpy)
     thermalConductivity = tc_ph(pressure, enthalpy)
@@ -1293,16 +1849,45 @@ def Pr_ph(pressure, enthalpy):
     return heatCapacity*1000.0*viscosity/thermalConductivity
 
 def kappa_pT(pressure, temperature):
+    '''
+    Heat capcity ratio given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: Heat capcity ratio
+    '''
     cp = cp_pT(pressure, temperature)
     cv = cv_pT(pressure, temperature)
     return cp/cv
 
 def kappa_ph(pressure, enthalpy):
+    '''
+    Heat capcity ratio given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: Heat capcity ratio
+    '''
     cp = cp_ph(pressure, enthalpy)
     cv = cv_ph(pressure, enthalpy)
     return cp/cv
 
 def st_t(temperature):
+    '''
+    Surface tension given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: surface tension in N/m or lb/ft
+    '''
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     surfaceTension = surfaceTension_T(temperature)
     if surfaceTension == Constants._errorValue:
@@ -1312,6 +1897,15 @@ def st_t(temperature):
     return surfaceTension
 
 def st_p(pressure):
+    '''
+    Surface tension given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: surface tension in N/m or lb/ft
+    '''
     temperature = Tsat_p(pressure)
     temperature = Convert.toSIUnit(temperature, 'temperature', englishUnits=englishUnits)
     if temperature == Constants._errorValue:
@@ -1327,6 +1921,15 @@ def st_p(pressure):
     return surfaceTension
 
 def tcL_p(pressure):
+    '''
+    Liquid thermal conductivity given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: thermal conductivity in W/(m*K) btu/(lb*ft*hr)
+    '''
     tsatt = Tsat_p(pressure)
     specificVolume = vL_p(pressure)
 
@@ -1336,6 +1939,15 @@ def tcL_p(pressure):
     return _tc_pTrho_wrapper(pressure, tsatt, specificVolume)
 
 def tcV_p(pressure):
+    '''
+    Vapor thermal conductivity given pressure
+
+    Args:
+        pressure (float): pressure in kPa or psi
+
+    Returns:
+        float: thermal conductivity in W/(m*K) btu/(lb*ft*hr)
+    '''
     tsatt = Tsat_p(pressure)
     specificVolume = vV_p(pressure)
 
@@ -1345,6 +1957,15 @@ def tcV_p(pressure):
     return _tc_pTrho_wrapper(pressure, tsatt, specificVolume)
 
 def tcL_T(temperature):
+    '''
+    Liquid thermal conductivity given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: thermal conductivity in W/(m*K) btu/(lb*ft*hr)
+    '''
     psatt = Psat_T(temperature)
     specificVolume = vL_T(temperature)
 
@@ -1354,6 +1975,15 @@ def tcL_T(temperature):
     return _tc_pTrho_wrapper(psatt, temperature, specificVolume)
 
 def tcV_T(temperature):
+    '''
+    Vapor thermal conductivity given temperature
+
+    Args:
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: thermal conductivity in W/(m*K) btu/(lb*ft*hr)
+    '''
     psatt = Psat_T(temperature)
     specificVolume = vV_T(temperature)
 
@@ -1363,15 +1993,45 @@ def tcV_T(temperature):
     return _tc_pTrho_wrapper(psatt, temperature, specificVolume)
 
 def tc_pT(pressure, temperature):
+    '''
+    Liquid thermal conductivity given pressure and temperature
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        temperature (float): Temperature in °C or °F
+
+    Returns:
+        float: thermal conductivity in W/(m*K) btu/(lb*ft*hr)
+    '''
     specificVolume = v_pT(pressure, temperature)
     return _tc_pTrho_wrapper(pressure, temperature, specificVolume)
 
 def tc_ph(pressure, enthalpy):
+    '''
+    Liquid thermal conductivity given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: thermal conductivity in W/(m*K) btu/(lb*ft*hr)
+    '''
     specificVolume = v_ph(pressure, enthalpy)
     temperature = T_ph(pressure, enthalpy)
     return _tc_pTrho_wrapper(pressure, temperature, specificVolume)
 
 def tc_hs(enthalpy, entropy):
+    '''
+    Liquid thermal conductivity given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: thermal conductivity in W/(m*K) btu/(lb*ft*hr)
+    '''
     enthalpy, entropy = float(enthalpy), float(entropy)
     pressure = P_hs(enthalpy, entropy)
     specificVolume = v_ph(pressure, enthalpy)
@@ -1399,6 +2059,16 @@ def _tc_pTrho_wrapper(pressure, temperature, specificVolume):
     return thermalConductivity
 
 def x_ph(pressure, enthalpy):
+    '''
+    Static quality given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: static quality
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -1408,6 +2078,16 @@ def x_ph(pressure, enthalpy):
         return Constants._errorValue
 
 def x_ps(pressure, entropy):
+    '''
+    Static quality given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: static quality
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         entropy = Convert.toSIUnit(entropy, 'entropy')
@@ -1417,6 +2097,16 @@ def x_ps(pressure, entropy):
         return Constants._errorValue
 
 def vx_ph(pressure, enthalpy):
+    '''
+    Void fraction given pressure and enthalpy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
+
+    Returns:
+        float: void fraction
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         enthalpy = Convert.toSIUnit(enthalpy, 'enthalpy')
@@ -1434,6 +2124,16 @@ def vx_ph(pressure, enthalpy):
         return Constants._errorValue
 
 def vx_ps(pressure, entropy):
+    '''
+    Void fraction given pressure and entropy
+
+    Args:
+        pressure (float): pressure in kPa or psi
+        enthalpy (float): enthalpy in kJ/kg or Btu/lb
+
+    Returns:
+        float: void fraction
+    '''
     pressure = Convert.toSIUnit(pressure, 'pressure', englishUnits=englishUnits)
     if englishUnits:
         entropy = Convert.toSIUnit(entropy, 'entropy')

@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 '''
-* Water and steam properties according to IAPWS IF-97
-* By Magnus Holmgren, www.x-eng.com
-* The steam tables are free and provided as is.
-* We take no responsibilities for any errors in the code or damage thereby.
-* You are free to use, modify and distribute the code as long as authorship is properly acknowledged.
-* Please notify me at magnus@x-eng.com if the code is used in commercial applications
+Region 3 functions
 '''
 import math
 
@@ -13,10 +8,16 @@ import numpy as np
 import scipy
 from scipy import optimize
 
-import Boundaries
-import Constants
-import Region1
-import Region2
+try:
+    import Boundaries
+    import Constants
+    import Region1
+    import Region2
+except ImportError:
+    from . import Boundaries
+    from . import Constants
+    from . import Region1
+    from . import Region2
 
 i = np.array([0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 6, 7, 8, 9, 9, 10, 10, 11])
 j = np.array([0, 0, 1, 2, 7, 10, 12, 23, 2, 6, 15, 17, 0, 2, 6, 7, 22, 26, 0, 2, 4, 16, 26, 0, 2, 4, 26, 1, 3, 26, 0, 2, 26, 2, 26, 2, 26, 0, 1, 26])
