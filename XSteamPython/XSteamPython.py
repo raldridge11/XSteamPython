@@ -32,12 +32,12 @@ def switchUnits():
     '''Function to switch between unit systems'''
     global englishUnits
     englishUnits = not englishUnits
-    print("Using English units") if englishUnits else print("Using SI Units")
+    _ = print("Using English units") if englishUnits else print("Using SI Units")
 
 def Tsat_p(pressure):
     '''
     Saturation temperature given pressure
-    
+
     Args:
         pressure (float): pressure in kPa or psi
 
@@ -54,7 +54,7 @@ def Tsat_p(pressure):
 def Tsat_s(entropy):
     '''
     Saturation temperature given entropy
-    
+
     Args:
         entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
 
@@ -72,7 +72,7 @@ def Tsat_s(entropy):
 def T_ph(pressure, enthalpy):
     '''
     Temperature given pressure and enthalpy
-    
+
     Args:
         pressure (float): pressure in kPa or psi
         enthalpy (float): enthalpy in kJ/kg or Btu/lb
@@ -104,13 +104,13 @@ def T_ph(pressure, enthalpy):
 def T_ps(pressure, entropy):
     '''
     Temperature given pressure and entropy
-    
+
     Args:
         pressure (float): pressure in kPa or psi
         entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
 
     Returns:
-        float: Temperature in °C or °F    
+        float: Temperature in °C or °F
     '''
     pressure = Convert.toSIUnit(float(pressure), 'pressure', englishUnits=englishUnits)
     entropy = float(entropy)
@@ -142,7 +142,7 @@ def T_hs(enthalpy, entropy):
         entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
 
     Returns:
-        float: Temperature in °C or °F   
+        float: Temperature in °C or °F
     '''
     enthalpy, entropy = float(enthalpy), float(entropy)
     if englishUnits:
@@ -212,7 +212,7 @@ def P_hs(enthalpy, entropy):
         entropy (float): entropy in kJ/(kg*K) or btu/(lb*°F)
 
     Returns:
-        float: pressure in kPa or psi     
+        float: pressure in kPa or psi
     '''
     enthalpy, entropy = float(enthalpy), float(entropy)
     if englishUnits:
