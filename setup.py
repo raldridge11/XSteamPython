@@ -13,7 +13,7 @@ with open(os.path.join(setup_dir, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setuptools.setup(name='XSteamPython', \
-    version='1.0.0', \
+    version='1.0.1', \
     description='Port of XSteam tables by Magnus Holmgren to python', \
     long_description=long_description, \
     long_description_content_type='text/markdown', \
