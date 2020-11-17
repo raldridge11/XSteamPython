@@ -37,6 +37,18 @@ def switchUnits():
     else:
         print("Using SI Units")
 
+def useEnglish():
+    '''Set units to use english units'''
+    global englishUnits
+    print("Using English units")
+    englishUnits = True
+
+def useSI():
+    '''Set units to use SI units'''
+    global englishUnits
+    print("Using SI Units")
+    englishUnits = False
+
 def Tsat_p(pressure):
     '''
     Saturation temperature given pressure
